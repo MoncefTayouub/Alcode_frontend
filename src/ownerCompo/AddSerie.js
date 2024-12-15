@@ -107,7 +107,7 @@ const condleImagContent = ()=> {
         <div className='addHeader center'>
         { condleImagContent()} 
         <input type='file' ref={fileInputRef} onChange={((e)=>handleFileChange(e))} style={{width : 0 , height :0 , display : 0 }} />
-        <div className='questionIcon center'>
+        <div  className='questionIcon center'>
             <img src={questionIcon} alt='' />
         </div>
         </div>

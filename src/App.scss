@@ -945,7 +945,7 @@ body {
     }
     textarea.bigInput {
       height: 239px ;
-      width : 550px ;
+      width : $inputWidth ;
       padding : 20px ;
       box-sizing: border-box;
     } 
@@ -977,13 +977,14 @@ body {
         width: $ownerWidth;
         gap: 30px ;
         justify-content: flex-end;
-        margin-bottom: 50px ;;
+        margin-bottom: 50px ;
         p {
           font-size: 28px ;
           color : #0D69E1 ;
           width :calc( $ownerWidth -  20px) ;
           text-align: end ;
           overflow: hidden;
+          cursor: pointer;
         }
         .questionIcon {
           width : 124px ;
@@ -991,6 +992,7 @@ body {
           border-radius: 50% ;
           background-color: $lightBC;
           border : 1px solid $primaryColor ;
+          cursor : pointer ;
           img {
             height: 69px ;
           }
@@ -1042,7 +1044,8 @@ body {
             margin-right: 30px ;
           }
           .bigInput {
-            width : 530px ;            
+            // width : 530px ;            
+            width : $inputWidth ;            
           }
 
         }
