@@ -119,15 +119,29 @@ body {
         background-color: $primaryColor;
         color: $white ;
     }
+    .full {
+      background-color: $secColor ;
+      color: $primaryColor ; 
+      border : 1px solid $primaryColor
+      
+    }
     .blank {
         border : 2px solid $primaryColor ; 
         color : $primaryColor ;
         margin:  40px 40px 0 40px ; 
     }
+    .blank:hover {
+      background-color: $primaryColor;
+      color: $white;
+    }
     .gold {
       background-color:  $secColor ; 
       color : $primaryColor ;
       
+    }
+    .gold:hover {
+      background-color: $primaryColor;
+      color: $white;
     }
     }
     .NavBar {
@@ -1199,5 +1213,13 @@ body {
       background-color: rgba(238, 245, 141, 0.199); 
 
     }
-    
+    .reloadSection {
+      position: fixed ;
+      left : 0 ;
+      top : 0 ; 
+      width : 100% ; 
+      height: 100vh ;
+      background-color: rgba(255, 255, 255, 0.4);
+      z-index: 10000;
+    }
 }

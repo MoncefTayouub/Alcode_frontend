@@ -12,7 +12,7 @@ import Login from './compoments/Login';
 import QuizRes from './compoments/QuizRes';
 
 const App = () => {
-  const backend_url = 'http://srv668869.hstgr.cloud/';
+  const backend_url = 'https://srv668869.hstgr.cloud/';
   const [testResults,settestResults] = useState()
   const [logged , setLogged] = useState(-5)
 
@@ -43,7 +43,7 @@ const App = () => {
 
     if (!accessToken || !user) {
         // No tokens or user info; user is not logged in
-        console.log('User is not logged in');
+        // console.log('User is not logged in');
         return 0 ;
     }
 
@@ -59,7 +59,7 @@ const App = () => {
       });
 
       const data = response.data; 
-      console.log('referesh' , data)
+      // console.log('referesh' , data)
       setfooterContent(data.seriesF)
       if (data.status === true) {
           return 1 ;
@@ -113,11 +113,11 @@ const logOut = ()=> {
       <div className="App">
         <Navbar logOut={logOut} logged={logged}  typeR={typeR} />   
         <Routes>
-          {/* <Route path="/" element={<Home HandleSubmitData={HandleSubmitData} logged={logged} setselectedSerie={setselectedSerie} selectedSerie={selectedSerie} backend_url={backend_url} />} />    
+           <Route path="/" element={<Home HandleSubmitData={HandleSubmitData} logged={logged} setselectedSerie={setselectedSerie} selectedSerie={selectedSerie} backend_url={backend_url} />} />    
           <Route path="/Serie" element={<Serie  setselectedSerie={setselectedSerie} selectedSerie={selectedSerie} backend_url={backend_url} />} />    
           <Route path="/Quiz" element={<Quiz logged={logged} testResults={testResults} settestResults={settestResults} backend_url={backend_url}  setselectedSerie={setselectedSerie} selectedSerie={selectedSerie}    />} />    
           <Route path="/QuizRes" element={<QuizRes logged={logged} testResults={testResults} settestResults={settestResults} backend_url={backend_url}  setselectedSerie={setselectedSerie} selectedSerie={selectedSerie}    />} />    
-          <Route path="/result" element={<Results logged={logged} testResults={testResults} settestResults={settestResults} backend_url={backend_url}  />} />     */}
+          <Route path="/result" element={<Results logged={logged} testResults={testResults} settestResults={settestResults} backend_url={backend_url}  />} />    
           <Route path="/Owner" element={<Owner logged={logged} backend_url={backend_url} />} />    
           <Route path="/login" element={<Login logged={logged} setLogged={setLogged} backend_url={backend_url} />} />    
         </Routes>

@@ -3,8 +3,7 @@ import axios from 'axios'
 
 
 
-
-export default function AddUser({backend_url,errorMsg,setErrorMsg,SetnavSelect,seteditUser,editUser}) {
+export default function AddUser({reloading,setreloading,backend_url,errorMsg,setErrorMsg,SetnavSelect,seteditUser,editUser}) {
 
   const [fullName , setFullName] = useState("")
   const [mail , setMail] = useState("")
@@ -51,7 +50,7 @@ export default function AddUser({backend_url,errorMsg,setErrorMsg,SetnavSelect,s
              const setUser = async ()=> {  
       
               if (checkINpust () ) {
-
+                setreloading(true)
                 const DataForm= new FormData();
                 var method = 'POST'     
                 var [fiN , laN] = fullName.split(" ")
@@ -72,6 +71,7 @@ export default function AddUser({backend_url,errorMsg,setErrorMsg,SetnavSelect,s
               })
               .then((response)=>{
                     let data = response.data ;
+                    setreloading(false)
                     console.log('add user' , data)
                     if (data['status'] == 1 ){
                     setErrorMsg(1) 
@@ -110,6 +110,7 @@ export default function AddUser({backend_url,errorMsg,setErrorMsg,SetnavSelect,s
       }
   return (
     <div className='AddUser ownerPadding center'>
+
       {editUser != null ? 
         <div className='editMode'>
               <p>كلمة المرور لا تظهر لأسباب أمنية، يُرجى التأكد من تعديلها عن طريق إضافة كلمة مرور جديدة.</p>

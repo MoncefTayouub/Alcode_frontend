@@ -12,6 +12,8 @@ import SeriesRender from '../ownerCompo/SeriesRender'
 import Quizes from '../ownerCompo/Quizes'
 import { useNavigate } from 'react-router-dom';
 import HandleMails from './HandleMails'
+import reloadImage from '../files/reloadImage.svg'
+
 export default function Owner({logged,backend_url}) {
   // const [content , setContent] = useState() 
   const [navSelect , SetnavSelect] = useState(15) 
@@ -25,7 +27,7 @@ export default function Owner({logged,backend_url}) {
 
   const [editUser , seteditUser ] = useState(null) 
 
-
+  const [reloading , setreloading ] = useState(false)
  
 
   const clearFields = ()=> {
@@ -113,7 +115,9 @@ export default function Owner({logged,backend_url}) {
     if (logged) {
       
     }
- },[logged])
+ },[logged])  
+
+ console.log(reloading)
   
   let content = <div></div>
   switch (navSelect) { 
@@ -136,7 +140,7 @@ export default function Owner({logged,backend_url}) {
         content = <Quizes setquizList={setquizList} quizList={quizList} setquiz={setquiz} quiz={quiz} setSerie={setSerie} serie={serie} SetnavSelect={SetnavSelect} errorMsg={errorMsg} setErrorMsg={setErrorMsg} backend_url={backend_url} />
         break ; 
         case 8 :
-        content = <AddSerie handleFileName={handleFileName} setquizList={setquizList} quizList={quizList} setquiz={setquiz} SetnavSelect={SetnavSelect} serieP={serie} setSerieP={setSerie} errorMsg={errorMsg} setErrorMsg={setErrorMsg} backend_url={backend_url} />
+        content = <AddSerie reloading={reloading} setreloading={setreloading} handleFileName={handleFileName} setquizList={setquizList} quizList={quizList} setquiz={setquiz} SetnavSelect={SetnavSelect} serieP={serie} setSerieP={setSerie} errorMsg={errorMsg} setErrorMsg={setErrorMsg} backend_url={backend_url} />
         break ;
         case 9 : 
         content = <SeriesRender setquiz={setquiz} quiz={quiz} setSerie={setSerie} serie={serie} SetnavSelect={SetnavSelect} errorMsg={errorMsg} setErrorMsg={setErrorMsg} backend_url={backend_url} />
@@ -154,10 +158,42 @@ export default function Owner({logged,backend_url}) {
       content  = <div>default {navSelect}</div>
 }
 
+// reloading 
+const [rotation, setRotation] = useState(0);
+
+useEffect(() => {
+  if (reloading) {
+    const intervalId = setInterval(() => {
+      setRotation(rotation + 10);
+    }, 16); // 16ms = 60fps
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }
+}, [reloading, rotation]);
+
+useEffect(() => {
+  if (!reloading) {
+    setRotation(0);
+  }
+}, [reloading]);
+
+
+
 
   return (
     <div className='Owner center'>
         <div className='content scrollableSection'>
+        { reloading ? 
+        <div className='reloadSection center '  style={{
+          transform: `rotate(${rotation}deg)`,
+          transition: 'transform 0.1s ease-in-out',
+        }} >
+          <img alt='' src={reloadImage} />
+        </div>  
+        : '' 
+      }
              {errorDiv}
              {/* <div className='error center error1'><p>{errorMsg[1]}</p></div> */}
             {content}  

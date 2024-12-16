@@ -71,7 +71,7 @@ function Home({HandleSubmitData,backend_url,setselectedSerie,selectedSerie}) {
      <div className='center gap'>
       {
         firstRows.length ? firstRows.map((ob,i)=> 
-            <Box title={ob['title']} ob={ob} imgurl={backend_url+ob['icon']} handleSettingSerie={handleSettingSerie} />
+            <Box key={i} title={ob['title']} ob={ob} imgurl={backend_url+ob['icon']} handleSettingSerie={handleSettingSerie} />
         ) : ''
       }
        
