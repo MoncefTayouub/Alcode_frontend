@@ -13,10 +13,12 @@ import Quizes from '../ownerCompo/Quizes'
 import { useNavigate } from 'react-router-dom';
 import HandleMails from './HandleMails'
 import reloadImage from '../files/reloadImage.svg'
+import axios from 'axios'
 
-export default function Owner({logged,backend_url}) {
+export default function Owner({isOwner,logged,backend_url}) {
+  const navigate = useNavigate();
   // const [content , setContent] = useState() 
-  const [navSelect , SetnavSelect] = useState(15) 
+  const [navSelect , SetnavSelect] = useState(8) 
 
   const [errorMsg , setErrorMsg] = useState(-1)
 
@@ -29,6 +31,7 @@ export default function Owner({logged,backend_url}) {
 
   const [reloading , setreloading ] = useState(false)
  
+  const [GoBack , setGoBack] = useState()
 
   const clearFields = ()=> {
     setErrorMsg(-1) 
@@ -111,87 +114,116 @@ export default function Owner({logged,backend_url}) {
     return rt[rt.length -1 ]   
  }
 
- useEffect(()=> {
-    if (logged) {
-      
-    }
- },[logged])  
 
- console.log(reloading)
-  
+ 
+ const submit = async () => {
+   const user = localStorage.getItem('user')
+   console.log('accessToken',user,user==null)
+   if (user == null){
+      navigate('/login');
+     return 0 ;
+    }
+    const jsonObject = JSON.parse(user);
+    console.log('not logged in',jsonObject)
+    setreloading(true)
+       const DataForm = new FormData();
+       DataForm.append('user', jsonObject.id);
+    
+       try {
+           const response = await axios({
+               method: 'POST',
+               url: `${backend_url}userlogin/check`,
+               data: DataForm,
+           });
+   
+           const data = response.data;
+           console.log('dataaaaaaaa',data)
+           setreloading(false)
+           if (data.status === 0) {
+              navigate('/login')
+           }
+           
+       } catch (error) {
+           console.error('Error during login:', error);
+       }
+   };
+
+useEffect(()=> {
+  submit()
+},[])
+
+
+ 
   let content = <div></div>
   switch (navSelect) { 
     case 1 :
-      content = <General  backend_url={backend_url} seteditUser={seteditUser}  SetnavSelect={SetnavSelect} errorMsg={errorMsg} setErrorMsg={setErrorMsg} />
+      content = <General setreloading={setreloading}  backend_url={backend_url} seteditUser={seteditUser}  SetnavSelect={SetnavSelect} errorMsg={errorMsg} setErrorMsg={setErrorMsg} />
       break ;
       case 2 :
-        content = <AddUser editUser={editUser} seteditUser={seteditUser}  errorMsg={errorMsg} setErrorMsg={setErrorMsg} backend_url={backend_url} SetnavSelect={SetnavSelect}  />
+        content = <AddUser setreloading={setreloading} editUser={editUser} seteditUser={seteditUser}  errorMsg={errorMsg} setErrorMsg={setErrorMsg} backend_url={backend_url} SetnavSelect={SetnavSelect}  />
         break ;
         case 3 : 
-        content = <AccNotActive setquiz={setquiz} quiz={quiz} setSerie={setSerie} serie={serie} SetnavSelect={SetnavSelect} errorMsg={errorMsg} setErrorMsg={setErrorMsg} backend_url={backend_url} />
+        content = <AccNotActive setreloading={setreloading} setquiz={setquiz} quiz={quiz} setSerie={setSerie} serie={serie} SetnavSelect={SetnavSelect} errorMsg={errorMsg} setErrorMsg={setErrorMsg} backend_url={backend_url} />
         break ;  
         case 4 : 
-        content = <AccContacted setquiz={setquiz} quiz={quiz} setSerie={setSerie} serie={serie} SetnavSelect={SetnavSelect} errorMsg={errorMsg} setErrorMsg={setErrorMsg} backend_url={backend_url} />
+        content = <AccContacted  setreloading={setreloading} setquiz={setquiz} quiz={quiz} setSerie={setSerie} serie={serie} SetnavSelect={SetnavSelect} errorMsg={errorMsg} setErrorMsg={setErrorMsg} backend_url={backend_url} />
         break ;
         case 6 : 
-        content = <AccNotCon setquiz={setquiz} quiz={quiz} setSerie={setSerie} serie={serie} SetnavSelect={SetnavSelect} errorMsg={errorMsg} setErrorMsg={setErrorMsg} backend_url={backend_url} />
+        content = <AccNotCon  setreloading={setreloading} setquiz={setquiz} quiz={quiz} setSerie={setSerie} serie={serie} SetnavSelect={SetnavSelect} errorMsg={errorMsg} setErrorMsg={setErrorMsg} backend_url={backend_url} />
         break ;
         case 7 : 
-        content = <Quizes setquizList={setquizList} quizList={quizList} setquiz={setquiz} quiz={quiz} setSerie={setSerie} serie={serie} SetnavSelect={SetnavSelect} errorMsg={errorMsg} setErrorMsg={setErrorMsg} backend_url={backend_url} />
+        content = <Quizes setreloading={setreloading}  setquizList={setquizList} quizList={quizList} setquiz={setquiz} quiz={quiz} setSerie={setSerie} serie={serie} SetnavSelect={SetnavSelect} errorMsg={errorMsg} setErrorMsg={setErrorMsg} backend_url={backend_url} />
         break ; 
         case 8 :
-        content = <AddSerie reloading={reloading} setreloading={setreloading} handleFileName={handleFileName} setquizList={setquizList} quizList={quizList} setquiz={setquiz} SetnavSelect={SetnavSelect} serieP={serie} setSerieP={setSerie} errorMsg={errorMsg} setErrorMsg={setErrorMsg} backend_url={backend_url} />
+        content = <AddSerie  GoBack={GoBack} setGoBack={setGoBack} reloading={reloading} setreloading={setreloading} handleFileName={handleFileName} setquizList={setquizList} quizList={quizList} setquiz={setquiz} SetnavSelect={SetnavSelect} serieP={serie} setSerieP={setSerie} errorMsg={errorMsg} setErrorMsg={setErrorMsg} backend_url={backend_url} />
         break ;
         case 9 : 
-        content = <SeriesRender setquiz={setquiz} quiz={quiz} setSerie={setSerie} serie={serie} SetnavSelect={SetnavSelect} errorMsg={errorMsg} setErrorMsg={setErrorMsg} backend_url={backend_url} />
+        content = <SeriesRender setreloading={setreloading} setquiz={setquiz} quiz={quiz} setSerie={setSerie} serie={serie} SetnavSelect={SetnavSelect} errorMsg={errorMsg} setErrorMsg={setErrorMsg} backend_url={backend_url} />
         break ;  
         case 10 :
-        content = <Questions handleFileName={handleFileName} questionList={questionList} setquestionList={setquestionList} setquiz={setquiz} quiz={quiz} setSerie={setSerie} serie={serie} SetnavSelect={SetnavSelect} errorMsg={errorMsg} setErrorMsg={setErrorMsg} backend_url={backend_url} />
+        content = <Questions GoBack={GoBack} setGoBack={setGoBack} setreloading={setreloading} handleFileName={handleFileName} questionList={questionList} setquestionList={setquestionList} setquiz={setquiz} quiz={quiz} setSerie={setSerie} serie={serie} SetnavSelect={SetnavSelect} errorMsg={errorMsg} setErrorMsg={setErrorMsg} backend_url={backend_url} />
         break ;
         case 11 : 
-        content = <QueDetail handleFileName={handleFileName} clearFields={clearFields} questionList={questionList} setquestionList={setquestionList}  setquiz={setquiz} quiz={quiz} setSerie={setSerie} serie={serie} SetnavSelect={SetnavSelect} errorMsg={errorMsg} setErrorMsg={setErrorMsg} backend_url={backend_url} />
+        content = <QueDetail GoBack={GoBack} setGoBack={setGoBack} setreloading={setreloading} handleFileName={handleFileName} clearFields={clearFields} questionList={questionList} setquestionList={setquestionList}  setquiz={setquiz} quiz={quiz} setSerie={setSerie} serie={serie} SetnavSelect={SetnavSelect} errorMsg={errorMsg} setErrorMsg={setErrorMsg} backend_url={backend_url} />
         break ; 
         case 15 : 
-        content = <HandleMails handleFileName={handleFileName} clearFields={clearFields} questionList={questionList} setquestionList={setquestionList}  setquiz={setquiz} quiz={quiz} setSerie={setSerie} serie={serie} SetnavSelect={SetnavSelect} errorMsg={errorMsg} setErrorMsg={setErrorMsg} backend_url={backend_url} />
+        content = <HandleMails setreloading={setreloading} handleFileName={handleFileName} clearFields={clearFields} questionList={questionList} setquestionList={setquestionList}  setquiz={setquiz} quiz={quiz} setSerie={setSerie} serie={serie} SetnavSelect={SetnavSelect} errorMsg={errorMsg} setErrorMsg={setErrorMsg} backend_url={backend_url} />
         break ; 
         default :
       content  = <div>default {navSelect}</div>
 }
 
 // reloading 
-const [rotation, setRotation] = useState(0);
 
-useEffect(() => {
-  if (reloading) {
-    const intervalId = setInterval(() => {
-      setRotation(rotation + 10);
-    }, 16); // 16ms = 60fps
 
-    return () => {
-      clearInterval(intervalId);
-    };
+
+
+useEffect(()=> {
+  if (GoBack != -1 )
+  // eslint-disable-next-line default-case
+  switch(GoBack) {
+    case 0 : 
+    SetnavSelect(8) 
+    break ;
+    case 1 : 
+    SetnavSelect(10) 
+    break ;
+    case 2 : 
+
+    break ;
+
+
   }
-}, [reloading, rotation]);
-
-useEffect(() => {
-  if (!reloading) {
-    setRotation(0);
-  }
-}, [reloading]);
-
-
+},[GoBack])
 
 
   return (
     <div className='Owner center'>
         <div className='content scrollableSection'>
         { reloading ? 
-        <div className='reloadSection center '  style={{
-          transform: `rotate(${rotation}deg)`,
-          transition: 'transform 0.1s ease-in-out',
-        }} >
-          <img alt='' src={reloadImage} />
-        </div>  
+        <div className='reloadSection center '   >
+          <div class="loader"></div>
+          </div>           
         : '' 
       }
              {errorDiv}

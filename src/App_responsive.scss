@@ -1,7 +1,163 @@
-body {
+
     @media (max-width: 1202px) {
-      .padding {
-          padding: 60px ;
+      body .padding {
+          padding: 0 60px ;
       }
     }
+    @media (max-width: 1002px) {
+      body .header .header_content {
+        align-items : center !important;
+      }
+      body .header .header_content p {
+        text-align: center !important;
+        font-size: 28px !important;
+      }
+        .header {
+          .header_content {
+            .twobutns{ 
+              button {
+               width : 200px ;
+            }
+          }
+      }
+    }
+    body .ContactUs .motivation  {
+      padding-left: 20px !important ;
+    }
+    body .ContactUs .form {
+      padding-right: 20px !important ;
+    }
+  }
+  @media (max-width: 1200px) { 
+    body .BySection .seciontion {
+      justify-content: center !important ;
+    }
+  }
+  @media (max-width: 902px) { 
+    body .header .header_content .twobutns button {
+      width : 170px !important;
+    }
+    body .AboutSectoin  {
+      flex-direction: column-reverse;
+      margin : 60px 0 ; 
+    }
+    body .AboutSectoin .desc {
+      width : 90% !important;
+      justify-content: center !important ;
+    }
+    body .AboutSectoin .bigLogo {
+      width : 60% !important ;
+    }
+    // body .ContactUs .motivation p{
+    //   height: 70% !important;
+    // }
+    // body .ContactUs .motivation .social_acc {
+    //   height: 30% !important;
+    // }
+    body .ContactUs .motivation p {
+      font-size: 18px !important ;
+    }
+    
+  }
+
+  @media (max-width: 762px) { 
+    body .NavBar {
+      padding: 0 40px !important;
+    }
+    body .headerContent {
+      margin-top: 50px !important;
+    }
+    body .header .header_content {
+      padding-top: 40px ;
+      width : 90% !important;
+    }
+    body .header {
+      flex-direction: column-reverse;
+      // justify-content: center;
+      gap : 40px ;
+      height: 70vh !important ;
+    }
+    body .padding {
+      padding: 0 20px;
+  }
+  body .header .imgCon {
+    width : 100% !important;
+    height: 40vh !important;
+  }
+  body .header .imgCon img {
+    height: 100%;
+    }
+    body .ContactUs {
+      height : 180vh !important;
+    }
+    body .ContactUs .motivation {
+      height : 60vh !important;
+      width : 100% !important;
+    }
+    body .ContactUs .motivation .social_acc .container h4 {
+      width : 0 !important; 
+      opacity: 0 !important;
+    }
+    body .ContactUs .motivation .social_acc .container {
+      width : 70px !important ;
+      
+    }
+    body .ContactUs .motivation .social_acc , body .ContactUs .motivation p {
+      padding : 20px ;
+    }
+    body .ContactUs .motivation .social_acc {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    body .ContactUs .form {
+      width : 100% !important ;
+      align-items: center !important;
+      height: 120vh !important;
+      padding-top: 40px ;
+    }
+    body .ContactUs .form img {
+      // transform: rotate(90deg) !important;
+      transform-origin: top left; /* Set the pivot point to the top-left corner */
+    transform: rotate(90deg) translateY(-100%);
+      height: 100vw !important; 
+    }
+    body .Footer .descContainer {
+      width : 100% !important;
+      height : 60vh !important;
+      padding : 0 20px ;
+    }
+    body .Footer .logoFooter {
+      width : 100% !important;
+      height : 30vh !important;
+    }
+    body .Footer .logoFooter .Big_logo {
+      width: 60% !important;
+      margin-bottom: 50px !important;
+  }
+  body .Footer .detail_content {
+    bottom: 20px !important;
 }
+body .Footer .descContainer .dicovering {
+  margin-right: 20px ;
+}
+body .Footer .logoFooter p {
+  bottom: 20px !important;
+}
+
+body .HeaderSerie .image .containerImage {
+  width: 163px;
+  min-width: 163px;
+  height: 163px;
+}
+body .HeaderSerie .descpt h3 {
+  font-size: 24px;
+}
+body .HeaderSerie .descpt p {
+  font-size: 18px;
+}
+
+
+  }
+
+          

@@ -81,8 +81,8 @@ export default function Quizes({logged,setErrorMsg,serie,quiz,setquiz,setSerie,S
 
         <div className='contentHeader contentBox center'>            
             <div className='sec center' > <img onClick={()=>addquiz()} src={blue_plus} alt='' /> </div>
-            <div className='sec center'> <p></p> </div>
-            <div className='sec center'>  <p>الاسم الكامل</p></div>
+            <div className='sec center'> <p>{quizList ? quizList.length +" سؤال " : ' لا سؤال '}</p> </div>
+            <div className='sec center'>  <p>الاسئلة</p></div>
         </div>
         {
             quizList ? quizList.map((ob,i)=>

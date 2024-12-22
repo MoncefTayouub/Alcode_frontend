@@ -19,7 +19,7 @@ export default function Login({backend_url,setLogged,logged}) {
           setError('تأكد من أن اسم المستخدم وكلمة المرور غير فارغين');
           return;
       }
-  
+      
       const DataForm = new FormData();
       DataForm.append('username', username);
       DataForm.append('password', password);
@@ -33,6 +33,8 @@ export default function Login({backend_url,setLogged,logged}) {
   
           const data = response.data;
           setresp(false)
+          setLogged(data.status)
+          console.log('data.status',data.status)
           if (data.status === 1) {
               // Store JWT in localStorage
               const { jwt } = data;
@@ -49,7 +51,7 @@ export default function Login({backend_url,setLogged,logged}) {
               setpassword('');
   
               navigate('/'); 
-              setLogged(true)
+              
             //   console.log('Login successful and tokens stored:', data);
           } else if (data.status === 0) {
               setError('اسم المستخدم أو كلمة المرور غير صحيحة');
@@ -70,6 +72,7 @@ export default function Login({backend_url,setLogged,logged}) {
       <input className='bigInput' type='password' onChange={(e)=>setpassword(e.target.value)} value={password}  placeholder='password' />
       <div className='twobutns  center padding'>
         <button  className='full rad20' onClick={()=>submit()} >{resp ? '...' :'تسجيل'}</button>
-    </div>     </div>
+    </div>     
+    </div>
   )
 }

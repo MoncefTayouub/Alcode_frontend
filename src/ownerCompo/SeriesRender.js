@@ -3,18 +3,18 @@ import notSub from '../files/notSub.svg'
 import axios  from 'axios'
 import edit_blue from '../files/edit_blue.svg'
 import trash_blue from '../files/trash_blue.svg'
-
-export default function SeriesRender({backend_url,setSerie,SetnavSelect,setErrorMsg}) {
+import addIconerror from '../files/addIconerror.svg'
+export default function SeriesRender({setreloading,backend_url,setSerie,SetnavSelect,setErrorMsg}) {
     const [hovering , sethovering ] = useState(-1)
     
     const [ data , setData ] = useState()
     let getData = async () => { 
-            
+        setreloading(true)
         let respons = await fetch (`${backend_url}owner/profiles/series`)
         let data = await respons.json()
         setData(data)
-    
-    }
+        setreloading(false)
+    }    
     
     useEffect(()=> {
         getData() 
@@ -104,31 +104,41 @@ export default function SeriesRender({backend_url,setSerie,SetnavSelect,setError
     </div> : ''  
 
        }
-        <div className='search spacebetween'>
-            <input onKeyDown={(e)=>handleDownKey(e)} onChange={(e)=>setsearchContent(e.target.value)} value={searchContent} placeholder='.......'  />  
-            <p>ابحث عن</p>
-        </div>
-
-        <div className='contentHeader contentBox center'>            
-            <div className='sec4 center'> <p> </p> </div>
-            <div className='sec4 center'> <p>عدد الأسئلة </p> </div>
-            <div className='sec4 center' >  <p>العنوان </p> </div>
-            <div className='sec4 center'>  <p>صورة</p></div>
-        </div>
         {
-            data ? data.map((ob,i)=>
+            data ?
+            <>
+                    <div className='search spacebetween'>
+                        <input onKeyDown={(e)=>handleDownKey(e)} onChange={(e)=>setsearchContent(e.target.value)} value={searchContent} placeholder='.......'  />  
+                        <p>ابحث عن</p>
+                    </div>
+
+                    <div className='contentHeader contentBox center'>            
+                        <div className='sec4 center'> <p> </p> </div>
+                        <div className='sec4 center'> <p>عدد الأسئلة </p> </div>
+                        <div className='sec4 center' >  <p>العنوان </p> </div>
+                        <div className='sec4 center'>  <p>صورة</p></div>
+                    </div>
+            
+       { data.map((ob,i)=>
                 <div key={i} className= {boxClass(i) } onMouseEnter={()=>sethovering(i)} >
                     <div className='sec4 center'> {hovering == i ? <div className='iconsContainer center'> 
                             <img alt='' onClick={()=>editSerie(ob)} src={edit_blue} />
                             <img alt='' onClick={()=> setdel_serie(ob['id'])} src={trash_blue} />
-                         </div>  : '' } 
+                    </div>  : '' } 
                 </div>
                     <div className='sec4 center'> <p>{ ob['childs'] }</p> </div>
                     <div className='sec4 center'> <p>{ ob['title'] }</p> </div>
                     <div className='sec4 center '> <div className='imgContainer center'><img alt='' src={backend_url+ob['icon']} /> </div>  </div>           
                 </div>
-            )  
-            : <div className=''>no content to reload</div>
+            )  }
+            </>    
+            : <div className='noContent'>
+                <img alt='' src={addIconerror} />
+                <p>
+          لا يوجد محتوى متاح حاليًا.<br />
+          يرجى التحقق من الاتصال إذا كنت متأكدًا من وجود محتوى محمّل هنا.
+                </p>
+            </div>
         }
 
         

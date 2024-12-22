@@ -11,6 +11,18 @@ export default function AddUser({reloading,setreloading,backend_url,errorMsg,set
   const [password , setpassword] = useState("")
   const [days , setDays] = useState('')
 
+  const calcCounterDays= (date,number_of_days )=> {
+    var dd = new Date(date);
+    dd.setDate(dd.getDate() + number_of_days);
+    var currentDate = new Date(); 
+    var differenceInMs = dd - currentDate;
+    var diff =  Math.floor(differenceInMs / (24 * 60 * 60 * 1000));
+    if (diff <= 0 ) {
+      return -1 
+    }else return diff
+  }
+
+  const [dayesLeft , setdayesLeft ] = useState(-1)
   useEffect(()=> {
     if (editUser != null) {
       setFullName( editUser['firstname']+" " + editUser['lastname']) 
@@ -18,6 +30,7 @@ export default function AddUser({reloading,setreloading,backend_url,errorMsg,set
       setPhone(editUser['phone_number'])
       setpassword(editUser['password'])
       setDays(editUser['duration'])     
+      setdayesLeft(calcCounterDays(editUser['dur_start'],editUser['duration']))
     }
   },[])
 
@@ -38,7 +51,7 @@ export default function AddUser({reloading,setreloading,backend_url,errorMsg,set
              // Empty dependency array ensures this runs once when the component mounts
           
              const checkINpust = ()=> {
-              return !(fullName == '' || password == '' || mail == '' || days == 0 || Phone == 0 ) 
+              return !(fullName == '' || password == '' || mail == ''  || Phone == 0 || Phone == '' ) 
              } 
              const clearINput = ()=> {
               setFullName('') 
@@ -92,17 +105,14 @@ export default function AddUser({reloading,setreloading,backend_url,errorMsg,set
               }
           
       }
+     
       const handleCounterDays = (date,number_of_days )=> {
-        var dd = new Date(date);
-        dd.setDate(dd.getDate() + number_of_days);
-        var currentDate = new Date(); 
-        var differenceInMs = dd - currentDate;
-        var differenceInDays = Math.floor(differenceInMs / (24 * 60 * 60 * 1000));
-        console.log('timing' , differenceInDays ,dd,currentDate,date)
+        
+        var differenceInDays = calcCounterDays (date,number_of_days )
         if (differenceInDays < 0) {
           return <>
-          <p>مدة الصلاحية تبدأ من تاريخ {editUser['dur_start']}</p>
-          <p>المدة منتهية</p>; 
+          {/* <p>مدة الصلاحية تبدأ من تاريخ {editUser['dur_start']}</p> */}
+          <p>المدة منتهية</p>
           </>
       } else {
           return <p> {`المدة المتبقية: ${differenceInDays} يوم`}</p>; // Remaining duration in days
@@ -122,7 +132,7 @@ export default function AddUser({reloading,setreloading,backend_url,errorMsg,set
       <input className='bigInput' onChange={(e)=>setMail(e.target.value)} value={mail} type='email' placeholder='البريد الإلكتروني : example@gmail.com' />
       <input className='bigInput' onChange={(e)=>setpassword(e.target.value)} value={password} type='' placeholder='كلمة المرور' />
       <input onChange={(e)=>setPhone(e.target.value)} value={Phone} className='bigInput' placeholder="أدخل رقم الهاتف" />
-      <input onChange={(e)=>setDays(e.target.value)} value={days} className='bigInput'  placeholder='المدة بالأيام' />
+      <input onChange={(e)=>setDays(e.target.value)} value={dayesLeft <= 0 ? '':days} className='bigInput'  placeholder='المدة بالأيام' />
       <div className='twobutns  center padding'>
         <button onClick={()=>setUser()} className='full rad20'>حفظ وإضافة آخر</button>
     </div>    </div>

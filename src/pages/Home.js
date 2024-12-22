@@ -8,17 +8,16 @@ import tiktokyellow from '../files/tiktokyellow.svg'
 import AboutSectoin from '../compoments/AboutSectoin'
 import Box from '../compoments/Box'
 import ContactUs from '../compoments/ContactUs'
+import BySection from '../compoments/BySection'
 import { useNavigate } from 'react-router-dom';
 
-function Home({HandleSubmitData,backend_url,setselectedSerie,selectedSerie}) {    
+function Home({setselectType,HandleSubmitData,backend_url,setselectedSerie,selectedSerie}) {    
   const navigate = useNavigate();
-  const [ data , setData ] = useState()
+  const [ data , setData ] = useState()    
   let getData = async () => { 
-          
       let respons = await fetch (`${backend_url}owner/profiles/HOME`)
       let data = await respons.json()
       setData(data)
-  
   }
   
   useEffect(()=> {
@@ -40,8 +39,8 @@ function Home({HandleSubmitData,backend_url,setselectedSerie,selectedSerie}) {
   const [lastRows , setlastRows ] = useState([])
   const handleSettingSerie = (ob)=> {
     setselectedSerie(ob)
-    if (pathname != 'serie')
-    navigate('/serie')
+    if (pathname != 'quiz')
+    navigate('/quiz')
     }
 
   useEffect(()=> {
@@ -57,7 +56,7 @@ function Home({HandleSubmitData,backend_url,setselectedSerie,selectedSerie}) {
     <div>
      <HemoHeader/>
      <div className='social padding spacebetween'>
-            <div className='socialIcons'>
+            <div className='socialIcons center'>
                <a href='https://www.instagram.com/almoniteur/' target="_blank"  rel="noreferrer" > <img src={instagramyellow} alt=''></img> </a>
                 <a href='https://www.tiktok.com/@almoniteur' target="_blank" rel="noreferrer" >   <img src={tiktokyellow} alt=''></img>  </a>
                 <a href='https://www.facebook.com/profile.php?id=61558066622408&locale=fr_FR' target="_blank" rel="noreferrer" >   <img src={facebookyellow} alt=''></img></a>
@@ -66,6 +65,7 @@ function Home({HandleSubmitData,backend_url,setselectedSerie,selectedSerie}) {
             </div>
             <h3>كونوا معنا يومياً في المساء، لمتابعة البث المباشر على جميع منصات التواصل الاجتماعي</h3>
      </div>
+     <BySection setselectType={setselectType} />
      <AboutSectoin />
      <div id = 'content'></div>
      <div className='center gap'>
@@ -88,7 +88,7 @@ function Home({HandleSubmitData,backend_url,setselectedSerie,selectedSerie}) {
     <div className='center gap'>
     {
         lastRows.length ? lastRows.map((ob,i)=> 
-            <Box title={ob['title']} imgurl={backend_url+ob['icon']} />
+            <Box key={i} title={ob['title']} imgurl={backend_url+ob['icon']} />
         ) : ''
       }  
      </div>

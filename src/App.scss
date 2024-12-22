@@ -1,10 +1,11 @@
 @import "./App_responsive.scss";
 
-@import url("https://fonts.googleapis.com/css2?family=Tajawal:wght@200;300&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Lato&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;600&display=swap");
+// @import url("https://fonts.googleapis.com/css2?family=Tajawal:wght@200;300&display=swap");
+// @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap");
+// @import url("https://fonts.googleapis.com/css2?family=Lato&display=swap");
+// @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;600&display=swap");
 
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Tajawal:wght@200;300;400;500;700;800;900&display=swap');
 
 * {
   margin: 0;
@@ -46,7 +47,12 @@
 .flipH {
   transform: scaleX(-1);
 }
-
+.flipW {
+  transform: scaleY(-1);
+}
+.flip90 {
+  transform: rotate(90deg) !important;
+}
 html {
   scroll-behavior: smooth;
 }
@@ -55,7 +61,7 @@ body {
   margin: 0;
   padding: 0;
   background-color: #F6F6F6;
-  font-family: "Lato", sans-serif;
+  font-family: "Tajawal", serif;
 }
 body .backgroundImage {
   position: absolute;
@@ -71,16 +77,21 @@ body .backgroundImage {
 body .filter06 {
   filter: brightness(0.6);
 }
-body a {
-  text-decoration: none;
-  color: black;
-  outline: none;
-}
-body button {
+
+body {
+
+
+button {
   cursor: pointer;
   border: none;
   outline: none;
 }
+
+a , select , option {
+  text-decoration: none;
+  color: black;
+  outline: none;
+}}
 body input ,textarea{
   outline: none;
   border: none;
@@ -96,9 +107,7 @@ body li {
 .padding {
     padding : 0 80px ;
 }
-.cursor {
 
-}
 
 $primaryColor : #212B3E ;
 $secColor : #FDC442 ; 
@@ -108,28 +117,46 @@ $prColLight : #41506D ;
 $ownerWidth : 70% ;
 $inputWidth : 654px;
 $inputHiegh : 70px ;
+$notAvailableBG : #939393 ;
+
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
 
 body {
     div {
         box-sizing: border-box;
+    }
+    
+    p , h1 , h2 , h3 , h4 , h5 , input , textarea , option , ul , li {
+      direction: rtl;
+      
+    }
+    .padding_bottom {
+      padding-bottom: 40px ;
     }
     .twobutns {
       
     .full {
         background-color: $primaryColor;
         color: $white ;
-    }
-    .full {
-      background-color: $secColor ;
-      color: $primaryColor ; 
-      border : 1px solid $primaryColor
-      
-    }
-    .blank {
+        transition: background-color 0.3s ease-in-out;
+        
+      }
+      .full:hover {
+        background-color: $secColor ;
+        color: $primaryColor ; 
+        border : 1px solid $primaryColor;
+        
+      }
+      .blank {
         border : 2px solid $primaryColor ; 
         color : $primaryColor ;
+        transition: background-color 0.3s ease-in-out;
         margin:  40px 40px 0 40px ; 
-    }
+      }
     .blank:hover {
       background-color: $primaryColor;
       color: $white;
@@ -137,6 +164,7 @@ body {
     .gold {
       background-color:  $secColor ; 
       color : $primaryColor ;
+      transition: background-color 0.3s ease-in-out;
       
     }
     .gold:hover {
@@ -183,7 +211,7 @@ body {
         height : 50vh ;
         .imgCon {
             height : 100% ;
-            width: 624px ;
+            width: 40% ;
             align-self: flex-end;
             
             img {
@@ -194,27 +222,45 @@ body {
         .header_content {
             align-items: end;
             flex-direction: column;
+            gap : 30px ; 
+            width: 60% ;
+            .twobutns {
+              margin : 0 ;
+              gap : 30px ; 
+              button {
+                margin : 0 ;
+                width : 200px ;
+                height: 40px ;
+                font-size: 20px ;
+
+              }
+            }
             p {
                 font-size: 38px ;
-                width : 60%; 
-                text-align: end;
+                width : 90%; 
+                text-align: start;
             }
-            button {
-              width : 250px ;
-              height: 40px ;
-              font-size: 20px ;
-              margin-top: 40px ;   
-
-          }
+           
             
         }
     }
     .social {
         width : 100% ;
-        height : 90px ;
+        // height : 90px ;
         background-color: $primaryColor; 
         color : $white ;
         font-size: 20px ;
+        gap : 40px ;
+        padding : 20px ;
+        .socialIcons {
+          flex-direction: row;
+          flex-wrap: nowrap;
+          width : 40% ;
+        }
+        h3 {
+          width: 60%;
+          font-size: 20px;
+        }
         img {
             margin-left: 20px ;
             height : 40px ;
@@ -226,17 +272,23 @@ body {
       width: 100% ; 
       height : 70vh ;
       box-sizing: border-box;
-
+      gap : 40px ;
+      .bigLogo {
+        width : 30% ;
+        img {
+          width : 100% ;
+        }
+      }
       .desc {
         width: 70% ; 
-        text-align: end;
+        text-align: start;
         justify-content: flex-end ;
         p {
-          font-size: 32px ;
+          font-size: 28px ;
           line-height: 40px;
           color : $primaryColor ;
           // letter-spacing: 10px; 
-          font-family: 'Roboto';
+
         }
         .twobutns {
           width : 500px ;
@@ -295,7 +347,7 @@ body {
       .frs {
         p {
           font-size: 24px ;
-          text-align: end ; 
+
           width : 70% ;
           color : $primaryColor
         }
@@ -310,7 +362,7 @@ body {
         height: 100% ;
         align-items: flex-end;
         background-color: $lightBC;
-        padding-right: 80px ;
+        padding-right: 40px ;
         position: relative;
         
         img {
@@ -326,9 +378,9 @@ body {
           border:  1px solid $primaryColor ;
           box-sizing: border-box;
           padding: 10px 20px ;
-          text-align: end;
           font-weight: bold;
           color : $prColLight ;
+          max-width: 80% ;
         }
         input {
           width: 450px ;
@@ -349,27 +401,33 @@ body {
       .motivation {
         width : 40% ;
         height: 100% ;
-        padding-left: 80px ;
+        padding-left: 40px ;
         background-color: $secColor;
         color: $primaryColor;
         flex-direction: column;
-
         p {
           width : 100% ;
           box-sizing: border-box;
-          font-size: 32px ;
+          font-size: 22px ;
           font-weight: bold; 
-          line-height: 50px ;
-          text-align: end;
+          line-height: 40px ;
+          text-align: start;
+          padding-top: 10px ;
+        }
+        p , .social_acc {
+          height: 50%;
         }
         .social_acc {
           width : 100% ;
           .container {
             height : 70px ;
             width : 100% ;
+            img {
+              height : 40px ;
+            }
             h4 { 
-              width : 250px ;
-              // height: 100%;
+              font-size: 20px ;
+              width: calc(90% - 60px);
               text-justify: center;
             }
           }
@@ -383,21 +441,21 @@ body {
       min-height: max-content;
       margin : 50px 0 ;
       p {
-          font-size: 38px ; 
+          font-size: 24px ; 
           color : $primaryColor ;
           line-height: 50px ;
-          width: 80%;
-          text-align: end;
+          width: 100%;
+          text-align: center;
       }
     }
-    .Footer {
+    .Footer {  
       width : 100% ;
       height : 80vh ; 
       .hight {
         height : 80% ;
       }
       .descContainer {
-        padding-left: 80px ;
+        padding-left: 40px ;
         position: relative;
         width : 50% ;
         height: 100% ; 
@@ -407,11 +465,14 @@ body {
             flex-direction: column;
             width : 30% ;
             height : 100% ;
-            gap : 30px ;
+            gap : 20px ;
             align-items: flex-start;
-            div {
-              width : 60px ;
+            // div {
+            //   width : 60px ;
               
+            // }
+            img {
+              width : 30px ;
             }
         }
         .dicovering {
@@ -419,8 +480,8 @@ body {
           width : 70% ;
           flex-direction: column;
           flex-wrap: nowrap;
-          justify-content: flex-start;
-          padding: 70px ;
+          // justify-content: flex-start;
+          // padding: 70px ;
           align-items: flex-end;
           gap : 20px ;
           h2 , p {
@@ -428,16 +489,16 @@ body {
             color : $white
           }
           p {
-            font-size: 24px ;
+            font-size: 20px ;
             cursor: pointer;
           }
           h2 {
-            font-size: 32px ;
+            font-size: 24px ;
           }
         }
       }
       .logoFooter {
-        padding-right: 80px;
+        padding-right: 40px;
         width : 50% ;
         height: 100% ;
         background-color: $lightBC;
@@ -445,7 +506,9 @@ body {
         position: relative;
         position: relative;
         .Big_logo {
-          width : 70% ;
+          width: 90%;
+        align-self: self-end;
+        margin-bottom: 100px;
         }
         .Polygon {
           position: absolute;
@@ -460,22 +523,7 @@ body {
           color : $primaryColor ; 
         };
       }
-    .detail_content {
-      width : 100% ;
-      // height : 20% ;
-      gap: 30px ;
-      justify-content: flex-start;
-      position: absolute;
-      bottom : 80px ;
-      img {
-        width : 30px ;
-        // height : 50px ;
-        // background-color: #fff;
-      }
-      .cont {
-        gap : 20px ;
-      } 
-    }
+   
     }
     .HeaderSerie {
       margin-bottom: 80px ;
@@ -488,6 +536,7 @@ body {
         .containerImage {
 
           width : 213px  ;
+          min-width: 213px  ;
           height: 213px ;
           background-color: $lightBC;
           border-radius: 50%;
@@ -510,19 +559,21 @@ body {
         flex-direction: column;
         align-items: flex-end;
         justify-content: flex-start;
+        flex-wrap: nowrap;
        
         h3 , p {
           width : fit-content ;
           color : $primaryColor ;
-          text-align: end;
+
         }
         h3 {
           font-size: 32px ;
         }
         p {
-          font-size: 28px ;
+          font-size: 24px ;
           line-height: 40px ;
           margin: 30px 0 ;
+          text-align: start;
         }
         button {
           width : 250px ;
@@ -575,7 +626,7 @@ body {
       h3 {
         color : $primaryColor ;
         width : (90% ) ;
-        text-align: end ;
+
         color : $lightBC
       }
 
@@ -632,7 +683,7 @@ body {
           width : 70% ;
         }
         h3 , p {
-          // text-align: end;
+
           color : white ; 
           text-align: start;
         }
@@ -692,11 +743,11 @@ body {
           width : 60px ;
           height: 60px ;
           background-color: $lightBC;
-          border-radius: 50%;
           color: $primaryColor;
+          border-radius: 30px ;
         }
         .answer {
-          width : 500px;
+          width : 400px;
           height : 60px ;
           border : 2px solid $lightBC ;
           border-radius: 30px ;
@@ -768,6 +819,7 @@ body {
         }
       }
     }
+
     .Owner {
       width : 100% ;
       height: 100vh;
@@ -799,12 +851,12 @@ body {
       .content {
         width : $ownerWidth ; 
         height: 100% ;
-        padding :  40px ;
-        padding-bottom: 0;
+        padding :  55px ;
+        padding-bottom: 100px;
         color : $primaryColor ;
         position: relative;
         .error {
-          position: absolute;
+          position: sticky;
           width : 100% ;
           height : 55px ;
           left : 0 ;
@@ -818,7 +870,6 @@ body {
         }
         .error0 {
           background-color: rgba(255, 0, 0, 0.22) ;
-
         }
         .General {
           width : 100% ;
@@ -837,7 +888,7 @@ body {
               width : 70% ;
               height : 50px ;
               border-radius: 25px ;
-              text-align: end ;
+
               padding: 0 25px ;
               font-size: 20px ;
             };
@@ -928,7 +979,7 @@ body {
         .editMode {
           width : $inputWidth ;  
           font-size: 18px ;
-          text-align: end;
+
         }
         button {
           width : 332px ;
@@ -942,18 +993,19 @@ body {
     .end {
       justify-content: flex-end;
     }
+
     .bigInput {
       width : $inputWidth ;
       font-size: 24px ;
       font-weight : 500;
-      text-align: end;
+
       background-color: transparent; 
       border: 1px solid $primaryColor; 
       border-radius: 35px ;
       padding : 0 35px ; 
       color : $primaryColor ;
     }
-    input.bigInput {
+    input.bigInput , .dropdown{
       height :$inputHiegh;
 
     }
@@ -996,7 +1048,7 @@ body {
           font-size: 28px ;
           color : #0D69E1 ;
           width :calc( $ownerWidth -  20px) ;
-          text-align: end ;
+          text-align: start ;
           overflow: hidden;
           cursor: pointer;
         }
@@ -1017,21 +1069,36 @@ body {
       flex-direction: column;
       gap : 40px ;
       padding-bottom: 50px ;
+      .errorDescBIG {
+        width : $inputWidth ;
+        text-align: start;
+      }
       .filesound {
+        position: relative;
         width : $inputWidth ; 
         justify-content: flex-end;
-        // flex-direction: column;
         gap: 20px ;
         font-size: 24px ;
         margin: 20px 0 ;
-        
+        .errorDesc {
+          width : $inputWidth ;
+          font-size: 18px ;
+          // color : $
+        }
         img , p {
           cursor: pointer;
           
         }
         p {
-          max-width: 300px ;
+          // max-width: 300px ;
           overflow: hidden;
+        }
+        .messageError404 {
+          position: absolute;
+          bottom: -20px ;
+          left : 0 ;
+          width : $inputWidth;
+          color : #888;
         }
       }
       .answerD {
@@ -1045,9 +1112,10 @@ body {
           height : $inputHiegh ;
         }
         p {
-          text-align: end;
+
           font-size: 24px ;
-          margin-bottom: 20px ;
+          margin-top: 20px ;
+          text-align: start;
         }
         .container {
           // justify-content: flex-end;
@@ -1075,6 +1143,7 @@ body {
         h3 {
           font-size: 32px ;
         }
+        
       }
       button {
         height : 60px ;
@@ -1173,7 +1242,7 @@ body {
       }
     }
     .ownerPadding {
-      padding-top: 60px; 
+      // padding-top: 60px; 
       padding-bottom: 100px ;
     }
     .Login {
@@ -1184,6 +1253,43 @@ body {
       align-items: flex-end;
       padding : 80px ;
       gap : 40px ;
+      .container {
+        width : 70% ;
+        text-align: start;
+        p {
+          font-size: 24px ;
+          line-height: 40px;
+
+        }
+        li {
+          font-size: 20px ;
+          font-weight: bold;
+          color : $prColLight ; 
+          padding : 10px 40px ;
+        }
+        
+      }
+      .link {
+        color : $prColLight;
+        font-size: 28px ;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      .detail_contenter {
+        width : 50% ; 
+        img , p {
+          cursor: pointer;
+        }
+        img {
+          width : 70px ; 
+          position: relative;
+        }
+        p {
+          font-size: 24px ;
+          width : 250px ;
+          color : $primaryColor ;
+        }
+      }
       img {
         position: absolute; 
         left : 0 ; 
@@ -1222,4 +1328,349 @@ body {
       background-color: rgba(255, 255, 255, 0.4);
       z-index: 10000;
     }
+    .BySection {
+      width : 100% ;
+      margin : 80px 0 ;
+
+     .bigTtielSections {
+        width : 100% ;
+        gap : 40px ;
+        
+        h1 , p {
+          width : 90% ;
+          
+          
+        }
+        h1 {
+          font-size: 28px ;
+          color : $primaryColor;
+          text-align: center;
+        }
+        p {
+          font-size: 24px ;
+          color : $prColLight;
+          text-align: start;
+        }
+      }
+      .seciontion {
+        gap : 30px ;
+        margin : 30px 0 ;
+        flex-wrap: wrap;
+        width : 80% ;
+        .course-card {
+          width : 529px ;   
+          height : 251px  ;    
+          border : 1px solid $primaryColor ;   
+          border-radius: 50px ;
+          overflow: hidden;
+          .imgBox {    
+            height : 100% ; 
+            width : 40% ; 
+            background-color: #D8E0F0;
+            img {  
+              width : 80% ; 
+              
+            } 
+
+          } 
+          .imgseCbg {
+            background-color: #FF8F74;
+          }
+          .descBox {
+            width : 60% ;
+            height : 100% ;
+            .detials {
+              height : 166px ;
+              width : 100% ; 
+              flex-direction: column;
+              gap : 20px ;
+              flex-wrap: nowrap;
+              h2 , p {
+                width : 90% ;
+                text-align: start;
+                font-weight : light;
+              }
+              h2 {
+                color : $primaryColor ; 
+                font-size: 22px ;
+              }
+              p {
+                font-size: 16px ;
+                color : $prColLight ;
+              }
+            }
+            button {
+              width: 100% ;
+              height: 40px ;
+              align-self: flex-end;
+              font-size: 20px ;
+              background-color: $secColor;
+              color : $primaryColor;
+              font-weight: bold;
+            }
+            .notavailable {
+              font-size: 16px ;
+              background-color: $notAvailableBG;
+              color : $white
+            }
+          }
+        }
+      }
+    }
+    .loader {
+      height: 60px;
+      aspect-ratio: 3;
+      --c:no-repeat linear-gradient(#514b82 0 0);
+      background:
+        var(--c) calc(0*100%/5) 50%,
+        var(--c) calc(1*100%/5) 50%,
+        var(--c) calc(2*100%/5) 50%,
+        var(--c) calc(3*100%/5) 50%,
+        var(--c) calc(4*100%/5) 50%,
+        var(--c) calc(5*100%/5) 50%;
+      background-size:calc(100%/6 + 1px) 50%;
+      animation: l19 1s infinite cubic-bezier(0.5,170,0.5,-170);
+    }
+    @keyframes l19 {
+        14.28% {background-position: calc(0*100%/5) 51%, calc(1*100%/5) 50%, calc(2*100%/5) 50%, calc(3*100%/5) 50%, calc(4*100%/5) 50%, calc(5*100%/5) 50%}
+        28.57% {background-position: calc(0*100%/5) 50%, calc(1*100%/5) 51%, calc(2*100%/5) 50%, calc(3*100%/5) 50%, calc(4*100%/5) 50%, calc(5*100%/5) 50%}
+        42.85% {background-position: calc(0*100%/5) 50%, calc(1*100%/5) 50%, calc(2*100%/5) 51%, calc(3*100%/5) 50%, calc(4*100%/5) 50%, calc(5*100%/5) 50%}
+        57.14% {background-position: calc(0*100%/5) 50%, calc(1*100%/5) 50%, calc(2*100%/5) 50%, calc(3*100%/5) 51%, calc(4*100%/5) 50%, calc(5*100%/5) 50%}
+        71.42% {background-position: calc(0*100%/5) 50%, calc(1*100%/5) 50%, calc(2*100%/5) 50%, calc(3*100%/5) 50%, calc(4*100%/5) 51%, calc(5*100%/5) 50%}
+        85.71% {background-position: calc(0*100%/5) 50%, calc(1*100%/5) 50%, calc(2*100%/5) 50%, calc(3*100%/5) 50%, calc(4*100%/5) 50%, calc(5*100%/5) 51%}
+    }
+    .noContent {
+      width : 100% ;
+      height : 100% ;
+      p {
+        font-size: 24px ;
+        color : $prColLight ;
+      }
+    }
+    // class="error center error1"
+    .Questions , .AddSerie{
+      .frame {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 365px;
+        height: 109px;
+      }
+      
+      .circle-box {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .circle {
+        width: 50px; /* Adjust size to your needs */
+        height: 50px;
+        border-radius: 50%;
+      }
+      
+      .yellow {
+        cursor: pointer;
+        background-color: #FFC543; /* Yellow color */
+      }
+      
+      .blue {
+        background-color: #5A667D; /* Blue color */
+      }
+      
+      .circle-text {
+        margin-top: 8px;
+        font-size: 12px;
+        text-align: center;
+        color: #333; /* Adjust text color if needed */
+      }
+    .boxesCategory {
+      width : $inputWidth ;
+      height : $inputHiegh ;
+      margin : 20px ;
+      .catBox {
+          width : $inputHiegh ;
+          height : $inputHiegh ;
+          border : 1px solid $primaryColor;
+          border-radius: calc( $inputHiegh / 2 );
+          cursor: pointer;
+          font-size: 20px ;
+        
+      }
+      .catBox:hover {
+        background-color: $lightBC;
+      }
+      .catBox-selected {
+        background-color: $secColor;
+        color : #f7ecd3 ;
+        border : 1px solid #f7ecd3
+      }
+      .catBox-selected:hover {
+        border : 1px solid #f7ecd3 ; 
+        background-color: $secColor;
+        color : #f7ecd3 ;
+      }
+    }
+    }
+    .detail_content {
+      width : 100% ;
+      // height : 20% ;
+      gap: 30px ;
+      justify-content: flex-start;
+      position: absolute;
+      bottom : 80px ;
+      img {
+        width : 30px ;
+        // height : 50px ;
+        // background-color: #fff;
+      }
+      .cont {
+        gap : 20px ;
+      } 
+    }
+  }
+   .Owner .content {
+
+    padding-top: 70px;
+   }
+
+  @media (max-width: 634px) { 
+    body .header .header_content p {
+      
+      width: 100%;
+      font-size: 24px !important;
+    }
+    body .NavBar {
+      padding: 0 40px;
+    }
+    body .header {
+      height: 70vh !important;
+  }
+  body .social {
+    flex-direction: column-reverse;
 }
+body .social .socialIcons {
+  width: 90%;
+}
+body .social h3 {
+  width: 100%;
+}
+body .BySection .seciontion .course-card .descBox .detials p {
+  font-size: 16px;
+}
+body .BySection .seciontion .course-card .descBox .detials h2 {
+  font-size: 18px;
+}
+body .BySection .seciontion .course-card {
+  width: 100%;
+}
+  }
+
+  @media (max-width: 532px) { 
+    body .AboutSectoin .bigLogo {
+      width: 90% !important;
+  }
+
+    body .NavBar {
+      padding: 0 20px;
+    }
+    body .NavBar button, body .NavBar p {
+      width: 150px;
+    }
+    body .ContactUs .motivation p {
+      line-height: 40px;
+    }
+    body .BySection .seciontion .course-card .descBox .detials {
+      height: 166px;
+      width: 100%;
+      flex-direction: column;
+      gap: 20px;
+      flex-wrap: nowrap;
+  }
+  body .BySection .seciontion .course-card .descBox {
+    width: 100%;
+    height: 70%;
+}
+body .BySection .seciontion .course-card .imgBox img {
+  width: 28%;
+}
+body .BySection .seciontion .course-card .imgBox {
+  height: 30%;
+  width: 100%;
+  background-color: #D8E0F0;
+}
+body .BySection .seciontion .course-card {
+  width: 100%;
+  height: 301px;
+  flex-direction: column;
+}
+body .ContactUs .motivation p {
+  height: 60%;
+}
+body .ContactUs .motivation .social_acc {
+  height: 40%;
+}
+  }
+
+  @media (max-width: 456px) { 
+    body .header .header_content p {
+      font-size: 38px;
+      width: 100%;
+    }
+    body .header .header_content .twobutns button , body .AboutSectoin .desc .twobutns button {
+      width: 300px !important;
+  }
+  body .header .header_content .twobutns , body .AboutSectoin .desc .twobutns  {
+    flex-direction: column;
+}
+body .AboutSectoin .desc p {
+  font-size: 18px;
+}
+body .AboutSectoin {
+  flex-direction: column-reverse;
+  margin: 140px 0;
+  margin-top: 200px;
+}
+body .AboutSectoin .desc .twobutns {
+  gap : 20px ;
+}
+body .ContactUs .motivation p {
+  line-height: 35px;
+}
+body .Footer .descContainer .dicovering h2 {
+  font-size: 20px;
+}
+body .ContactUs .form {
+  padding-right: 0px !important;
+}
+body .BySection .bigTtielSections p {
+  font-size: 20px;
+}
+body .header .header_content p {
+  text-align: center !important;
+  font-size: 22px !important;
+}
+body .ContactUs .motivation p {
+  line-height: 35px;
+}
+body .Footer .logoFooter p {
+  position: absolute;
+  right: 20px;
+  bottom: 80px;
+  color: #212B3E;
+  width: 90%;
+}
+body .Footer .logoFooter .Big_logo {
+  width: 70% !important;
+  margin-bottom: 80px !important;
+}
+body .Footer .descContainer .dicovering h2 {
+  font-size: 20px;
+}
+body .ContactUs .form {
+  padding-right: 0px !important;
+}
+
+
+  }
+

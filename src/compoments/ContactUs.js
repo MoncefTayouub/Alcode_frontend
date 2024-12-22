@@ -10,7 +10,7 @@ import doublewave from "../files/doublewave.svg"
 export default function ContactUs({HandleSubmitData}) {
 
 
-    const [fullName , setFullName ] = useState('')
+  const [fullName , setFullName ] = useState('')
   const [Mail , setMail ] = useState('')
   const [Subjects , setSubjects ] = useState('')
   const [MSG , setMSG ] = useState('')
@@ -48,7 +48,7 @@ export default function ContactUs({HandleSubmitData}) {
   return (
     <div className='ContactUs center '>
         <div className='motivation center'>
-            <p>نحن هنا لدعمك والإجابة على جميع استفساراتك. إذا كنت بحاجة إلى مساعدة، أو لديك سؤال، أو ترغب في معرفة المزيد عن خدماتنا، يسعدنا تواصلك معنا. فريقنا جاهز لتقديم الدعم والمشورة لضمان حصولك على أفضل تجربة ممكنة. لا تتردد في التواصل معنا اليوم!</p>
+            <p className="center">نحن هنا لدعمك والإجابة على جميع استفساراتك. إذا كنت بحاجة إلى مساعدة، أو لديك سؤال، أو ترغب في معرفة المزيد عن خدماتنا، يسعدنا تواصلك معنا. فريقنا جاهز لتقديم الدعم والمشورة لضمان حصولك على أفضل تجربة ممكنة. لا تتردد في التواصل معنا اليوم!</p>
         <div className='social_acc'>
             
             <div className='container center'>
@@ -77,7 +77,7 @@ export default function ContactUs({HandleSubmitData}) {
         </div>      
         </div>
         <div className='form frs center'>
-             <img src={doublewave} alt='' />
+             <img src={doublewave} className='' alt='' />
              {
                 sent ? 
                 <>
@@ -92,8 +92,8 @@ export default function ContactUs({HandleSubmitData}) {
                     <input placeholder='البريد الإلكتروني : example@gmail.com' onChange={(e)=>setMail(e.target.value)} value={Mail} />
                     <input placeholder='موضوع رسالتك' onChange={(e)=>setSubjects(e.target.value)} value={Subjects} />
                     
-                    <textarea onChange={(e)=>setMSG(e.target.value)} value={MSG} placeholder='لا تتردد في التواصل معنا إذا كنت بحاجة إلى أي توضيحات أو استفسارات. نحن هنا للمساعدة!' />
-                    <div className='twobutns center padding'>
+                    <textarea className='' onChange={(e)=>setMSG(e.target.value)} value={MSG} placeholder='لا تتردد في التواصل معنا إذا كنت بحاجة إلى أي توضيحات أو استفسارات. نحن هنا للمساعدة!' />
+                    <div className='twobutns center '>
                         <button className='gold rad20' onClick={()=>Submit()}>إرسال</button>
                     </div> 
                 </>

@@ -1,6 +1,7 @@
 import React , {useState , useEffect}from 'react'
 import notSub from '../files/notSub.svg'
 import axios  from 'axios'
+import addIconerror from '../files/addIconerror.svg'
 
 
 export default function AccNotActive({backend_url}) {
@@ -12,8 +13,7 @@ export default function AccNotActive({backend_url}) {
         setData(data)
     
     }
-    console.log(data) 
-    const markConnected = async(ob)=> {
+        const markConnected = async(ob)=> {
         const DataForm= new FormData();
         DataForm.append('id',ob['id'])
         DataForm.append('state','setconnect')
@@ -70,23 +70,36 @@ export default function AccNotActive({backend_url}) {
             <p>ابحث عن مستخدم</p>
         </div> */}
 
-        <div className='contentHeader contentBox center'>            
-            <div className='sec center' >  <p> تم التواصل معه </p> </div>
-            <div className='sec center'> <p>المدة </p> </div>
-            <div className='sec center'>  <p>الاسم الكامل</p></div>
-        </div>
-        {
-            data ? data.map((ob,i)=>
-                <div key={i} className= {boxClass(i) }>
-                    <div className='sec center'> <div onClick={()=>markConnected(ob)} className={ ob['contacted'] == false ? 'contated con00' : 'contated con01' }></div> </div>
-                    <div className='sec center'> {handleCounterDays(ob['dur_start'],ob['duration'])}</div>
-                    <div className='sec center'> <p>{ob['firstname'] } {ob['lastname']}</p> </div>           
+{
+            data ? data.length ? <>
+                <div className='contentHeader contentBox center'>            
+                    <div className='sec center' >  <p> تم التواصل معه </p> </div>
+                    <div className='sec center'> <p>المدة </p> </div>
+                    <div className='sec center'>  <p>الاسم الكامل</p></div>
                 </div>
-            )
-            :<p>لا يوجد محتوى محمّل</p>
-        }
-
-        
-    </div>
+                {data.map((ob,i)=>
+                        <div key={i} className= {boxClass(i) }>
+                            <div className='sec center'> <div onClick={()=>markConnected(ob)} className={ ob['contacted'] == false ? 'contated con00' : 'contated con01' }></div> </div>
+                            <div className='sec center'> {handleCounterDays(ob['dur_start'],ob['duration'])}</div>
+                            <div className='sec center'> <p>{ob['firstname'] } {ob['lastname']}</p> </div>           
+                        </div>
+                    )
+                } </>:
+                    <div className='noContent'>
+                    <img alt='' src={addIconerror} />
+                    <p>
+                    لا يوجد محتوى متاح حاليًا.<br />
+                    يرجى التحقق من الاتصال إذا كنت متأكدًا من وجود محتوى محمّل هنا.
+                            </p>
+                        </div>
+                    :<div className='noContent'>
+                    <img alt='' src={addIconerror} />
+                    <p>
+                        لا يوجد محتوى متاح حاليًا.<br />
+                        يرجى التحقق من الاتصال إذا كنت متأكدًا من وجود محتوى محمّل هنا.
+                                </p>
+                            </div>
+                    
+                }    </div>
   )
 }

@@ -10,23 +10,64 @@ import AudioExp from '../Items/AudioExp'
 import pauseWhite from '../files/pauseWhite.svg'
 import AutoPlayAudio from '../Items/AutoPlayAudio'
 
-export default function Quiz({logged,backend_url,selectedSerie,setselectedSerie,testResults,settestResults}) {
+export default function Quiz({validationRef,setvalidationRef,setreloading,logged,backend_url,selectedSerie,setselectedSerie,testResults,settestResults}) {
     const navigate = useNavigate();
     const [moDAnswer ,  setmoDAnswer ] = useState(0)
     const [ data , setData ] = useState(null)
     const [nbQ , setNbQ]= useState(0)
     const [userAnswers , setuserAnswers] = useState([])
+    const [setQuiz ,sSETetQuiz ] = useState()
 
+    console.log({'validationRef' : validationRef,'logged':logged})
+   const Auth =  () => {
+    
+    //   const user = localStorage.getItem('user')
+    //     console.log('user',user)
+    //   if (user == null){
+    //      navigate('/login');
+    //     return 0 ;
+    //    }
+    //    const jsonObject = JSON.parse(user);
+    //    setreloading(true)
+    //       const DataForm = new FormData();
+    //       DataForm.append('user', jsonObject.id);
+    //       DataForm.append('data', selectedSerie['id']);
+       
+    //       try {
+    //           const response = await axios({
+    //               method: 'POST',
+    //               url: `${backend_url}userlogin/duration`,
+    //               data: DataForm,
+    //           });
+      
+    //           const data = response.data;
+    //           if (data.status === 1) {
+    //             setData(data['serieTest'])
+    //             setNbQ(data['serieTest'].length - 1)
+    //             setuserAnswers(data['res'])
+    //           }
+    //           setreloading(false)
+    //           if (data.status === 0) {
+    //              navigate('/login')
+    //              return 0 
+    //           }
+    //           return 1 
+              
+    //       } catch (error) {
+    //           console.error('Error during login:', error);
+    //           return 0 
+    //       }
+      };    
     
 
-    let getData = async () => { 
-          
-        let respons = await fetch (`${backend_url}loadData`)
-        let data = await respons.json()
-        setData(data['serieTest'])
-        setNbQ(data['serieTest'].length - 1)
-        setuserAnswers(data['res'])
-    }
+    // let getData = async () => { 
+        
+    //     let respons = await fetch (`${backend_url}loadData${''}`)
+    //     let data = await respons.json()
+    //     setData(data['serieTest'])
+    //     setNbQ(data['serieTest'].length - 1)
+    //     setuserAnswers(data['res'])
+    // }
 
     const [selectedAnswers , setselectedAnswers] = useState([])
 
@@ -45,10 +86,20 @@ export default function Quiz({logged,backend_url,selectedSerie,setselectedSerie,
 
     useEffect(()=> {
         window.scrollTo(0, 0);
-        getData()
-        if (logged != 1&&logged!=-5) navigate('/login')
+       
+           
+       
+        
         },[])
 
+        useEffect(()=> {
+            if (logged !== 1  ) {
+                navigate('/login')
+            }else 
+            if (validationRef == 0  ) {
+                navigate('/ByPass')
+            }
+        },[validationRef,logged])
 
     const [startTest , setStartTest] = useState(false)
 
@@ -57,6 +108,7 @@ export default function Quiz({logged,backend_url,selectedSerie,setselectedSerie,
         const DataForm = new FormData();
         DataForm.append('id',selectedSerie['id'])
         DataForm.append('state','series_test')
+        setreloading(true)
         await axios ({
             method : 'POST' , 
             url : `${backend_url}owner/profiles/GEN` ,
@@ -66,6 +118,7 @@ export default function Quiz({logged,backend_url,selectedSerie,setselectedSerie,
 
             let dataR = response.data
             if (dataR['status'] == 1 ) {
+                setreloading(false)
                 setData(dataR['content'])
                 setNbQ(dataR['content'].length - 1)
               }
@@ -87,19 +140,20 @@ const [timeLeft, setTimeLeft] = useState(6);
 
 const [totalcounter , settotalcounter] = useState(0)
 
-// console.log({
-//     'timeLeft ':timeLeft , 
-//     'moDAnswer':moDAnswer,
-//     'userAnswers':userAnswers,
-//     'selectedAnswers':selectedAnswers,  
-//     'counter State':nbQ < 0 || isPlaying || !startTest,
-//     'nbQ':nbQ ,
-//     'isPlaying':isPlaying , 
-//     'startTest':!startTest, 
-//     'cond' : !(moDAnswer == 1 && totalcounter % 2 == 0 ),
-//     'totalcounter':totalcounter ,
-//     'testResults':testResults , 
-// })
+console.log({
+    'timeLeft ':timeLeft , 
+    'moDAnswer':moDAnswer,
+    'userAnswers':userAnswers,
+    'selectedAnswers':selectedAnswers,  
+    'counter State':nbQ < 0 || isPlaying || !startTest,
+    'nbQ':nbQ ,
+    'isPlaying':isPlaying , 
+    'startTest':startTest, 
+    'cond' : !(moDAnswer == 1 && totalcounter % 2 == 0 ),
+    'totalcounter':totalcounter ,
+    'testResults':testResults , 
+    'data':data,
+})
 
 
 
@@ -231,7 +285,7 @@ const HandleUserAnswer = (idQ, id) => {
     const [AXurl , setAXurl ]= useState('')  
    
 
-    const audiDesc = useRef(null);   
+    // const audiDesc = useRef(null);   
     const audioExplainationRef = useRef(null);
     const togglePlayPause = () => {
         // console.log('-----' , isPlaying , AXurl ,audioExplainationRef.current )
@@ -248,7 +302,7 @@ const HandleUserAnswer = (idQ, id) => {
     
     const [totalTiming, setTotalTiming] = useState(0);
 
-    
+   
 
     
 
@@ -263,7 +317,7 @@ const HandleUserAnswer = (idQ, id) => {
                 let  audioRef =    new Audio(backend_url+data[nbQ]['auidio_explaination']);
                 let  audioD  =    new Audio(backend_url+data[nbQ]['audio_content']);
                  audioExplainationRef.current = audioRef
-                 audiDesc.current = audioD
+                //  audiDesc.current = audioD
                  audioRef.addEventListener('loadedmetadata', () => {
                     setTotalTiming(parseInt(audioRef.duration))
                   }); 
@@ -276,10 +330,10 @@ const HandleUserAnswer = (idQ, id) => {
       const [muteAudio , setmuteAudio  ] = useState(false ) 
 
       const handleMute = ()=> {
-        if (audiDesc.current) {
-            audioExplainationRef.current.muted = !muteAudio
-            setmuteAudio(!muteAudio) 
-        }  
+        // if (audiDesc.current) {
+        //     audioExplainationRef.current.muted = !muteAudio
+        //     setmuteAudio(!muteAudio) 
+        // }  
       }
 
       const decreasenbQ = ()=> {

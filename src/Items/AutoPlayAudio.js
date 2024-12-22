@@ -13,6 +13,7 @@ const AutoPlayAudio = ({moDAnswer,setmoDAnswer, descAudioIsPlaying,audioUrl ,sta
         setIsPlaying(false)
       
       } else 
+      if (startTest)
       audioRef.current
         .play()
         .then(() => {

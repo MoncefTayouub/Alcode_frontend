@@ -15,7 +15,7 @@ export default function Footer({footerContent,typeR,setselectedSerie,pathname}) 
   const navigate = useNavigate();
 
  
- 
+
   const handleSettingSerie = (ob)=> {
     setselectedSerie(ob)
     if (pathname != 'serie')

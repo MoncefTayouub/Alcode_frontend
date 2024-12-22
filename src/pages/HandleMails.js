@@ -2,18 +2,23 @@ import { useEffect , useState } from "react"
 import React  from 'react'
 import topWhite from '../files/topWhite.svg'
 import buttonWhite from '../files/buttonWhite.svg'
-export default function HandleMails({backend_url}) {
+export default function HandleMails({backend_url,setreloading}) {
     const [ data , setData ] = useState()
     const [hovering , sethovering ] = useState(-1)
     const [droppedMsg , setdroppedMsg] = useState(-1)
 
-  let getData = async () => { 
-          
-      let respons = await fetch (`${backend_url}contactUs`)
-      let data = await respons.json()
-      setData(data)
-  
+  let getData = async () => {
+  setreloading(true); // Start reloading process
+  try {
+    let respons = await fetch(`${backend_url}contactUs`);
+    let data = await respons.json();
+    setData(data); // Set the data after fetching
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  } finally {
+    setreloading(false); // Set reloading to true after everything is done
   }
+};
   
   useEffect(()=> {
       getData() 

@@ -5,14 +5,9 @@ import { useNavigate } from 'react-router-dom';
 const   Navbar = ({typeR,logged,logOut})=> {
     const navigate = useNavigate()
 
-    
-
     const log = ()=> {
         navigate('/login')
     }
-
-
-
     const content = (typeR == true) ? <div></div> 
     : <div className="NavBar spacebetween">
          <a href="/"> <img src={logo} alt=""></img></a>

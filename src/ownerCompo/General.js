@@ -3,8 +3,9 @@ import notSub from '../files/notSub.svg'
 import axios  from 'axios'
 import edit_blue from '../files/edit_blue.svg'
 import trash_blue from '../files/trash_blue.svg'
+import addIconerror from '../files/addIconerror.svg'
 
-export default function General({backend_url,seteditUser,SetnavSelect}) {
+export default function General({backend_url,seteditUser,SetnavSelect,setreloading}) {
     const [ data , setData ] = useState()
     let getData = async () => { 
             
@@ -21,7 +22,7 @@ export default function General({backend_url,seteditUser,SetnavSelect}) {
         DataForm.append('type','user')
         DataForm.append('content',searchContent)
         var method = 'POST'
-      
+        setreloading(true)
         // DataForm.append('quiz',quiz)
         
         await axios ({
@@ -33,6 +34,7 @@ export default function General({backend_url,seteditUser,SetnavSelect}) {
             let data = response.data
             setData(data['content'])
             setsearchContent('')
+            setreloading(false)
       }).catch(function (error) {
           console.log(error)
         });
@@ -157,7 +159,7 @@ export default function General({backend_url,seteditUser,SetnavSelect}) {
             <div className='sec4 center'>  <p>الاسم الكامل</p></div>
         </div>
         {
-            data ? data.map((ob,i)=>
+            data ? data.length ? data.map((ob,i)=>
                 <div key={i} className= {boxClass(i) } onMouseEnter={()=>sethovering(i)} >
                     <div className='sec4 center'> {hovering == i ? <div className='iconsContainer center'> 
                                 <img alt='' onClick={()=>editUser(ob)}   src={edit_blue} />
@@ -172,8 +174,21 @@ export default function General({backend_url,seteditUser,SetnavSelect}) {
                         
                                   
                 </div>
-            )
-            :''
+            ) : 
+            <div className='noContent'>
+            <img alt='' src={addIconerror} />
+            <p>
+            لا يوجد محتوى متاح حاليًا.<br />
+            يرجى التحقق من الاتصال إذا كنت متأكدًا من وجود محتوى محمّل هنا.
+                    </p>
+                </div>
+            :<div className='noContent'>
+            <img alt='' src={addIconerror} />
+            <p>
+                لا يوجد محتوى متاح حاليًا.<br />
+                يرجى التحقق من الاتصال إذا كنت متأكدًا من وجود محتوى محمّل هنا.
+                        </p>
+                    </div>
         }
 
         

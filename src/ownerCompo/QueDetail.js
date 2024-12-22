@@ -10,7 +10,7 @@ import notCorr from '../files/notCorr.svg'
 import isvalidBlue from '../files/isvalidBlue.svg'
 import { useNavigate } from 'react-router-dom';
 
-export default function QueDetail({logged,clearFields,questionList , setquestionList ,quiz,serie,setSerie,SetnavSelect,backend_url,errorMsg,setErrorMsg}) {
+export default function QueDetail({setreloading,GoBack,setGoBack,logged,clearFields,questionList , setquestionList ,quiz,serie,setSerie,SetnavSelect,backend_url,errorMsg,setErrorMsg}) {
     const [content , setContent ] = useState()
     const [answers , setAnswers ] = useState([])
     const [answerContent , setAnswerContent] = useState('')
@@ -26,7 +26,7 @@ export default function QueDetail({logged,clearFields,questionList , setquestion
     //     answers: [{'content' :'answerContent' , 'status' : 0 },{'content' :'answerContent01' , 'status' : 1 },{'content' :'answerContent333' , 'status' : 0 }],
     //   }
     // ])
-    const [answercheck , setanswercheck ] = useState(-1) 
+    const [answercheck , setanswercheck ] = useState('') 
     const [compoUpdate , setcompoUpdate] = useState(1)
 
     useEffect(()=> {
@@ -37,6 +37,10 @@ export default function QueDetail({logged,clearFields,questionList , setquestion
     },[])
 
     const addAnswer = ()=> {
+        if (answerContent === '') {
+          setanswercheck ("لا يمكنك ترك الإجابة فارغة")
+          return 0
+        }
         if (editanswerMode == -1 ) {
         setAnswers([...answers , {'content' :answerContent , 'status' : 0 , "id":-1 }])
         
@@ -93,7 +97,7 @@ export default function QueDetail({logged,clearFields,questionList , setquestion
       const addQuestion = () => {
        if (checkCorrectAnswer()){
       if (!content || answers.length === 0) {
-        console.error("Question content or answers cannot be empty");
+        setanswercheck("Question content or answers cannot be empty");
         return;
       }
     
@@ -123,11 +127,11 @@ export default function QueDetail({logged,clearFields,questionList , setquestion
       setAnswerContent([]); // Clear answers
       setContent(''); // Clear question content
       setAnswers([])
-      setanswercheck(-1)
+      setanswercheck('')
       seteditanswerMode(-1)
       seteditQuestionMode(-1)
    }else 
-      setanswercheck(0)
+      setanswercheck('يجب اختيار إجابة صحيحة واحدة بالضغط على الإجابة الصحيحة لتصبح باللون الأحمر')
   
   };
 
@@ -137,6 +141,7 @@ export default function QueDetail({logged,clearFields,questionList , setquestion
   
       const Submit = async ()=> {
         if (checkInput()) {
+          setreloading(true)
         const DataForm= new FormData();
         DataForm.append('content',JSON.stringify(questions))
         DataForm.append('quiz',quiz['id'])
@@ -152,6 +157,7 @@ export default function QueDetail({logged,clearFields,questionList , setquestion
           
       })
       .then((response)=>{
+        setreloading(false)
             let data = response.data
             // eslint-disable-next-line eqeqeq
             if (data['status'] == 1 ) {
@@ -174,6 +180,7 @@ export default function QueDetail({logged,clearFields,questionList , setquestion
 
       const handleDelete = async ()=> { 
           if (del_serie != -1 ) {
+            setreloading(true)
           const DataForm= new FormData();
           DataForm.append('id',questions[del_serie]['id'])
           DataForm.append('serie',serie['id'])
@@ -188,6 +195,7 @@ export default function QueDetail({logged,clearFields,questionList , setquestion
             data :  DataForm,
         })
         .then((response)=>{
+          setreloading(false)
               let data = response.data
               setdel_serie(-1)
               setErrorMsg(6)
@@ -219,6 +227,7 @@ export default function QueDetail({logged,clearFields,questionList , setquestion
     const handleDeleteAnswer = async ()=> {
       console.log([{'del_answer' : del_answer} , {'id': del_answer != -1 ? answers[del_answer]['id'] : -1} ] )
       if (del_answer != -1 ) {
+        setreloading(true)
         const DataForm= new FormData();
         DataForm.append('type','answer')
         DataForm.append('id',answers[del_answer]['id'])
@@ -228,6 +237,7 @@ export default function QueDetail({logged,clearFields,questionList , setquestion
           data :  DataForm,
       })
       .then((response)=>{
+        setreloading(false)
             let data =  response.data 
             console.log('deleteAnswer ' , data )
             if (data['status'] == 1 ) {
@@ -245,9 +255,40 @@ export default function QueDetail({logged,clearFields,questionList , setquestion
         setErrorMsg(7)
     }
 
+    const CircleBox = ({ text, colorClass , tpe , setGoBack }) => {  
+      return (
+        <div className="circle-box">
+          <div onClick={()=>setGoBack(tpe)} className={`circle ${colorClass}`}></div>
+          <p onClick={()=>setGoBack(tpe)} className="circle-text">{text}</p>
+        </div>
+      );
+    };
 
+    useEffect(() => {
+
+        const timer = setTimeout(() => {
+          setanswercheck('')    
+          // Place your function logic here 
+        }, 6000); // 30 seconds = 30000 milliseconds
+    
+        // Cleanup to avoid memory leaks if the component unmounts
+        return () => clearTimeout(timer);
+      }, [answercheck]);
+
+      const handleAnswerKeyDown = (e)=> {
+          if (e.key === 'Enter') {
+            addAnswer()
+          }
+      }
+
+    
     return (
     <div className='Questions ownerPadding center '>
+        <div className="frame">
+        <CircleBox tpe={0} setGoBack={setGoBack} text="سلسلة" colorClass="yellow" />
+        <CircleBox tpe={1} setGoBack={setGoBack}  text="اختبار" colorClass="yellow" />
+        <CircleBox tpe={2} setGoBack={setGoBack}  text="أسئلة" colorClass="yellow" />
+      </div>
       {
         del_serie != -1 ?  <div className='deleteConfirmMessage center' >
         <div className='boxer center'>
@@ -321,14 +362,15 @@ export default function QueDetail({logged,clearFields,questionList , setquestion
              ( editanswerMode != -1 ) ?  <img onClick={(e)=> addAnswer() } alt='' src={isCorr} />  
              : <img onClick={(e)=> addAnswer() } alt='' src={yellow_plus} /> 
              }
-            <input className='bigInput' placeholder='اقترح إجابة للمستخدم' onChange={(e)=> {setAnswerContent(e.target.value)}}  value={answerContent}/>
+            <input className='bigInput'  onKeyDown={handleAnswerKeyDown} placeholder='اقترح إجابة للمستخدم' onChange={(e)=> {setAnswerContent(e.target.value)}}  value={answerContent}/>
         </div>
         <div className='errorAnswer wrongAnswer'>
-          <p> {answercheck === 0 ? 'يجب اختيار إجابة صحيحة واحدة بالضغط على الإجابة الصحيحة لتصبح باللون الأحمر.' : '' }  </p>
+          {/* <p> {answercheck === 0 ? 'يجب اختيار إجابة صحيحة واحدة بالضغط على الإجابة الصحيحة لتصبح باللون الأحمر.' : '' }  </p> */}
+          <p> {answercheck  }  </p>
         </div>
         <div className='container end center'>
             {/* <input className='bigInput' placeholder='اقترح إجابة للمستخدم' /> */}
-            <p>أضف سؤالًا آخر </p>
+            <p onClick={()=>addQuestion()}>أضف سؤالًا آخر </p>
             <img alt='' onClick={()=>addQuestion()} src={(editQuestionMode == -1 ? blue_plus : isvalidBlue)} />
         </div>
     </div>
