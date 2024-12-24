@@ -14,8 +14,8 @@ import { use } from 'react';
 import SellingPoing from './compoments/SellingPoing';
 import TestAudio from './Items/TestAudio';
 const App = () => {
-  // const backend_url = 'https://srv668869.hstgr.cloud/';
-  const backend_url = 'http://127.0.0.1:8000/';
+  const backend_url = 'https://srv668869.hstgr.cloud/';
+  // const backend_url = 'http://127.0.0.1:8000/';
   const [testResults,settestResults] = useState()
   const [logged , setLogged] = useState(-5)
   const [isOwner , setisOwner] = useState(false)
@@ -172,7 +172,7 @@ return (
         <Navbar logOut={logOut} logged={logged}  typeR={typeR} />   
         <Routes>
            <Route path="/" element={<Home  setselectType={setselectType} HandleSubmitData={HandleSubmitData} logged={logged} setselectedSerie={setselectedSerie} selectedSerie={selectedSerie} backend_url={backend_url} />} />    
-          <Route path="/Serie" element={<Serie selectType={selectType} categoryContent={categoryContent} setselectedSerie={setselectedSerie} selectedSerie={selectedSerie} backend_url={backend_url} />} />    
+          <Route path="/Serie" element={<Serie setreloading={setreloading} selectType={selectType} categoryContent={categoryContent} setselectedSerie={setselectedSerie} selectedSerie={selectedSerie} backend_url={backend_url} />} />    
           <Route path="/Quiz" element={<Quiz validationRef={validationRef} setreloading={setreloading} typeLicence={typeLicence} logged={logged} testResults={testResults} settestResults={settestResults} backend_url={backend_url}  setselectedSerie={setselectedSerie} selectedSerie={selectedSerie}    />} />    
           <Route path="/QuizRes" element={<QuizRes logged={logged} testResults={testResults} settestResults={settestResults} backend_url={backend_url}  setselectedSerie={setselectedSerie} selectedSerie={selectedSerie}    />} />    
           <Route path="/result" element={<Results logged={logged} testResults={testResults} settestResults={settestResults} backend_url={backend_url}  />} />    

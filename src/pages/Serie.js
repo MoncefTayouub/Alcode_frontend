@@ -8,7 +8,7 @@ import motocycle_section from '../files/motocycle_section.svg'
 import bigTruck_section from '../files/bigTruck_section.svg'
 import bus_section from '../files/bus_section.svg'
 
-export default function Serie({selectType,categoryContent,selectedSerie,backend_url,setselectedSerie}) {
+export default function Serie({setreloading,selectType,categoryContent,selectedSerie,backend_url,setselectedSerie}) {
     const [title , setTitle ] = useState('')
     const [desc , setdesc ] = useState('')
     const [img , setimg ] = useState('') 
@@ -30,9 +30,11 @@ export default function Serie({selectType,categoryContent,selectedSerie,backend_
     const navigate = useNavigate();
     let getData = async () => {
         var index = licenceTypes.indexOf(selectType)
+        setreloading(true)
         let respons = await fetch (`${backend_url}course/content/${index}`)
         let data = await respons.json()
         setData(data)
+        setreloading(false)
         window.scrollTo(0, 0);
          // eslint-disable-next-line default-case
          switch(selectType) {
