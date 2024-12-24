@@ -1,9 +1,17 @@
 import React ,{useEffect, useState}from "react";
 import logo from "../files/logo.png"
-import { useNavigate } from 'react-router-dom';
+import { useNavigate , useLocation } from 'react-router-dom';
 
-const   Navbar = ({typeR,logged,logOut})=> {
+const   Navbar = ({logged,logOut})=> {
+    const [typeR,settypeR]= useState(false)
     const navigate = useNavigate()
+    const location = useLocation();
+    const [currentPath, setCurrentPath] = useState("");
+
+    useEffect(() => {
+      setCurrentPath(location.pathname);
+      settypeR(location.pathname=="/login" || location.pathname=="/owner" || location.pathname=="/ByPass" )
+    }, [location]);
 
     const log = ()=> {
         navigate('/login')

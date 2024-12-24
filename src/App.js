@@ -14,8 +14,8 @@ import { use } from 'react';
 import SellingPoing from './compoments/SellingPoing';
 import TestAudio from './Items/TestAudio';
 const App = () => {
-  const backend_url = 'https://srv668869.hstgr.cloud/';
-  // const backend_url = 'http://127.0.0.1:8000/';
+  // const backend_url = 'https://srv668869.hstgr.cloud/';
+  const backend_url = 'http://127.0.0.1:8000/';
   const [testResults,settestResults] = useState()
   const [logged , setLogged] = useState(-5)
   const [isOwner , setisOwner] = useState(false)

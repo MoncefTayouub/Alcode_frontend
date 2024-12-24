@@ -1,4 +1,4 @@
-import React from 'react'
+import React , {useState , useEffect} from 'react'
 import instagramyellow from '../files/instagramyellow.svg'
 import facebookyellow from '../files/facebookyellow.svg'
 import whatsappyellow from '../files/whatsappyellow.svg'
@@ -8,13 +8,23 @@ import Big_logo from '../files/Big_logo.png'
 import phoneNumber from '../files/phoneNumber.svg'
 import mail_yellow from '../files/mail_yellow.svg'
 import Polygon from '../files/Polygon.svg'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate , useLocation } from 'react-router-dom';
 
-export default function Footer({footerContent,typeR,setselectedSerie,pathname}) {
+export default function Footer({footerContent,setselectedSerie,pathname}) {
  
   const navigate = useNavigate();
+  const [ typeR , settypeR] = useState(false)
+  const location = useLocation();
+  const [currentPath, setCurrentPath] = useState("");
 
- 
+  useEffect(() => {
+    setCurrentPath(location.pathname);
+    settypeR(location.pathname=="/login" || location.pathname=="/owner" )
+  }, [location]);
+
+  const log = ()=> {
+      navigate('/login')
+  }
 
   const handleSettingSerie = (ob)=> {
     setselectedSerie(ob)
