@@ -7,7 +7,7 @@ import image_logo from '../files/image_logo.svg'
 import axios from 'axios'
 import Quiz from '../pages/Quiz'
 
-export default function Questions({setGoBack,logged,handleFileName,questionList , setquestionList ,serie,quiz , setquiz,setSerie,SetnavSelect,backend_url,errorMsg,setErrorMsg}) {
+export default function Questions({setreloading,setGoBack,logged,handleFileName,questionList , setquestionList ,serie,quiz , setquiz,setSerie,SetnavSelect,backend_url,errorMsg,setErrorMsg}) {
 
   
   const [audioContent , setAudioContent ] = useState(null)
@@ -130,6 +130,7 @@ export default function Questions({setGoBack,logged,handleFileName,questionList 
       DataForm.append('picture',imgC)
       DataForm.append('serie',serie['id'])
       DataForm.append('correctAnswer',imgCExp)
+      setreloading(true)
       if (editMode) {
         DataForm.append('id',quiz['id'])
         method = 'PUT'
@@ -141,7 +142,7 @@ export default function Questions({setGoBack,logged,handleFileName,questionList 
     })
   
     .then((response)=>{
-  
+      setreloading(false)
           let data = response.data
           console.log('---__-',data)
           // eslint-disable-next-line eqeqeq

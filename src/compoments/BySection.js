@@ -49,7 +49,8 @@ export default function BySection({setselectType}) {
                     <button className="start-button">ابد الآن </button>
             </div>
         </div>
-        <div className='course-card center' onClick={()=> navi("CE")}>
+        {/* <div className='course-card center' onClick={()=> navi("CE")}> */}
+        <div className='course-card center' >
             <div className='imgBox center '>
                <img src={bigTruck_section} alt={''} className="course-image" />
 
@@ -62,7 +63,8 @@ export default function BySection({setselectType}) {
                     <button className="notavailable">الدورات قيد الإعداد، ترقبونا قريبًا </button>
             </div>
         </div>
-        <div className='course-card center' onClick={()=> navi("C")}>
+        {/* <div className='course-card center' onClick={()=> navi("C")}> */}
+        <div className='course-card center' >
             <div className='imgBox center '>
                <img src={truck_section} alt={''} className="course-image" />
 
@@ -75,7 +77,8 @@ export default function BySection({setselectType}) {
                     <button className="notavailable">الدورات قيد الإعداد، ترقبونا قريبًا </button>
             </div>
         </div>
-        <div className='course-card center' onClick={()=> navi("D")}>
+        {/* <div className='course-card center' onClick={()=> navi("D")}> */}
+        <div className='course-card center' >
             <div className='imgBox center '>
                <img src={bus_section} alt={''} className="course-image" />
 
