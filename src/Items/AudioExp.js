@@ -4,66 +4,136 @@ import audioPlayer from '../files/audioPlayer.svg'
 import pauseWhite from '../files/pauseWhite.svg'
 import leftWhite from '../files/leftWhite.svg'
 import rightWhite from '../files/rightWhite.svg'
-
-export default function AudioExp({len,nbQ,isPlaying,audioExplainationRef,togglePlayPause,totalTiming,seeRes=false,handleSeeNbQ}) {
-
+import HandleAudio from './HandleAudio'
+export default function AudioExp({AXurl,setIsPlaying,len,nbQ,isPlaying,audioExplainationRef,togglePlayPause,seeRes=false,handleSeeNbQ}) {
+    const [totalTiming , settotalTiming] = useState(0)
     const [currentTime , setcurrentTime] = useState(0) 
     // const [hourMode ]
 
-     useEffect(()=> {
-        if (totalTiming > 0 ) {
-            setcurrentTime(totalTiming)
-        }
-    },[totalTiming])
+    //  useEffect(()=> {
+    //     if (totalTiming > 0 ) {
+    //         setcurrentTime(totalTiming)
+    //     }
+    // },[totalTiming])
 
-    console.log(len,nbQ,seeRes)
+    // console.log(len,nbQ,seeRes)
     // const handleSeeNbQ = (dir)=> {
     //     console.log('handleSeeNbQ',dir)
     // }
 
-    useEffect(() => {
+    
+    // useEffect(() => {
 
-        if (currentTime < 0 || !isPlaying ) return ;
-        // Update every second
-        const smallSequence = setInterval(() => {
-            setcurrentTime((prevTime) => prevTime - 1);
-        }, 1000); // 1 second = 1000 milliseconds
+    //     if (currentTime < 0 || !isPlaying ) return ;
+    //     // Update every second
+    //     const smallSequence = setInterval(() => {
+    //         setcurrentTime((prevTime) => prevTime - 1);
+    //     }, 1000); // 1 second = 1000 milliseconds
     
         
     
-        return () => {
-            clearInterval(smallSequence);
-        };
-    }, [isPlaying,currentTime]);
+    //     return () => {
+    //         clearInterval(smallSequence);
+    //     };
+    // }, [isPlaying,currentTime]);
 
  
-    const [leftTime , setleftTime ] = useState('')
-    useEffect(()=> {
-        let min =  parseInt(currentTime/60)
-        let sec = currentTime % 60 
-        min =  min > 9 ? min : "0"+ min
-        sec = sec>9 ? sec : "0"+sec
-        setleftTime( min + ':' +  sec  )
-    },[currentTime])
+    // const [leftTime , setleftTime ] = useState('')
+    // useEffect(()=> {
+    //     let min =  parseInt(currentTime/60)
+    //     let sec = currentTime % 60 
+    //     min =  min > 9 ? min : "0"+ min
+    //     sec = sec>9 ? sec : "0"+sec
+    //     setleftTime( min + ':' +  sec  )
+    // },[currentTime])
+
+    let audio = null
+
+    // useEffect(()=> {
+    //     if (AXurl != '') {
+    //        audio =  new Audio(AXurl);
+    //     }
+    // },[AXurl])
+
+
+    const [audioDuration, setAudioDuration] = useState(0); // Total audio duration in seconds
+    const [isAudioReady, setIsAudioReady] = useState(false); // Boolean to check if audio is ready
+    // const audioUrl = 'https://www.example.com/path-to-audio.mp3'; // Replace with your audio URL
+
+    
+    // useEffect(() => {
+    //     if (audio == null) return ;
+    //   const onLoadedMetadata = () => {
+    //     settotalTiming(audio.duration); // Set the total duration
+    //     setIsAudioReady(true); // Mark audio as ready
+    //   };
+  
+    //   const onError = () => {
+    //     setIsAudioReady(false); // Mark audio as not ready
+    //   };
+  
+    //   // Attach event listeners
+    //   audio.addEventListener('loadedmetadata', onLoadedMetadata);
+    //   audio.addEventListener('error', onError);
+  
+    //   return () => {
+    //     // Clean up event listeners
+    //     audio.removeEventListener('loadedmetadata', onLoadedMetadata);
+    //     audio.removeEventListener('error', onError);
+    //   };
+    // }, [audio]);
+  
+    // useEffect(() => {
+    //     if (audio == null || !isAudioReady ) return ;
+    //   if (isPlaying ) {
+    //     audio.pause();
+    //   } else {
+    //     audio.play();
+    //   }
+    //   // Cleanup to prevent multiple instances
+    //   return () => {
+    //     audio.pause();
+    //     audio.currentTime = 0;
+    //   };
+    // }, [isPlaying, isAudioReady, audio]);
+
+
+     function formatSeconds(seconds) {
+            if (isNaN(seconds) || seconds < 0) {
+              return "00:00"; // Handle invalid input
+            }
+          
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = Math.floor(seconds % 60); // Use Math.floor for accurate seconds
+          
+            const formattedMinutes = String(minutes).padStart(2, '0');
+            const formattedSeconds = String(remainingSeconds).padStart(2, '0');
+          
+            return `${formattedMinutes}:${formattedSeconds}`;
+          }
+
+
+
   return (
     <div className='audioExplaination padding center'>
             <div className='seeRes'>
             
+            <HandleAudio setCurrentTiming={setcurrentTime} setTotalDuration={settotalTiming} audioUrl={AXurl} isPlaying={isPlaying} setReady={setIsAudioReady} />
 
             </div>
             <div className='audioPlayer center width100 '>
-                 {seeRes && nbQ < len -1 ?    <img alt='' onClick={() => handleSeeNbQ(0)} src={leftWhite} /> : ''} 
+                    {seeRes && nbQ < len -1 ?    <img alt='' onClick={() => handleSeeNbQ(0)} src={leftWhite}  /> : ''} 
                     <div className='audioLabel spacebetween'>
-                        <p>{ leftTime }</p>
+                        <p>{ formatSeconds(currentTime) }</p>
                         <div className='slide_bar center'>
-                            <div className='s_bar' style={{width :(100-currentTime/totalTiming*100)+"%" }} ></div>
+                            <div className='s_bar' style={{width :(currentTime/totalTiming*100)+"%" }} ></div>
                         </div>
                         {
-                            audioExplainationRef.current ? 
-                            <img alt='' src={isPlaying ? pauseWhite  : play_white } onClick={()=>togglePlayPause()} />
-                            : ''
+                            // isAudioReady ? 
+                            <img alt='' src={isPlaying ? pauseWhite  : play_white } onClick={()=>setIsPlaying(!isPlaying)} />
+                            // : ''
                         }
-                        <img alt='' src={audioPlayer} />
+                        {/* <img alt='' src={audioPlayer} /> */}
                     </div>
                     { seeRes && nbQ > 0 ? <img onClick={() => handleSeeNbQ(1)} alt='' src={rightWhite} /> : ''}
 

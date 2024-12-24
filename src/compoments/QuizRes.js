@@ -23,15 +23,16 @@ export default function QuizRes({logged,backend_url,selectedSerie,setselectedSer
 
     const [selectedAnswers , setselectedAnswers] = useState([])
 
-    const hadnleRes = (qi,anss)=> {
+    const hadnleRes = (qi, anss) => {
         if (userAnswers) {
-            return userAnswers.filter((e,i)=>{
-                if (e['QI']==qi && e['answer'].indexOf(anss) > -1 ) return e
-            }).length > 0 
-            
+            for (let i = 0; i < userAnswers.length; i++) {
+                if (userAnswers[i].content.some(e => e.QI === qi && e.CA.includes(anss))) {
+                    return true; // Found a match, exit early
+                }
+            }
         }
-        return 0 
-    }
+        return false; // No match found
+    };
 
 
 
@@ -128,39 +129,22 @@ const [totalcounter , settotalcounter] = useState(0)
     
     const [totalTiming, setTotalTiming] = useState(0);
 
-    console.log(selectedAnswers,userAnswers)
+    // console.log(selectedAnswers,userAnswers)
 
-    
+    console.log('AXurl',AXurl,'userAnswers',userAnswers)
 
     useEffect(()=> {
-        if (nbQ < 0) {
-            // seeResaults()
-        }else {
-           
-            if (data) {
-                setACurl(backend_url+data[nbQ]['audio_content'])  
-                setAXurl(backend_url+data[nbQ]['auidio_explaination'])   
-                let  audioRef =    new Audio(backend_url+data[nbQ]['auidio_explaination']);
-                let  audioD  =    new Audio(backend_url+data[nbQ]['audio_content']);
-                 audioExplainationRef.current = audioRef
-                 audiDesc.current = audioD
-                 audioRef.addEventListener('loadedmetadata', () => {
-                    setTotalTiming(parseInt(audioRef.duration))
-                  }); 
-
-                  
-                }
+        console.log(data,nbQ, data && nbQ >= 0 )
+        if ( data && nbQ >= 0 ) {
+            setAXurl(backend_url+data[nbQ]['auidio_explaination'])  
         }
-      },[nbQ])
+
+        
+      },[nbQ,data])
 
       const [muteAudio , setmuteAudio  ] = useState(false ) 
 
-      const handleMute = ()=> {
-        if (audiDesc.current) {
-            audioExplainationRef.current.muted = !muteAudio
-            setmuteAudio(!muteAudio) 
-        }  
-      }
+      
 
       const decreasenbQ = ()=> {
         if (nbQ <= 0) 
@@ -169,11 +153,7 @@ const [totalcounter , settotalcounter] = useState(0)
         return 1 
       }
 
-      const handleResumConter = ()=> {
-        var va = decreasenbQ()
-        setTimeLeft(6)
-        settotalcounter((prev)=>prev+1)
-      }
+      
 
       const handleSeeNbQ = (dir)=> {
 
@@ -199,7 +179,7 @@ const [totalcounter , settotalcounter] = useState(0)
         </div>
         {
             nbQ <= 0 ?  <div className='bar center '>
-            <button className='instantBtn' onClick={()=>navigate('/')}>3awda</button>
+            <button className='instantBtn' onClick={()=>navigate('/')}>الصفحة الرئيسية</button>
         </div> : 'dd'
         }    
         </>
@@ -233,7 +213,7 @@ const [totalcounter , settotalcounter] = useState(0)
         </div>
         {
             startTest ? 
-            <AudioExp nbQ={nbQ} len={data ? data.length : 0} handleSeeNbQ={handleSeeNbQ} seeRes={true} startTest={true} isPlaying={isPlaying} totalTiming={totalTiming} pauseWhite={pauseWhite} togglePlayPause={togglePlayPause} audioExplainationRef={audioExplainationRef } AXurl={AXurl} />
+            <AudioExp setIsPlaying={setIsPlaying} nbQ={nbQ} len={data ? data.length : 0} handleSeeNbQ={handleSeeNbQ} seeRes={true} startTest={true} isPlaying={isPlaying} totalTiming={totalTiming} pauseWhite={pauseWhite} togglePlayPause={togglePlayPause} audioExplainationRef={audioExplainationRef } AXurl={AXurl} />
             : ''
         }
     </div>

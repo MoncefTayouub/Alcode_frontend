@@ -64,7 +64,7 @@ export default function Footer({footerContent,typeR,setselectedSerie,pathname}) 
         <div className='detail_content center'>
             <div className='cont center'>
                 <img src= {phoneNumber}  alt='' /> 
-                <a style={{color : 'white' }} href={`https://wa.me/212613294385`} target="_blank" rel="noreferrer" >  <p>+212 613-294385</p></a>
+                <a style={{color : 'white' }} href={`https://wa.me/212613294385`} target="_blank" rel="noreferrer" >  <p>0613-294385</p></a>
 
             </div>
             <div className='cont center'>

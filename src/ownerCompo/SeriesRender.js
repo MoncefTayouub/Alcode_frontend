@@ -65,7 +65,7 @@ export default function SeriesRender({setreloading,backend_url,setSerie,SetnavSe
         var method = 'POST'
       
         // DataForm.append('quiz',quiz)
-        
+        setreloading(true)
         await axios ({
           method : method , 
           url : `${backend_url}search` ,
@@ -74,7 +74,7 @@ export default function SeriesRender({setreloading,backend_url,setSerie,SetnavSe
       .then((response)=>{
             // console.log(response.data) ; 
             let data = response.data
-            
+            setreloading(false)
             setData(data['content'])
             setdel_serie(-1)
             setsearchContent('')

@@ -34,7 +34,6 @@ export default function Serie({selectType,categoryContent,selectedSerie,backend_
         let data = await respons.json()
         setData(data)
         window.scrollTo(0, 0);
-        console.log('get',selectType)
          // eslint-disable-next-line default-case
          switch(selectType) {
             case 'A' : 
@@ -70,7 +69,6 @@ export default function Serie({selectType,categoryContent,selectedSerie,backend_
       const startTest = ()=> {
         navigate('/quiz')
       }
-      console.log({'categoryContent':categoryContent , 'title':title,'desc':desc,'img':img,'data':data})
   return (
     <div className='Serie padding padding_bottom'>
         <div className='HeaderSerie  center'>

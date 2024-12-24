@@ -12,8 +12,10 @@ import Login from './compoments/Login';
 import QuizRes from './compoments/QuizRes';
 import { use } from 'react';
 import SellingPoing from './compoments/SellingPoing';
+import TestAudio from './Items/TestAudio';
 const App = () => {
-  const backend_url = 'https://srv668869.hstgr.cloud/';
+  // const backend_url = 'https://srv668869.hstgr.cloud/';
+  const backend_url = 'http://127.0.0.1:8000/';
   const [testResults,settestResults] = useState()
   const [logged , setLogged] = useState(-5)
   const [isOwner , setisOwner] = useState(false)
@@ -38,7 +40,7 @@ const App = () => {
 
     
   }, [pathname]);
-  console.log('pathname',pathname,"typeR",typeR)
+  // console.log('pathname',pathname,"typeR",typeR)
     
   const [selectedSerie , setselectedSerie ] = useState(null)
 
@@ -49,12 +51,10 @@ const App = () => {
     const user = localStorage.getItem('user');
 
     if (!accessToken || !user) {
-        // No tokens or user info; user is not logged in
-        // console.log('User is not logged in');
+
         setvalidationRef()
         setLogged(-5)
-      // setfooterContent()
-        // return -1 ;
+
     }
 
     const DataForm = new FormData();
@@ -179,6 +179,7 @@ return (
           <Route path="/Owner" element={<Owner isOwner={isOwner} logged={logged} backend_url={backend_url} />} />    
           <Route path="/login" element={<Login  logged={logged} setLogged={setLogged} backend_url={backend_url} />} />    
           <Route path="/ByPass" element={<SellingPoing  logged={logged} setLogged={setLogged} backend_url={backend_url} />} />    
+          <Route path="/TestAudio" element={<TestAudio  logged={logged} setLogged={setLogged} backend_url={backend_url} />} />    
         </Routes>
         <Footer setselectedSerie={setselectedSerie} pathname={pathname} footerContent={footerContent} typeR={typeR} />
       </div>

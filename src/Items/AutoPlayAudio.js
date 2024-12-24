@@ -1,13 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-const AutoPlayAudio = ({moDAnswer,setmoDAnswer, descAudioIsPlaying,audioUrl ,startTest,setStartTest }) => {
+const AutoPlayAudio = ({setmuteAudio,muteAudio,moDAnswer,setmoDAnswer, descAudioIsPlaying,audioUrl ,startTest,setStartTest }) => {
   const audioRef = useRef(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
   useEffect(() => {
     if (audioRef.current) {
-      console.log('audioRef.current',descAudioIsPlaying, audioRef.current.paused)
       if (descAudioIsPlaying ) {
-
+    
         audioRef.current
         .pause()
         setIsPlaying(false)
@@ -26,6 +25,11 @@ const AutoPlayAudio = ({moDAnswer,setmoDAnswer, descAudioIsPlaying,audioUrl ,sta
     }
   }, [audioUrl,descAudioIsPlaying]);
 
+  useEffect(()=> {
+    if (audioRef.current) {
+        audioRef.current.muted = muteAudio
+    } 
+  },[muteAudio])
   const handleStartAudio = (mod)=> {
     setmoDAnswer(mod)
     setStartTest(true)
@@ -38,14 +42,13 @@ const AutoPlayAudio = ({moDAnswer,setmoDAnswer, descAudioIsPlaying,audioUrl ,sta
       <audio
         ref={audioRef}
         src={audioUrl}
+        muted={muteAudio}
         style={{ width: 0, height: 0, opacity: 0 }}
       />
       {/* <p>{isPlaying ? 'speaking' : 'not speaking'}</p> */}
       {!startTest ? 
       <>
-          {/* <button onClick={() => handleStartAudio()}>
-            ابدأ الاختبار واثبت تميزك
-          </button> */}
+        
           <h3>اختر وضعك المفضل</h3>
           <p>نقدم لك خيارين لاستخدام منصتنا حسب احتياجاتك. يمكنك اختيار الوضع الأول لمعرفة الإجابة فورًا بعد كل خطوة، مما يساعدك على التعلم السريع والتفاعل الفوري. أو اختر الوضع الثاني لتحصل على جميع النتائج مجتمعة في النهاية، وهو مثالي لتحليل شامل وتجربة أكثر عمقًا</p>
             <div className='spacebetween'>

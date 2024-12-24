@@ -34,6 +34,18 @@
     }
   }
   @media (max-width: 902px) { 
+    
+    body .HeaderSerie .descpt {
+      padding-right: 60px !important;
+      padding-top: 40px !important;
+    }
+    body .HeaderSerie .descpt p {
+      font-size: 20px !important;
+    }
+    body .HeaderSerie .descpt h3 {
+      font-size: 24px !important;
+      text-align: start !important;
+  }
     body .header .header_content .twobutns button {
       width : 170px !important;
     }
@@ -57,10 +69,39 @@
     body .ContactUs .motivation p {
       font-size: 18px !important ;
     }
+  }
+  body .HeaderSerie .image .containerImage {
+      width: 163px;
+      min-width: 163px;
+      height: 163px;
     
   }
+ 
 
   @media (max-width: 762px) { 
+    body .Quiz .audioExplaination .audioLabel img {
+      width: 30px;
+    }
+    body .Quiz .audioExplaination .audioLabel {
+      max-width: 80%;
+    }
+    
+    body .HeaderSerie {
+      margin-bottom: 80px  !important;  
+      // height: 80vh  !important;
+      height: fit-content  !important;
+      flex-direction: column  !important;
+  }
+  body .HeaderSerie .image {
+    width: 100%  !important;
+    // height: 50%  !important;
+    height: fit-content  !important;
+  }
+  body .HeaderSerie .descpt {
+    width: 100%  !important;
+    // height: 50% !important;
+    height: fit-content  !important;
+  }
     body .NavBar {
       padding: 0 40px !important;
     }

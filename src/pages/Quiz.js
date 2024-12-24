@@ -18,8 +18,8 @@ export default function Quiz({validationRef,setvalidationRef,setreloading,logged
     const [userAnswers , setuserAnswers] = useState([])
     const [setQuiz ,sSETetQuiz ] = useState()
 
-    console.log({'validationRef' : validationRef,'logged':logged})
-   const Auth =  () => {
+
+    const Auth =  () => {
     
     //   const user = localStorage.getItem('user')
     //     console.log('user',user)
@@ -60,26 +60,20 @@ export default function Quiz({validationRef,setvalidationRef,setreloading,logged
       };    
     
 
-    // let getData = async () => { 
-        
-    //     let respons = await fetch (`${backend_url}loadData${''}`)
-    //     let data = await respons.json()
-    //     setData(data['serieTest'])
-    //     setNbQ(data['serieTest'].length - 1)
-    //     setuserAnswers(data['res'])
-    // }
+    
 
     const [selectedAnswers , setselectedAnswers] = useState([])
 
-    const hadnleRes = (qi,anss)=> {
+    const hadnleRes = (qi, anss) => {
         if (userAnswers) {
-            return userAnswers.filter((e,i)=>{
-                if (e['QI']==qi && e['answer'].indexOf(anss) > -1 ) return e
-            }).length > 0 
-            
+            for (let i = 0; i < userAnswers.length; i++) {
+                if (userAnswers[i].content.some(e => e.QI === qi && e.CA.includes(anss))) {
+                    return true; // Found a match, exit early
+                }
+            }
         }
-        return 0 
-    }
+        return false; // No match found
+    };
 
 
 
@@ -94,10 +88,10 @@ export default function Quiz({validationRef,setvalidationRef,setreloading,logged
 
         useEffect(()=> {
             if (logged !== 1  ) {
-                navigate('/login')
+                // navigate('/login')
             }else 
             if (validationRef == 0  ) {
-                navigate('/ByPass')
+                // navigate('/ByPass')
             }
         },[validationRef,logged])
 
@@ -120,6 +114,7 @@ export default function Quiz({validationRef,setvalidationRef,setreloading,logged
             if (dataR['status'] == 1 ) {
                 setreloading(false)
                 setData(dataR['content'])
+                setuserAnswers(dataR['correct'])
                 setNbQ(dataR['content'].length - 1)
               }
         }).catch(function (error) {  
@@ -140,20 +135,7 @@ const [timeLeft, setTimeLeft] = useState(6);
 
 const [totalcounter , settotalcounter] = useState(0)
 
-console.log({
-    'timeLeft ':timeLeft , 
-    'moDAnswer':moDAnswer,
-    'userAnswers':userAnswers,
-    'selectedAnswers':selectedAnswers,  
-    'counter State':nbQ < 0 || isPlaying || !startTest,
-    'nbQ':nbQ ,
-    'isPlaying':isPlaying , 
-    'startTest':startTest, 
-    'cond' : !(moDAnswer == 1 && totalcounter % 2 == 0 ),
-    'totalcounter':totalcounter ,
-    'testResults':testResults , 
-    'data':data,
-})
+
 
 
 
@@ -165,7 +147,7 @@ useEffect(() => {
             settestResults({'selectedAnswers':selectedAnswers,'userAnswers':userAnswers,'data':data})
             navigate("/result")
     }
-    if (nbQ < 0 || isPlaying || !startTest  ) return ;
+    if (nbQ < 0 || isPlaying || !startTest || false ) return ;
     
     // Update every second    
    
@@ -173,7 +155,7 @@ useEffect(() => {
         
         setTimeLeft((prevTime) => prevTime - 1);   
        if ( timeLeft <= 0) clearInterval(smallSequence)
-    }, 1000); // 1 second = 1000 milliseconds
+    }, 1000); // 1 second = 1000 milliseconds  
 
     const timer = setInterval(() => {
 
@@ -185,8 +167,10 @@ useEffect(() => {
         }
         if (nbQ >= 0  ) {
             setTimeLeft(6)
-            if (!(moDAnswer == 1 && totalcounter % 2 == 0 )) 
-                setNbQ((prevNbQ) => prevNbQ - 1);    
+            if (!(moDAnswer == 1 && totalcounter % 2 == 0 )) {
+                setNbQ((prevNbQ) => prevNbQ - 1);  
+               
+            }
             else 
             clearInterval(smallSequence);
             clearInterval(timer);
@@ -213,8 +197,10 @@ useEffect(() => {
 const HandleUserAnswer = (idQ, id) => { 
     // var check = hadnleRes(idQ, id); // Check if the answer already exists
     // console.log('check -- check', check);
+     
+   if( moDAnswer != 2 && !(moDAnswer == 1 && totalcounter % 2 == 0 )) 
+            return ;
 
-    
     let found = false;
 
     const updatedAnswers = selectedAnswers.map((e) => {
@@ -241,8 +227,8 @@ const HandleUserAnswer = (idQ, id) => {
 
 
 
-  
-     
+
+
  
 
  
@@ -288,7 +274,6 @@ const HandleUserAnswer = (idQ, id) => {
     // const audiDesc = useRef(null);   
     const audioExplainationRef = useRef(null);
     const togglePlayPause = () => {
-        // console.log('-----' , isPlaying , AXurl ,audioExplainationRef.current )
         if (audioExplainationRef.current){
         if (isPlaying ) {
             audioExplainationRef.current.pause();
@@ -307,34 +292,35 @@ const HandleUserAnswer = (idQ, id) => {
     
 
     useEffect(()=> {
-        if (nbQ < 0) {
-            // seeResaults()
-        }else {
-           
-            if (data) {
-                setACurl(backend_url+data[nbQ]['audio_content'])  
-                setAXurl(backend_url+data[nbQ]['auidio_explaination'])   
-                let  audioRef =    new Audio(backend_url+data[nbQ]['auidio_explaination']);
-                let  audioD  =    new Audio(backend_url+data[nbQ]['audio_content']);
-                 audioExplainationRef.current = audioRef
-                //  audiDesc.current = audioD
-                 audioRef.addEventListener('loadedmetadata', () => {
-                    setTotalTiming(parseInt(audioRef.duration))
-                  }); 
-
-                  
-                }
+        if ( data && nbQ >= 0 ) {
+            setAXurl(backend_url+data[nbQ]['auidio_explaination'])  
         }
-      },[nbQ])
+        // if (nbQ < 0) {
+        //     // seeResaults()
+        // }else {
+           
+        //     if (data) {
+                
+        //         // setAXurl(backend_url+data[nbQ]['auidio_explaination'])   
+        //         console.log('auidio_explaination',backend_url+data[nbQ]['auidio_explaination'])
+        //         let  audioRef =    new Audio(backend_url+data[nbQ]['auidio_explaination']);
+        //         let  audioD  =    new Audio(backend_url+data[nbQ]['audio_content']);
+        //          audioExplainationRef.current = audioRef   
+        //         //  audiDesc.current = audioD
+        //          audioRef.addEventListener('loadedmetadata', () => {
+        //             setTotalTiming(parseInt(audioRef.duration))
+        //           }); 
+    
+                  
+        //         }
+        // }
+      },[nbQ,data])
 
       const [muteAudio , setmuteAudio  ] = useState(false ) 
 
-      const handleMute = ()=> {
-        // if (audiDesc.current) {
-        //     audioExplainationRef.current.muted = !muteAudio
-        //     setmuteAudio(!muteAudio) 
-        // }  
-      }
+      
+
+     
 
       const decreasenbQ = ()=> {
         if (nbQ <= 0) 
@@ -349,29 +335,53 @@ const HandleUserAnswer = (idQ, id) => {
         settotalcounter((prev)=>prev+1)
       }
 
+   
+
+    //   console.log({
+        // 'timeLeft ':timeLeft , 
+        // 'moDAnswer':moDAnswer,
+        // 'userAnswers':userAnswers,
+        // 'selectedAnswers':selectedAnswers,  
+        // 'counter State':nbQ < 0 || isPlaying || !startTest,
+        // 'nbQ':nbQ ,
+        // 'isPlaying':isPlaying , 
+        // 'startTest':startTest, 
+        // 'cond' : !(moDAnswer == 1 && totalcounter % 2 == 0 ),
+        // 'totalcounter':totalcounter ,
+        // 'testResults':testResults , 
+        // 'data':data,
+    //     'expAudioBool' : startTest,
+    //     'AXurl' : AXurl,
+    // })
+    // console.log('handleBoxStyle',handleBoxStyle(69,142),moDAnswer != 2 && !(moDAnswer == 1 && totalcounter % 2 == 0 ),'hadnleRes',hadnleRes(69,142))
       return (
     <div className='Quiz center'> 
         {startTest ? 
         
         <>
         <div className='img_container'>
-            <img  alt='' src={data != null && nbQ >= 0 ? backend_url+data[nbQ]['picture']:''} />
+            {
+                ( moDAnswer != 2 && !(moDAnswer == 1 && totalcounter % 2 == 0 )) ? 
+                <img  alt='' src={data != null && nbQ >= 0 ?  backend_url+data[nbQ]['correctAnswer']:''} />
+                :
+                <img  alt='' src={data != null && nbQ >= 0 ?  backend_url+data[nbQ]['picture']:''} />
+            }
         </div>
         {
            moDAnswer != 2 && !(moDAnswer == 1 && totalcounter % 2 == 0 ) ?
             nbQ == 0 ? 
             <div className='bar center '>
-                <button className='instantBtn' onClick={()=>navigate('/')}>3awda</button>
+                <button className='instantBtn' onClick={()=>navigate('/')}> صفحة الرئيسية </button>
             </div>   
             :
             <div className='bar center '>
-            <button className='instantBtn' onClick={()=>handleResumConter()}>tali</button>
+            <button className='instantBtn' onClick={()=>handleResumConter()}>التالي</button>
             </div>   
             : 
             <div className='bar center '>
              <div className='counter numberContainer center'>{timeLeft}</div>
                 <div className='volum'>
-                    <img alt='' src={muteAudio ? volume_off : soundOne} onClick={()=> handleMute()} />
+                    <img alt='' src={muteAudio ? volume_off : soundOne} onClick={()=> setmuteAudio(!muteAudio)} />
                 </div>
             </div>
         }
@@ -380,11 +390,12 @@ const HandleUserAnswer = (idQ, id) => {
         <div className={startTest ? 'TestContainer positionRelative' : 'TestContainer positionRelative bigHei '}>
               {
                 data != null && nbQ >= 0 ?
-                !startTest ? 
-                <AutoPlayAudio moDAnswer={moDAnswer} setmoDAnswer={setmoDAnswer} descAudioIsPlaying={isPlaying} startTest={startTest} setStartTest={setStartTest} audioUrl={backend_url+data[nbQ]['audio_content']}  />
-                :
-                <AutoPlayAudio moDAnswer={moDAnswer} setmoDAnswer={setmoDAnswer} descAudioIsPlaying={isPlaying} startTest={startTest} setStartTest={setStartTest} audioUrl={backend_url+data[nbQ]['audio_content']}  />
-                   :'' }
+                // !startTest ? 
+                <AutoPlayAudio setmuteAudio={setmuteAudio} muteAudio={muteAudio} moDAnswer={moDAnswer} setmoDAnswer={setmoDAnswer} descAudioIsPlaying={isPlaying} startTest={startTest} setStartTest={setStartTest} audioUrl={backend_url+data[nbQ]['audio_content']}  />
+                // :
+                // <AutoPlayAudio moDAnswer={moDAnswer} setmoDAnswer={setmoDAnswer} descAudioIsPlaying={isPlaying} startTest={startTest} setStartTest={setStartTest} audioUrl={backend_url+data[nbQ]['audio_content']}  />
+                //    
+                :'' }   
                 {
                 data != null && nbQ >= 0 ? data[nbQ]['content'].map((ob,i)=> 
                 <div key={i}>
@@ -412,7 +423,7 @@ const HandleUserAnswer = (idQ, id) => {
         </div>
         {
             startTest ? 
-            <AudioExp startTest={startTest} isPlaying={isPlaying} totalTiming={totalTiming} pauseWhite={pauseWhite} togglePlayPause={togglePlayPause} audioExplainationRef={audioExplainationRef } AXurl={AXurl} />
+            <AudioExp startTest={startTest} isPlaying={isPlaying} setIsPlaying={setIsPlaying} totalTiming={totalTiming} pauseWhite={pauseWhite} togglePlayPause={togglePlayPause} audioExplainationRef={audioExplainationRef } AXurl={AXurl} />
             : ''
         }
     </div>

@@ -80,7 +80,7 @@ body .filter06 {
 
 body {
 
-
+position: relative;
 button {
   cursor: pointer;
   border: none;
@@ -122,10 +122,14 @@ $notAvailableBG : #939393 ;
 html, body {
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
+  // overflow-x: hidden;
 }
 
 body {
+  .App{position: relative;}
+  .Serie , .Footer ,.Quiz{
+    overflow: hidden;
+  }
     div {
         box-sizing: border-box;
     }
@@ -528,13 +532,15 @@ body {
     .HeaderSerie {
       margin-bottom: 80px ;
       height: 50vh;
+      min-height: fit-content;
       .image {
         width: 20% ;
         height : 100% ;
         padding-top: 80px ;
         align-items: flex-start;
-        .containerImage {
+        min-height: fit-content;
 
+        .containerImage {
           width : 213px  ;
           min-width: 213px  ;
           height: 213px ;
@@ -545,7 +551,7 @@ body {
         }
         img {
           object-fit: cover;
-          height : 80% ;
+          // height : 80% ;
           max-width: 80% ;
         }
       }
@@ -560,7 +566,7 @@ body {
         align-items: flex-end;
         justify-content: flex-start;
         flex-wrap: nowrap;
-       
+       min-height: fit-content;
         h3 , p {
           width : fit-content ;
           color : $primaryColor ;
@@ -593,6 +599,7 @@ body {
       flex-direction: column;
       margin-bottom: 50px ;
       .containerRes {
+        max-width: 90%;
         width : 400px ;
         height : 90px ;
         border-radius: 45px ;
@@ -605,6 +612,7 @@ body {
       }
       button {
         margin-top: 30px ;
+        max-width: 90%;
         width : 400px ;
         height : 60px ;
         font-size: 32px ;
@@ -623,27 +631,30 @@ body {
       background-color: $primaryColor;
       padding-bottom: 60px  ;
       position: relative;
+      $viewWidth : 80% ;
+      
       h3 {
-        color : $primaryColor ;
-        width : (90% ) ;
-
+        width : $viewWidth ;
         color : $lightBC
       }
 
       .img_container {
-        width : 80% ;
+        width : $viewWidth ;
         height : 45vh ; 
+        // max-height: max-content;
         object-fit: cover;
         background-color: #13171D;
         flex-direction: column;
         img {
-          height: 100% ;
+          // height: 100% ;
+          width : 100% ;
+          max-height: 100% ;;
           object-fit: cover;
           max-width: max-content;
         }
       }
       .bar {
-        width : 80% ;
+        width : $viewWidth ;
         height : 100px ;
         justify-content: flex-start;
         margin-bottom: 40px ;
@@ -651,6 +662,7 @@ body {
         position: absolute;
         top : 45vh ;
         left : 10% ; 
+        z-index: 1000;
         .counter {
             font-size: 24px ;
             width : 60px ;
@@ -698,8 +710,8 @@ body {
 
         button {
           height : 70px ; 
-          font-size: 32px ;
-          width : 30% ;
+          font-size: 24px ;
+          width : 200px ;
           border-radius: 35px ;
           font-weight: bold;
         }
@@ -717,7 +729,7 @@ body {
         height: 70vh;
       }
       .TestContainer {
-        width : 80% ;
+        width : $viewWidth ;
         // min-height: 50vh;
         direction: rtl;
         flex-wrap: wrap;
@@ -733,19 +745,22 @@ body {
         // background-color: #0D69E1;
       }
       .answerContainer {
-        width : 40%;
-        gap : 20px ;
-        color : $white ; 
+        width: 40%;
+        gap: 20px;
+        color: white;
+        min-width: max-content;
         cursor: pointer;
         flex-wrap: nowrap;
+
         .QN {
-          font-size: 28px ;
-          width : 60px ;
-          height: 60px ;
-          background-color: $lightBC;
-          color: $primaryColor;
-          border-radius: 30px ;
-        }
+          font-size: 28px;
+          width: 60px;
+          min-width: 60px;
+          height: 60px;
+          background-color: #E4E5E7;
+          color: #212B3E;
+          border-radius: 30px;
+      }
         .answer {
           width : 400px;
           height : 60px ;
@@ -771,6 +786,7 @@ body {
         color : $white ; 
         position: relative;
         margin-top: 40px ;
+        max-width: 70% ;
         .seeRes {
           width : $inputWidth ;
           position: absolute;
@@ -1534,7 +1550,29 @@ body {
     padding-top: 70px;
    }
 
+   body .Quiz .startTest div {
+    width: 100%;
+}
+body .Quiz .startTest h3, body .Quiz .startTest p, body .Quiz .startTest div {
+  width: 100%;
+}
+body .Quiz .startTest p {
+  font-size: 24px;
+  width: 100%;
+  font-weight: lighter;
+}
+
   @media (max-width: 634px) { 
+    body .Quiz .audioExplaination .audioPlayer {
+      gap: 20px;
+      width: 100vw;
+  }
+    // body .Quiz .audioExplaination .audioLabel {
+    //   max-width: 90%  !important;
+    // }
+    body .Quiz .audioExplaination .slide_bar {
+      max-width: 50% !important;
+    }
     body .header .header_content p {
       
       width: 100%;
@@ -1566,7 +1604,27 @@ body .BySection .seciontion .course-card {
 }
   }
 
-  @media (max-width: 532px) { 
+  @media (max-width: 555px) { 
+    body .Quiz .answerContainer .answer {
+      width: 350px !important;
+    }
+    body .Quiz .bar {
+      top: 51vh !important;
+    }
+    body .Quiz .img_container {
+      width: 100% !important;
+      height: 50vh !important;
+    }
+   
+
+    body .Quiz .startTest div {
+      flex-direction: column;
+      gap: 20px;
+    }
+    body .Quiz .startTest h3 {
+      text-align: center;
+    }
+
     body .AboutSectoin .bigLogo {
       width: 90% !important;
   }
@@ -1613,6 +1671,36 @@ body .ContactUs .motivation .social_acc {
   }
 
   @media (max-width: 456px) { 
+    body .HeaderSerie .descpt {
+      padding-right: 20px !important;
+    }
+    body .Quiz .answerContainer .answer {
+      width: 250px !important;
+    }
+    body .Quiz .answerContainer .answer {
+      width: 250px !important;
+      max-width: 250px !important;
+    }
+    body .Quiz .answerContainer .QN {
+      font-size: 24px;
+      width: 40px;
+      min-width: 40px;
+      height: 40px;
+    }
+
+    body .Quiz .startTest p {
+      font-size: 16px!important;
+    }
+    body .Quiz .startTest {
+      padding: 0 20px!important;
+  }
+  body .Quiz .startTest {
+    gap: 20px;
+  }
+  body .Quiz .startTest h3 {
+    font-size: 24px !important;
+}
+
     body .header .header_content p {
       font-size: 38px;
       width: 100%;
@@ -1674,3 +1762,69 @@ body .ContactUs .form {
 
   }
 
+  @media (max-width: 494px) { 
+    body .Quiz .answerContainer .answer {
+      width: 300px !important;
+
+    }
+    body .Quiz .audioExplaination .mativ {
+      font-size: 22px;
+    }
+    body .Quiz .audioExplaination .audioPlayer img {
+      height: 30px;
+    }
+
+  body .Quiz .TestContainer {
+    padding: 0;
+    width: 100%;
+}
+body .Quiz .bar {
+  position: initial;
+  margin: 0 !important;
+}
+
+    body .header {
+      height: 90vh !important;
+    }
+        body .NavBar button, body .NavBar p {
+        width: 120px;
+    }
+    body .NavBar button, body .NavBar p {
+          font-size: 16px;
+    }
+  }
+
+  @media (max-width: 762px) { 
+    $viewWidth : 90% ;
+    body .Quiz .answerContainer .answer {
+      font-size: 18px;
+    }
+    body .Quiz .TestContainer {
+      width: 100%;
+    }
+    body .Quiz .startTest h3 {
+      font-size: 32px;
+  }
+    
+    body .Quiz .startTest {
+      padding: 0 40px;
+    }
+    body .Quiz .startTest button {
+      height: 50px;
+      font-size: 18px;
+    }
+    body .Quiz .startTest p {
+      font-size: 19px;
+      line-height: 30px;
+    }
+    body .Quiz .audioExplaination .mativ {
+      width: 80%;
+    }
+  }
+
+  @media (max-width: 760px) { 
+    body .Quiz .questions ,body .Quiz .TestContainer h5 {
+      width: 90% !important;
+      margin: 0 5% !important;
+    }
+  }

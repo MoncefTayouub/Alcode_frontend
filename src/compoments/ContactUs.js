@@ -60,7 +60,7 @@ export default function ContactUs({HandleSubmitData}) {
                 <a href='https://www.facebook.com/profile.php?id=61558066622408&locale=fr_FR' target="_blank" rel="noreferrer" >   <img src={facebookBleu} alt=''></img></a>
             </div>  
             <div className='container center'>
-                <h4>+212 613-294385</h4>    
+                <h4>0613-294385</h4>    
                 <a href={`https://wa.me/212613294385`} target="_blank" rel="noreferrer" >   <img src={whatsappBleu} alt=''></img></a>
             </div>  
             <div className='container center'>
