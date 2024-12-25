@@ -120,7 +120,7 @@ export default function Owner({isOwner,logged,backend_url}) {
    const user = localStorage.getItem('user')
    console.log('accessToken',user,user==null)
    if (user == null){
-      // navigate('/login');
+      navigate('/login');
      return 0 ;
     }
     const jsonObject = JSON.parse(user);
@@ -140,7 +140,7 @@ export default function Owner({isOwner,logged,backend_url}) {
 
            setreloading(false)
            if (data.status === 0) {
-              // navigate('/login')
+              navigate('/login')
            }
            
        } catch (error) {
