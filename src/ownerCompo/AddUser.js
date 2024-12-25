@@ -25,7 +25,7 @@ export default function AddUser({reloading,setreloading,backend_url,errorMsg,set
   const [dayesLeft , setdayesLeft ] = useState(-1)
   useEffect(()=> {
     if (editUser != null) {
-      setFullName( editUser['firstname']+" " + editUser['lastname']) 
+      setFullName( editUser['firstname']+"" + editUser['lastname']) 
       setMail(editUser['mail'])
       setPhone(editUser['phone_number'])
       setpassword(editUser['password'])
@@ -66,9 +66,9 @@ export default function AddUser({reloading,setreloading,backend_url,errorMsg,set
                 setreloading(true)
                 const DataForm= new FormData();
                 var method = 'POST'     
-                var [fiN , laN] = fullName.split(" ")
-                DataForm.append('firstname',fiN)
-                DataForm.append('lastname', laN)
+                // var [fiN , laN] = fullName.split(" ")
+                DataForm.append('firstname',fullName)
+                DataForm.append('lastname', '')
                 DataForm.append('phone_number', Phone )
                 DataForm.append('mail', mail )
                 DataForm.append('duration', days )
