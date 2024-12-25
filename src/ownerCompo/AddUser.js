@@ -132,7 +132,7 @@ export default function AddUser({reloading,setreloading,backend_url,errorMsg,set
       <input className='bigInput' onChange={(e)=>setMail(e.target.value)} value={mail} type='email' placeholder='البريد الإلكتروني : example@gmail.com' />
       <input className='bigInput' onChange={(e)=>setpassword(e.target.value)} value={password} type='' placeholder='كلمة المرور' />
       <input onChange={(e)=>setPhone(e.target.value)} value={Phone} className='bigInput' placeholder="أدخل رقم الهاتف" />
-      <input onChange={(e)=>setDays(e.target.value)} value={dayesLeft <= 0 ? '':days} className='bigInput'  placeholder='المدة بالأيام' />
+      <input onChange={(e)=>setDays(e.target.value)} value={days} className='bigInput'  placeholder='المدة بالأيام' />
       <div className='twobutns  center padding'>
         <button onClick={()=>setUser()} className='full rad20'>حفظ وإضافة آخر</button>
     </div>    </div>

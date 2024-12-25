@@ -179,7 +179,6 @@ return (
           <Route path="/Owner" element={<Owner isOwner={isOwner} logged={logged} backend_url={backend_url} />} />    
           <Route path="/login" element={<Login  logged={logged} setLogged={setLogged} backend_url={backend_url} />} />    
           <Route path="/ByPass" element={<SellingPoing  logged={logged} setLogged={setLogged} backend_url={backend_url} />} />    
-          <Route path="/TestAudio" element={<TestAudio  logged={logged} setLogged={setLogged} backend_url={backend_url} />} />    
         </Routes>
         <Footer setselectedSerie={setselectedSerie} pathname={pathname} footerContent={footerContent} typeR={typeR} />
       </div>
