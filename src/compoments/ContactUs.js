@@ -36,10 +36,10 @@ export default function ContactUs({HandleSubmitData}) {
                 setMSG('')
                 setSent(true)
             }
-            console.log("Response:", res);
+            // console.log("Response:", res);
           })  
           .catch(error => {
-            console.error("Error in HandleSubmitData:", error);
+            // console.error("Error in HandleSubmitData:", error);
           });
         }
 

@@ -30,7 +30,6 @@ export default function HandleMails({backend_url,setreloading}) {
     return 'contentBox center'
 }
 
-  console.log(data)
   return (
     <div className='General positionRelative center'>
         <div className='contentHeader contentBox center'>            

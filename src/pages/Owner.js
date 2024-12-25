@@ -137,7 +137,7 @@ export default function Owner({isOwner,logged,backend_url}) {
            });
    
            const data = response.data;
-           console.log('dataaaaaaaa',data)
+
            setreloading(false)
            if (data.status === 0) {
               // navigate('/login')
