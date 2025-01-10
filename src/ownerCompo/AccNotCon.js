@@ -2,8 +2,10 @@ import React , {useState , useEffect}from 'react'
 import notSub from '../files/notSub.svg'
 import axios  from 'axios'
 import addIconerror from '../files/addIconerror.svg'
+import { useNavigate } from 'react-router-dom'
 
 export default function AccNotCon({backend_url}) {
+    const navigate = useNavigate()
     const [ data , setData ] = useState()
     
     let getData = async () => { 
@@ -13,7 +15,6 @@ export default function AccNotCon({backend_url}) {
         setData(data)
     
     }
-    console.log(data) 
     const markConnected = async(ob)=> {
         const DataForm= new FormData();
         DataForm.append('id',ob['id'])
@@ -28,7 +29,6 @@ export default function AccNotCon({backend_url}) {
         .then((response)=>{
               // console.log(response.data) ;
               let dataR = response.data
-              console.log(dataR)
               getData() 
               // eslint-disable-next-line eqeqeq
             //   if (data['status'] == 1 ) {
@@ -38,13 +38,12 @@ export default function AccNotCon({backend_url}) {
               
             
         }).catch(function (error) {
-            console.log(error)
+            navigate('/InernalError')
           });
     }
     useEffect(()=> {
         getData() 
     },[])
-    console.log(data)
     const boxClass = (index )=> {
         if (parseInt(index)%2 == 1) return 'contentBox center bgContent'
         return 'contentBox center'

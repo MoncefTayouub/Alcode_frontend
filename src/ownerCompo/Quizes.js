@@ -52,7 +52,8 @@ export default function Quizes({logged,setErrorMsg,serie,quiz,setquiz,setSerie,S
             setErrorMsg(6)
             
       }).catch(function (error) {
-          console.log(error)
+        navigate('/InernalError')
+        //   console.log(error)
         });
         }
 }
@@ -63,7 +64,7 @@ export default function Quizes({logged,setErrorMsg,serie,quiz,setquiz,setSerie,S
         {
         del_serie != -1 ?  <div className='deleteConfirmMessage center' >
         <div className='boxer center'>
-            <p>هل تؤكد حذف هذه السلسلة؟</p>
+            <p>هل تؤكد حذف هذه الاختبار؟</p>
             <div className='center'>
                 <button onClick={()=>handleDelete()}>نعم</button>
                 <button onClick={()=>setdel_serie(-1)}>لا</button>

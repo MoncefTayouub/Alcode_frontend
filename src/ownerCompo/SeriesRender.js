@@ -4,9 +4,12 @@ import axios  from 'axios'
 import edit_blue from '../files/edit_blue.svg'
 import trash_blue from '../files/trash_blue.svg'
 import addIconerror from '../files/addIconerror.svg'
-export default function SeriesRender({setreloading,backend_url,setSerie,SetnavSelect,setErrorMsg}) {
+import { useNavigate } from 'react-router-dom'
+
+export default function SeriesRender({backend_img,setreloading,backend_url,setSerie,SetnavSelect,setErrorMsg}) {
     const [hovering , sethovering ] = useState(-1)
-    
+    const navigate = useNavigate()
+
     const [ data , setData ] = useState()
     let getData = async () => { 
         setreloading(true)
@@ -52,7 +55,7 @@ export default function SeriesRender({setreloading,backend_url,setSerie,SetnavSe
                 setErrorMsg(5)
                 setdel_serie(-1)
           }).catch(function (error) {
-              console.log(error)
+            //   console.log(error)
             });
           
     }
@@ -79,7 +82,8 @@ export default function SeriesRender({setreloading,backend_url,setSerie,SetnavSe
             setdel_serie(-1)
             setsearchContent('')
       }).catch(function (error) {
-          console.log(error)
+        navigate('/InernalError')
+        //   console.log(error)
         });
       
 }
@@ -128,7 +132,7 @@ export default function SeriesRender({setreloading,backend_url,setSerie,SetnavSe
                 </div>
                     <div className='sec4 center'> <p>{ ob['childs'] }</p> </div>
                     <div className='sec4 center'> <p>{ ob['title'] }</p> </div>
-                    <div className='sec4 center '> <div className='imgContainer center'><img alt='' src={backend_url+ob['icon']} /> </div>  </div>           
+                    <div className='sec4 center '> <div className='imgContainer center'><img alt='' src={backend_img+ob['icon']} /> </div>  </div>           
                 </div>
             )  }
             </>    

@@ -47,7 +47,7 @@ const HandleAudio = ({ audioUrl, isPlaying ,setCurrentTiming,setTotalDuration,is
     };
 
     if (!audioUrl) {
-        return <div>No audio URL provided.</div>;
+        // return <div>No audio URL provided.</div>;
     }
 
     return (

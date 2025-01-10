@@ -14,6 +14,7 @@ export default function QueDetail({setreloading,GoBack,setGoBack,logged,clearFie
     const [content , setContent ] = useState()
     const [answers , setAnswers ] = useState([])
     const [answerContent , setAnswerContent] = useState('')
+    const [desc , setDesc] = useState('')
     const [questions , setQuesions] = useState([])
     const navigate = useNavigate();
 
@@ -83,6 +84,7 @@ export default function QueDetail({setreloading,GoBack,setGoBack,logged,clearFie
         seteditQuestionMode(i) 
         setContent(res['question'])
         setAnswers(res['answers'])
+        setDesc(res['explication'])
       }
 
       const editAnser = (i)=> {
@@ -96,8 +98,8 @@ export default function QueDetail({setreloading,GoBack,setGoBack,logged,clearFie
 
       const addQuestion = () => {
        if (checkCorrectAnswer()){
-      if (!content || answers.length === 0) {
-        setanswercheck("Question content or answers cannot be empty");
+      if (!content || answers.length === 0 || desc === '') {
+        setanswercheck("لا يمكن أن يكون محتوى السؤال أو الإجابات فارغًا");
         return;
       }
     
@@ -107,7 +109,7 @@ export default function QueDetail({setreloading,GoBack,setGoBack,logged,clearFie
             ob['question'] = content 
             ob['answers'] = answers
             return {
-              ...ob , 'question' : content , 'answers' : answers
+              ...ob , 'question' : content , 'answers' : answers , 'explication' : desc
             };
           }else {
             return ob
@@ -120,6 +122,7 @@ export default function QueDetail({setreloading,GoBack,setGoBack,logged,clearFie
         {
           question: content,
           answers: answers,
+          explication : desc ,
           id : -1 
         },
       ]);
@@ -127,6 +130,7 @@ export default function QueDetail({setreloading,GoBack,setGoBack,logged,clearFie
       setAnswerContent([]); // Clear answers
       setContent(''); // Clear question content
       setAnswers([])
+      setDesc('')
       setanswercheck('')
       seteditanswerMode(-1)
       seteditQuestionMode(-1)
@@ -169,8 +173,10 @@ export default function QueDetail({setreloading,GoBack,setGoBack,logged,clearFie
             }else setErrorMsg(7)
           
       }).catch(function (error) {
-          console.log(error)
+        navigate('/InernalError')
         });
+      }else {
+        setanswercheck('تأكد من إضافة سؤال وبعض الإجابات')
       }
       }
       
@@ -201,14 +207,14 @@ export default function QueDetail({setreloading,GoBack,setGoBack,logged,clearFie
               setErrorMsg(6)
               
         }).catch(function (error) {
-            console.log(error)
+          navigate('/InernalError')
           });
           }
   }
 
  
 
- 
+ console.log(questions)
 
     const deleteItem = () => {
 
@@ -225,7 +231,6 @@ export default function QueDetail({setreloading,GoBack,setGoBack,logged,clearFie
     
 
     const handleDeleteAnswer = async ()=> {
-      console.log([{'del_answer' : del_answer} , {'id': del_answer != -1 ? answers[del_answer]['id'] : -1} ] )
       if (del_answer != -1 ) {
         setreloading(true)
         const DataForm= new FormData();
@@ -239,16 +244,15 @@ export default function QueDetail({setreloading,GoBack,setGoBack,logged,clearFie
       .then((response)=>{
         setreloading(false)
             let data =  response.data 
-            console.log('deleteAnswer ' , data )
             if (data['status'] == 1 ) {
               setAnswers((prevArr) => prevArr.filter((item,i) => i !== del_answer));
+              
               setdel_answer(-1)   
 
             }
             
       }).catch(function (error) {
-          console.log(error)
-
+        navigate('/InernalError')
         });        
         
       }else 
@@ -276,7 +280,7 @@ export default function QueDetail({setreloading,GoBack,setGoBack,logged,clearFie
       }, [answercheck]);
 
       const handleAnswerKeyDown = (e)=> {
-          if (e.key === 'Enter') {
+          if (e.key === 'Enter' && desc != '' && answerContent != '') {
             addAnswer()
           }
       }
@@ -327,7 +331,8 @@ export default function QueDetail({setreloading,GoBack,setGoBack,logged,clearFie
                             <img alt='' onClick={()=>editQes(i)} src={edit_blue} />
                             <img alt='' onClick={()=>setdel_serie(i)} src={trash_blue} />
                          </div>   
-          <h4>  {ob['question']} , {i+1}  </h4> 
+          <h4>  {ob['question']} , {i+1}  </h4>
+          <p className='explinationText'>{ob['explication']}</p> 
           {
             ob['answers'].map((os , j)=> 
             <p key={j} className={os['status'] == 1 ? 'wrongAnswer' : ''} >  {os['content']} {j+1}</p>
@@ -341,11 +346,12 @@ export default function QueDetail({setreloading,GoBack,setGoBack,logged,clearFie
 
  
     <input className='bigInput' onChange={(e)=>setContent(e.target.value)} value={content}  placeholder='السؤال' />
-   
+    <textarea className='bigInput'  onChange={(e)=> {setDesc(e.target.value)}} value={desc} placeholder='تفاصيل' />
+
     <div className='answerD'>
         {answers.length ? 
         answers.map((e,i)=> 
-        <div className='spacebetween positionRelative'>
+        <div className='spacebetween positionRelative' key={i}>
           <div className='croud center'> 
                             <img alt='' onClick={()=>editAnser(i)} src={edit_blue} />
                             <img alt='' onClick={()=>setdel_answer(i)} src={trash_blue} />
@@ -357,13 +363,16 @@ export default function QueDetail({setreloading,GoBack,setGoBack,logged,clearFie
       )
          : <p>إضافة اقتراح جديد للإجابة على السؤال </p>
         }
-        <div className='container spacebetween'>
+        <div className='container fdc spacebetween'>
+          <div className='bxown center '>
             {
              ( editanswerMode != -1 ) ?  <img onClick={(e)=> addAnswer() } alt='' src={isCorr} />  
              : <img onClick={(e)=> addAnswer() } alt='' src={yellow_plus} /> 
              }
             <input className='bigInput'  onKeyDown={handleAnswerKeyDown} placeholder='اقترح إجابة للمستخدم' onChange={(e)=> {setAnswerContent(e.target.value)}}  value={answerContent}/>
-        </div>
+
+          </div>
+            </div>
         <div className='errorAnswer wrongAnswer'>
           {/* <p> {answercheck === 0 ? 'يجب اختيار إجابة صحيحة واحدة بالضغط على الإجابة الصحيحة لتصبح باللون الأحمر.' : '' }  </p> */}
           <p> {answercheck  }  </p>

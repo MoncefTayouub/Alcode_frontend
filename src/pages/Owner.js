@@ -15,7 +15,7 @@ import HandleMails from './HandleMails'
 import reloadImage from '../files/reloadImage.svg'
 import axios from 'axios'
 
-export default function Owner({isOwner,logged,backend_url}) {
+export default function Owner({backend_img,isOwner,logged,backend_url}) {
   const navigate = useNavigate();
   // const [content , setContent] = useState() 
   const [navSelect , SetnavSelect] = useState(8) 
@@ -110,7 +110,7 @@ export default function Owner({isOwner,logged,backend_url}) {
   const handleFileName = (name)=> {
     var nname = name + ''
     var rt = nname.split("/")
-    // console.log(rt[0],rt,rt[rt.length -1 ],rt.length -1)
+
     return rt[rt.length -1 ]   
  }
 
@@ -118,13 +118,13 @@ export default function Owner({isOwner,logged,backend_url}) {
  
  const submit = async () => {
    const user = localStorage.getItem('user')
-   console.log('accessToken',user,user==null)
+
    if (user == null){
       navigate('/login');
      return 0 ;
     }
     const jsonObject = JSON.parse(user);
-    console.log('not logged in',jsonObject)
+
     setreloading(true)
        const DataForm = new FormData();
        DataForm.append('user', jsonObject.id);
@@ -153,23 +153,23 @@ useEffect(()=> {
 },[])
 
 
- 
+ console.log('navSelect',navSelect)
   let content = <div></div>
   switch (navSelect) { 
     case 1 :
-      content = <General setreloading={setreloading}  backend_url={backend_url} seteditUser={seteditUser}  SetnavSelect={SetnavSelect} errorMsg={errorMsg} setErrorMsg={setErrorMsg} />
+      content = <General backend_img={backend_img} setreloading={setreloading}  backend_url={backend_url} seteditUser={seteditUser}  SetnavSelect={SetnavSelect} errorMsg={errorMsg} setErrorMsg={setErrorMsg} />
       break ;
       case 2 :
-        content = <AddUser setreloading={setreloading} editUser={editUser} seteditUser={seteditUser}  errorMsg={errorMsg} setErrorMsg={setErrorMsg} backend_url={backend_url} SetnavSelect={SetnavSelect}  />
+        content = <AddUser  setreloading={setreloading} editUser={editUser} seteditUser={seteditUser}  errorMsg={errorMsg} setErrorMsg={setErrorMsg} backend_url={backend_url} SetnavSelect={SetnavSelect}  />
         break ;
         case 3 : 
-        content = <AccNotActive setreloading={setreloading} setquiz={setquiz} quiz={quiz} setSerie={setSerie} serie={serie} SetnavSelect={SetnavSelect} errorMsg={errorMsg} setErrorMsg={setErrorMsg} backend_url={backend_url} />
+        content = <AccNotActive setreloading={setreloading}  quiz={quiz} setSerie={setSerie} serie={serie} SetnavSelect={SetnavSelect} errorMsg={errorMsg} setErrorMsg={setErrorMsg} backend_url={backend_url} />
         break ;  
         case 4 : 
-        content = <AccContacted  setreloading={setreloading} setquiz={setquiz} quiz={quiz} setSerie={setSerie} serie={serie} SetnavSelect={SetnavSelect} errorMsg={errorMsg} setErrorMsg={setErrorMsg} backend_url={backend_url} />
+        content = <AccContacted  setreloading={setreloading}  quiz={quiz} setSerie={setSerie} serie={serie} SetnavSelect={SetnavSelect} errorMsg={errorMsg} setErrorMsg={setErrorMsg} backend_url={backend_url} />
         break ;
         case 6 : 
-        content = <AccNotCon  setreloading={setreloading} setquiz={setquiz} quiz={quiz} setSerie={setSerie} serie={serie} SetnavSelect={SetnavSelect} errorMsg={errorMsg} setErrorMsg={setErrorMsg} backend_url={backend_url} />
+        content = <AccNotCon  setreloading={setreloading}  setSerie={setSerie} serie={serie} SetnavSelect={SetnavSelect} errorMsg={errorMsg} setErrorMsg={setErrorMsg} backend_url={backend_url} />
         break ;
         case 7 : 
         content = <Quizes setreloading={setreloading}  setquizList={setquizList} quizList={quizList} setquiz={setquiz} quiz={quiz} setSerie={setSerie} serie={serie} SetnavSelect={SetnavSelect} errorMsg={errorMsg} setErrorMsg={setErrorMsg} backend_url={backend_url} />
@@ -178,7 +178,7 @@ useEffect(()=> {
         content = <AddSerie  GoBack={GoBack} setGoBack={setGoBack} reloading={reloading} setreloading={setreloading} handleFileName={handleFileName} setquizList={setquizList} quizList={quizList} setquiz={setquiz} SetnavSelect={SetnavSelect} serieP={serie} setSerieP={setSerie} errorMsg={errorMsg} setErrorMsg={setErrorMsg} backend_url={backend_url} />
         break ;
         case 9 : 
-        content = <SeriesRender setreloading={setreloading} setquiz={setquiz} quiz={quiz} setSerie={setSerie} serie={serie} SetnavSelect={SetnavSelect} errorMsg={errorMsg} setErrorMsg={setErrorMsg} backend_url={backend_url} />
+        content = <SeriesRender backend_img={backend_img} setreloading={setreloading} setquiz={setquiz} quiz={quiz} setSerie={setSerie} serie={serie} SetnavSelect={SetnavSelect} errorMsg={errorMsg} setErrorMsg={setErrorMsg} backend_url={backend_url} />
         break ;  
         case 10 :
         content = <Questions GoBack={GoBack} setGoBack={setGoBack} setreloading={setreloading} handleFileName={handleFileName} questionList={questionList} setquestionList={setquestionList} setquiz={setquiz} quiz={quiz} setSerie={setSerie} serie={serie} SetnavSelect={SetnavSelect} errorMsg={errorMsg} setErrorMsg={setErrorMsg} backend_url={backend_url} />

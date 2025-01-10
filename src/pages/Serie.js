@@ -8,7 +8,7 @@ import motocycle_section from '../files/motocycle_section.svg'
 import bigTruck_section from '../files/bigTruck_section.svg'
 import bus_section from '../files/bus_section.svg'
 
-export default function Serie({setreloading,selectType,categoryContent,selectedSerie,backend_url,setselectedSerie}) {
+export default function Serie({backend_img,setreloading,selectType,categoryContent,selectedSerie,backend_url,setselectedSerie}) {
     const [title , setTitle ] = useState('')
     const [desc , setdesc ] = useState('')
     const [img , setimg ] = useState('') 
@@ -92,7 +92,7 @@ export default function Serie({setreloading,selectType,categoryContent,selectedS
         <div className='center gap'>
         {    
         data ? data['content'].map((ob,i)=> 
-            <Box key={i} title={ob['title']} ob={ob} imgurl={backend_url+ob['icon']} handleSettingSerie={handleSettingSerie} />
+            <Box key={i} title={ob['title']} ob={ob} imgurl={backend_img+ob['icon']} handleSettingSerie={handleSettingSerie} />
         ) : ''
       }
      </div>

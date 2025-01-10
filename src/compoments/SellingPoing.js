@@ -10,7 +10,7 @@ export default function SellingPoing() {
 
   return (
 <div className='Login center'>
-  <img src={leftBarLogin} alt='' />
+  <img className='imgLogin' src={leftBarLogin} alt='' />
   <div className="container ">
             <p>هل تفكر في الحصول على رخصة القيادة وتبحث عن أفضل الطرق لتحقيق ذلك بسهولة ونجاح؟ نحن هنا لمساعدتك! مقابل اشتراك شهري بسيط بقيمة 50 درهم فقط، يمكنك الاستفادة من:</p>
             <ul>
@@ -34,7 +34,7 @@ export default function SellingPoing() {
                 <p>contact@alcode.com</p>
             </div>
         </div>
-        <p className='link' onClick={()=>navigate('/')} > {" > "+" صفحة الرئيسية "}</p>
+        <p className='link' onClick={()=>navigate('/')} > {" صفحة الرئيسية "}</p>
 </div>
   )
 }

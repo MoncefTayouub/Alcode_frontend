@@ -1,6 +1,7 @@
 import React from 'react'
 import caricon from "../files/caricon.png"
 export default function Box({ob,handleSettingSerie,title , imgurl}) {
+  
   return (
     <div className='box spacebetween'>
       <img src={imgurl} alt='' />

@@ -1,9 +1,12 @@
 import React , {useEffect, useRef , useState} from 'react'
 import questionIcon from '../files/questionIcon.svg'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
+
 // import { submitData } from './PutOut'
 
 export default function AddSerie({setGoBack,setreloading, handleFileName,setquizList,quizList,setquiz,serieP,backend_url , SetnavSelect ,navSelect, setSerieP ,errorMsg,setErrorMsg}) {
+  const navigate = useNavigate()
   const [file , setFile ] = useState(null)
   const [title , setTitle ] = useState('')     
   const [desc , setDesc ] = useState('')
@@ -21,7 +24,6 @@ export default function AddSerie({setGoBack,setreloading, handleFileName,setquiz
     const file = event.target.files[0];
     if (file) {
       setFile(file)
-      console.log("Selected file:", file.name);
     }
   };
 
@@ -42,7 +44,6 @@ export default function AddSerie({setGoBack,setreloading, handleFileName,setquiz
 
 
     const setSerie = async ()=> {  
-      console.log("checkInput(),setSerie",checkInput(),category)
       if (checkInput()){
         setreloading(true)
         const DataForm= new FormData();
@@ -85,7 +86,8 @@ export default function AddSerie({setGoBack,setreloading, handleFileName,setquiz
 
           
       }).catch(function (error) {
-          // console.log(error)
+        navigate('/InernalError')
+          console.log(error)
         });
       }
   }

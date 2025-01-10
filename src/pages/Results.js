@@ -3,21 +3,21 @@ import Box from '../compoments/Box'
 import motocycleIcon from '../files/motocycleIcon.png'
 import { useNavigate } from 'react-router-dom';
 
-export default function Results( {testResults,settestResults,logged}) {
+export default function Results( {setcallNbQ,testResults,settestResults,logged}) {
   
   const navigate = useNavigate();
   useEffect(() => {
     window.scrollTo(0, 0);
     
-    if (logged != 1&&logged!=-5) navigate('/login')
+    // if (logged != 1&&logged!=-5) navigate('/login')
     }, []);
   const handleSeeRes = ()=> {
     navigate('/QuizRes')
   }
   
-  console.log(testResults)
   const [correctAnswer, setcorrectAnswer] = useState()
   const [totalAnswer, settotalAnswer] = useState()
+  const [answersTable , setanswersTable  ] = useState([])
   useEffect(()=> {
     if (testResults ) {
 
@@ -29,6 +29,25 @@ export default function Results( {testResults,settestResults,logged}) {
           })
           return (cc == ans.length)
       }
+      const answerIndex = (id) => {
+        let index = -1; // Default value if no match is found
+        testResults.data.forEach((ob) => {
+            ob['content'].forEach((om) => {
+                om.answers.forEach((of, idx) => {
+                    if (of.id === id) {
+                        index = idx + 1 ; // Store the index of the matching answer
+                    }
+                });
+            });
+        });
+        return index; // Return the found index or -1 if not found
+    };
+
+      const checkAnswer = (ans )=> {
+        return testResults['selectedAnswers'].filter((ob,i)=> {
+           return ob.answer.includes(ans)
+        }).length
+    }
       
 
       settotalAnswer(testResults.userAnswers.length)
@@ -41,15 +60,45 @@ export default function Results( {testResults,settestResults,logged}) {
         cP += countP.length ? 1 : 0
 
       })
-      setcorrectAnswer(cP)    
+      // setcorrectAnswer(cP)  
+      
+      var totalSec = 0 
+      var res = [] 
+      testResults['userAnswers'].map((ob,i)=>{
+        var total = [] 
+        var corr = 0
+        var ansIndex = []
+        ob['content'].map((om,m)=> {
+          om['CA'].map((oca , ca)=>{
+            if (checkAnswer(oca)) corr++
+            total ++
+            ansIndex.push(answerIndex(oca))
+          })
+        })
+        totalSec += total == corr ? 1 : 0 
+        res.push({'status':total == corr , 'index' : i+1 , 'ans':ansIndex})
+      })
+      setcorrectAnswer(totalSec)
+      setanswersTable(res)
+      var obj = testResults
+      obj.answersTable = res
+      settestResults(obj)
+
     }
   },[testResults])
 
-  console.log({
-    'correctAnswer':correctAnswer , 
-    'totalAnswer':totalAnswer , 
 
-  })
+  const handleGoRes = (nbqq)=> {
+    if (!testResults) return ;
+    console.log(nbqq-1 , testResults.data , testResults.data[nbqq])
+    setcallNbQ(nbqq-1)
+    // setcallNbQ(testResults.data.length - nbqq)
+    navigate('/QuizRes')
+    return 1
+
+  }
+
+//  console.log('answersTable',answersTable,'testResults',testResults)
   return (
     <div className='Serie padding'>
         <div className='HeaderSerie  center'>
@@ -73,20 +122,75 @@ export default function Results( {testResults,settestResults,logged}) {
                 </div>
                 <button className='full rad20' onClick={()=>handleSeeRes()}>الإجابات الصحيحة</button>
         </div>
-        <div className='center gap'>
-        <Box />
-        <Box />
-        <Box />
-        <Box />
-        <Box />
-        <Box />
-        <Box />
-        <Box />
-        <Box />
-     </div>
-     <div className='twobutns seeMore center padding'>
-        <button className='full rad20'>عرض المزيد</button>
-    </div>
+        <div className='resByAnswer center'>
+
+          {
+            answersTable.map((oc,i)=>
+
+              <div onClick={()=>handleGoRes(oc.index)} key={i} className={oc.status ? 'boxOffice center boxOffice01 ' : 'boxOffice center boxOffice_01'}>
+                  {/* <div  className='nbquestion center'>{oc.index}</div> */}
+                  <div  className='nbquestion center'>{ oc.index}</div>
+                  <div className='corrAns center'>
+                    <p>الإجابات الصحيحة</p>
+                    <div className='center'>
+                      {
+                        oc.ans.map((om,j)=>
+                          <div className='layer'>{om}</div>
+                        )
+                      }
+                      {/* <div className='layer'>3</div>
+                      <div className='layer'>3</div> */}
+
+                    </div>
+                  </div>
+                </div>
+            )
+          }
+
+
+          {/* <div className='boxOffice boxOffice01 center'>
+            <div  className='nbquestion center'>1</div>
+            <div className='corrAns center'>
+              <p>الإجابات الصحيحة</p>
+              <div className='center'>
+                <div className='layer'>3</div>
+                <div className='layer'>3</div>
+                <div className='layer'>3</div>
+
+              </div>
+            </div>
+          </div>
+
+          <div className='boxOffice boxOffice_01 center'>
+            <div  className='nbquestion center'>1</div>
+            <div className='corrAns center'>
+              <p>الإجابات الصحيحة</p>
+              <div className='center'>
+                <div className='layer'>3</div>
+                <div className='layer'>3</div>
+                <div className='layer'>3</div>
+
+              </div>
+            </div>
+          </div>
+
+          <div className='boxOffice boxOffice_00 center'>
+            <div  className='nbquestion center'>1</div>
+            <div className='corrAns center'>
+              <p>الإجابات الصحيحة</p>
+              <div className='center'>
+                <div className='layer'>3</div>
+                <div className='layer'>3</div>
+                <div className='layer'>3</div>
+
+              </div>
+            </div>
+          </div> */}
+
+
+        </div>
+      
+ 
     </div>
   )
 }

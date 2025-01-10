@@ -4,8 +4,11 @@ import axios  from 'axios'
 import edit_blue from '../files/edit_blue.svg'
 import trash_blue from '../files/trash_blue.svg'
 import addIconerror from '../files/addIconerror.svg'
+import { useNavigate } from 'react-router-dom'
 
 export default function General({backend_url,seteditUser,SetnavSelect,setreloading}) {
+    const navigate = useNavigate()
+
     const [ data , setData ] = useState()
     let getData = async () => { 
             
@@ -36,13 +39,12 @@ export default function General({backend_url,seteditUser,SetnavSelect,setreloadi
             setsearchContent('')
             setreloading(false)
       }).catch(function (error) {
-          console.log(error)
+        navigate('/InernalError')
         });
       
 }
 
     const markConnected = async(ob)=> {
-        console.log('marked')
         const DataForm= new FormData();
         DataForm.append('id',ob['id'])
         DataForm.append('state','setconnect')
@@ -56,7 +58,6 @@ export default function General({backend_url,seteditUser,SetnavSelect,setreloadi
         .then((response)=>{
               // console.log(response.data) ;
               let dataR = response.data
-              console.log(dataR)
               getData() 
               // eslint-disable-next-line eqeqeq
             //   if (data['status'] == 1 ) {
@@ -66,7 +67,7 @@ export default function General({backend_url,seteditUser,SetnavSelect,setreloadi
               
             
         }).catch(function (error) {
-            console.log(error)
+            navigate('/InernalError')
           });
     }
     useEffect(()=> {
@@ -104,14 +105,13 @@ export default function General({backend_url,seteditUser,SetnavSelect,setreloadi
                 })
                 .then((response)=>{
                       let dataR = response.data
-                      console.log('dataR',dataR)
                       getData()    
                       if (dataR['status'] == 1 ) {
                         setdelUser(-1)
                       }                   
 
                 }).catch(function (error) {
-                    console.log(error)
+                    navigate('/InernalError')
                   });
             }
        }

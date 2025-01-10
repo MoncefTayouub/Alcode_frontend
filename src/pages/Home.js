@@ -11,7 +11,7 @@ import ContactUs from '../compoments/ContactUs'
 import BySection from '../compoments/BySection'
 import { useNavigate } from 'react-router-dom';
 
-function Home({setselectType,HandleSubmitData,backend_url,setselectedSerie,selectedSerie}) {    
+function Home({setselectType,backend_img,HandleSubmitData,backend_url,setselectedSerie}) {    
   const navigate = useNavigate();
   const [ data , setData ] = useState()    
   let getData = async () => { 
@@ -39,9 +39,12 @@ function Home({setselectType,HandleSubmitData,backend_url,setselectedSerie,selec
   const [lastRows , setlastRows ] = useState([])
   const handleSettingSerie = (ob)=> {
     setselectedSerie(ob)
-    if (pathname != 'quiz')
+    // if (pathname != 'quiz')
     navigate('/quiz')
     }
+
+
+  
 
   useEffect(()=> {
       if (data) {
@@ -50,7 +53,10 @@ function Home({setselectType,HandleSubmitData,backend_url,setselectedSerie,selec
       }
   },[data])
 
-
+  const navi = ()=> {
+    setselectType('A')
+    navigate('/serie')
+  }
 
   return (
     <div>
@@ -65,20 +71,20 @@ function Home({setselectType,HandleSubmitData,backend_url,setselectedSerie,selec
             </div>
             <h3>كونوا معنا يومياً في المساء، لمتابعة البث المباشر على جميع منصات التواصل الاجتماعي</h3>
      </div>
-     <BySection setselectType={setselectType} />
+     <BySection data={data} setselectType={setselectType} />
      <AboutSectoin />
      <div id = 'content'></div>
      <div className='center gap'>
       {
         firstRows.length ? firstRows.map((ob,i)=> 
-            <Box key={i} title={ob['title']} ob={ob} imgurl={backend_url+ob['icon']} handleSettingSerie={handleSettingSerie} />
+            <Box key={i} title={ob['title']} ob={ob} imgurl={backend_img+ob['icon']} handleSettingSerie={handleSettingSerie} />
         ) : ''
       }
        
      
      </div>
      <div className='twobutns seeMore center padding'>
-        <button className='full rad20'>عرض المزيد</button>
+        <button className='full rad20' onClick={()=>navi()}>عرض المزيد</button>
     </div>
     <a id='contact'></a>
     <ContactUs  HandleSubmitData={HandleSubmitData} />
@@ -88,12 +94,12 @@ function Home({setselectType,HandleSubmitData,backend_url,setselectedSerie,selec
     <div className='center gap'>
     {
         lastRows.length ? lastRows.map((ob,i)=> 
-            <Box key={i} title={ob['title']} imgurl={backend_url+ob['icon']} />
+            <Box key={i} title={ob['title']} imgurl={backend_img+ob['icon']} handleSettingSerie={handleSettingSerie}/>
         ) : ''
       }  
      </div>
      <div className='twobutns seeMore center padding'>
-        <button className='full rad20'>عرض المزيد</button>
+        <button onClick={()=>navi()} className='full rad20'>عرض المزيد</button>
     </div>
     </div>
   )

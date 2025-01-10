@@ -12,8 +12,8 @@ export default function RenderProfiles() {
     useEffect(()=> {
         getData() 
     })
-    console.log(data)
-  return (
+
+    return (
     <div className='General center'>
         <div className='search spacebetween'>
             <input placeholder='سارة أحمد'  />  

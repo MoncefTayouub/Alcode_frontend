@@ -10,14 +10,14 @@ import AudioExp from '../Items/AudioExp'
 import pauseWhite from '../files/pauseWhite.svg'
 import AutoPlayAudio from '../Items/AutoPlayAudio'
 
-export default function Quiz({validationRef,setvalidationRef,setreloading,logged,backend_url,selectedSerie,setselectedSerie,testResults,settestResults}) {
+export default function Quiz({backend_img,validationRef,setvalidationRef,setreloading,logged,backend_url,selectedSerie,setselectedSerie,testResults,settestResults}) {
     const navigate = useNavigate();
     const [moDAnswer ,  setmoDAnswer ] = useState(0)
     const [ data , setData ] = useState(null)
     const [nbQ , setNbQ]= useState(0)
     const [userAnswers , setuserAnswers] = useState([])
     const [setQuiz ,sSETetQuiz ] = useState()
-
+    const [switcher , setswitcher  ] = useState(false) 
 
     const Auth =  () => {
     
@@ -86,9 +86,13 @@ export default function Quiz({validationRef,setvalidationRef,setreloading,logged
         
         },[])
 
+        // <div className='reloadSection center '   >
+        //   <div class="loader"></div>
+        //   </div>   
+
         useEffect(()=> {
             if (logged !== 1  ) {
-                // navigate('/login')
+                navigate('/login')
             }else 
             if (validationRef == 0  ) {
                 // navigate('/ByPass')
@@ -118,7 +122,8 @@ export default function Quiz({validationRef,setvalidationRef,setreloading,logged
                 setNbQ(dataR['content'].length - 1)
               }
         }).catch(function (error) {  
-            console.log(error)
+            navigate('/InernalError')
+            // console.log(error)
         });
     }
 }
@@ -130,19 +135,22 @@ useEffect(()=> {
 
 
 const [isPlaying, setIsPlaying] = useState(false);
-const [timeLeft, setTimeLeft] = useState(6); 
+const [timeLeft, setTimeLeft] = useState(30); 
 
 
 const [totalcounter , settotalcounter] = useState(0)
 
 
 
-
+const setRes = ()=> {
+    settestResults({'selectedAnswers':selectedAnswers,'userAnswers':userAnswers,'data':data})
+           navigate("/result")
+}
 
 
 
 useEffect(() => {
-    if (nbQ == -1 && !isPlaying && startTest) {
+    if (nbQ == -1 && !isPlaying && startTest && moDAnswer !== 1 ) {
         
             settestResults({'selectedAnswers':selectedAnswers,'userAnswers':userAnswers,'data':data})
             navigate("/result")
@@ -166,7 +174,7 @@ useEffect(() => {
             clearInterval(timer);
         }
         if (nbQ >= 0  ) {
-            setTimeLeft(6)
+            setTimeLeft(30)
             if (!(moDAnswer == 1 && totalcounter % 2 == 0 )) {
                 setNbQ((prevNbQ) => prevNbQ - 1);  
                
@@ -180,7 +188,7 @@ useEffect(() => {
             clearInterval(timer);
         }
         settotalcounter(prev => prev + 1)
-    }, 6000); // 60 seconds = 60000 milliseconds
+    }, 30000); // 60 seconds = 60000 milliseconds
     
     return () => {
         clearInterval(smallSequence);
@@ -206,14 +214,13 @@ const HandleUserAnswer = (idQ, id) => {
     const updatedAnswers = selectedAnswers.map((e) => {
         if (e['QI'] === idQ) {
             found = true;
-            // Check if the id already exists in the answer array
             if (!e.answer.includes(id)) {
-                return { ...e, answer: [...e.answer, id] }; // Append id to the array
+                return { ...e, answer: [...e.answer, id] }; 
             }else {
                 return { ...e, answer: e.answer.filter((item) => item !== id) };
             }
         }
-        return e; // Leave other answers unchanged
+        return e; 
     });
 
     if (!found) {
@@ -281,7 +288,8 @@ const HandleUserAnswer = (idQ, id) => {
             audioExplainationRef.current.play();
         }
         setIsPlaying(!isPlaying);
-      }else console.log('not set yet')
+      }
+    //   else console.log('not set yet')
     }
 
     
@@ -293,7 +301,8 @@ const HandleUserAnswer = (idQ, id) => {
 
     useEffect(()=> {
         if ( data && nbQ >= 0 ) {
-            setAXurl(backend_url+data[nbQ]['auidio_explaination'])  
+            setAXurl(backend_img+data[nbQ]['auidio_explaination'])  
+            
         }
         // if (nbQ < 0) {
         //     // seeResaults()
@@ -331,11 +340,11 @@ const HandleUserAnswer = (idQ, id) => {
 
       const handleResumConter = ()=> {
         var va = decreasenbQ()
-        setTimeLeft(6)
+        setTimeLeft(30)
         settotalcounter((prev)=>prev+1)
       }
 
-   
+
 
     //   console.log({
         // 'timeLeft ':timeLeft , 
@@ -356,26 +365,63 @@ const HandleUserAnswer = (idQ, id) => {
     // console.log('handleBoxStyle',handleBoxStyle(69,142),moDAnswer != 2 && !(moDAnswer == 1 && totalcounter % 2 == 0 ),'hadnleRes',hadnleRes(69,142))
       return (
     <div className='Quiz center'> 
+    {
+            startTest ? 
+            <>
+            {
+             switcher ? 
+
+                <div className='toolBar center'>
+                        <AudioExp startTest={startTest} isPlaying={isPlaying} setIsPlaying={setIsPlaying} totalTiming={totalTiming} pauseWhite={pauseWhite} togglePlayPause={togglePlayPause} audioExplainationRef={audioExplainationRef } AXurl={AXurl} />
+                    <p className='pbttn center' onClick={()=>setswitcher(false)}>استئناف</p>
+                </div>
+            : 
+                <div className='toolBar spacebetween jcfc'>
+
+                    {
+                    moDAnswer != 2 && !(moDAnswer == 1 && totalcounter % 2 == 0 ) ?
+                        nbQ == 0 ? 
+                            <p className='pbttn  center' onClick={()=>setRes('/')}> النتائج</p>
+                           
+                        :
+                        <p className='pbttn  center' onClick={()=>handleResumConter()}>التالي</p>
+                        
+                        : 
+                        <div className='bar center '>
+                        <div className='counter numberContainer center'>{timeLeft}</div>
+                            <div className='volum'>
+                                <img alt='' src={muteAudio ? volume_off : soundOne} onClick={()=> setmuteAudio(!muteAudio)} />
+                            </div>
+                        </div>  
+                    }
+                    <p onClick={()=>setswitcher(true)} className='pbttn center'>شرح صوتي</p>
+                </div>
+
+        }
+            </>
+            : ''
+        }
         {startTest ? 
         
         <>
-        <div className='img_container'>
+        <div className='img_container center'>
+            
             {
                 ( moDAnswer != 2 && !(moDAnswer == 1 && totalcounter % 2 == 0 )) ? 
-                <img  alt='' src={data != null && nbQ >= 0 ?  backend_url+data[nbQ]['correctAnswer']:''} />
+                <img  alt='' src={data != null && nbQ >= 0 ?  backend_img+data[nbQ]['correctAnswer']:''} />
                 :
-                <img  alt='' src={data != null && nbQ >= 0 ?  backend_url+data[nbQ]['picture']:''} />
+                <img  alt='' src={data != null && nbQ >= 0 ?  backend_img+data[nbQ]['picture']:''} />
             }
         </div>
-        {
+        {/* {
            moDAnswer != 2 && !(moDAnswer == 1 && totalcounter % 2 == 0 ) ?
             nbQ == 0 ? 
             <div className='bar center '>
-                <button className='instantBtn' onClick={()=>navigate('/')}> صفحة الرئيسية </button>
+                <button className='pbttn' onClick={()=>navigate('/')}> صفحة الرئيسية </button>
             </div>   
             :
             <div className='bar center '>
-            <button className='instantBtn' onClick={()=>handleResumConter()}>التالي</button>
+            <button className='pbttn' onClick={()=>handleResumConter()}>التالي</button>
             </div>   
             : 
             <div className='bar center '>
@@ -384,17 +430,14 @@ const HandleUserAnswer = (idQ, id) => {
                     <img alt='' src={muteAudio ? volume_off : soundOne} onClick={()=> setmuteAudio(!muteAudio)} />
                 </div>
             </div>
-        }
+        } */}
         </>
             : ''}
-        <div className={startTest ? 'TestContainer positionRelative' : 'TestContainer positionRelative bigHei '}>
+        <div className={startTest ? 'TestContainer scrollableSection positionRelative ' : '  TestContainer positionRelative h100vh '}>
               {
                 data != null && nbQ >= 0 ?
-                // !startTest ? 
-                <AutoPlayAudio setmuteAudio={setmuteAudio} muteAudio={muteAudio} moDAnswer={moDAnswer} setmoDAnswer={setmoDAnswer} descAudioIsPlaying={isPlaying} startTest={startTest} setStartTest={setStartTest} audioUrl={backend_url+data[nbQ]['audio_content']}  />
-                // :
-                // <AutoPlayAudio moDAnswer={moDAnswer} setmoDAnswer={setmoDAnswer} descAudioIsPlaying={isPlaying} startTest={startTest} setStartTest={setStartTest} audioUrl={backend_url+data[nbQ]['audio_content']}  />
-                //    
+                <AutoPlayAudio setmuteAudio={setmuteAudio} muteAudio={muteAudio} moDAnswer={moDAnswer} setmoDAnswer={setmoDAnswer} descAudioIsPlaying={isPlaying} startTest={startTest} setStartTest={setStartTest} audioUrl={backend_img+data[nbQ]['audio_content']}  />
+                
                 :'' }   
                 {
                 data != null && nbQ >= 0 ? data[nbQ]['content'].map((ob,i)=> 
@@ -415,17 +458,22 @@ const HandleUserAnswer = (idQ, id) => {
                     )}
 
                         </div>
+                        {
+                            ( moDAnswer != 2 && !(moDAnswer == 1 && totalcounter % 2 == 0 )) ?
+                                <div className='center'>
+                                    <div className='expText'>
+                                    {ob['question']['explication']}
+                                    </div>
+                                </div>
+                            : ''
+                        }
                         </div> 
              
                 ) :''
             } 
 
         </div>
-        {
-            startTest ? 
-            <AudioExp startTest={startTest} isPlaying={isPlaying} setIsPlaying={setIsPlaying} totalTiming={totalTiming} pauseWhite={pauseWhite} togglePlayPause={togglePlayPause} audioExplainationRef={audioExplainationRef } AXurl={AXurl} />
-            : ''
-        }
+       
     </div>
   )
 }

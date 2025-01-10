@@ -10,7 +10,7 @@ const   Navbar = ({logged,logOut})=> {
 
     useEffect(() => {
       setCurrentPath(location.pathname);
-      settypeR(location.pathname=="/login" || location.pathname=="/owner" || location.pathname=="/ByPass" )
+      settypeR(location.pathname=="/login" || location.pathname=="/owner" || location.pathname=="/Bypass" || location.pathname=="/quiz"  || location.pathname=="/InernalError"|| location.pathname=="/InernalError"|| location.pathname=="/quiz"|| location.pathname=="/QuizRes" )
     }, [location]);
 
     const log = ()=> {

@@ -13,14 +13,20 @@ import QuizRes from './compoments/QuizRes';
 import { use } from 'react';
 import SellingPoing from './compoments/SellingPoing';
 import TestAudio from './Items/TestAudio';
+import Quiz01_02 from './pages/Quiz01_02';
+import SeeAllRess from './compoments/SeeAllRess';
+import InernalError from './compoments/InernalError';
 const App = () => {
   const backend_url = 'https://srv668869.hstgr.cloud/';
+  const backend_img = "https://srv668869.hstgr.cloud";
+  // const backend_img = 'http://127.0.0.1:8000';
   // const backend_url = 'http://127.0.0.1:8000/';
   const [testResults,settestResults] = useState()
   const [logged , setLogged] = useState(-5)
   const [isOwner , setisOwner] = useState(false)
   const [reloading , setreloading ] = useState(false)
   const [validationRef , setvalidationRef] = useState(null)
+  const [callNbQ,setcallNbQ] = useState(null)
 
   const [footerContent, setfooterContent] = useState()  
 
@@ -79,7 +85,7 @@ const App = () => {
           if (data.status === 2) 
             setisOwner(true)          
           return 1 ;
-      }
+      } 
 
        
   } catch (error) {
@@ -171,14 +177,15 @@ return (
       }
         <Navbar logOut={logOut} logged={logged}  typeR={typeR} />   
         <Routes>
-           <Route path="/" element={<Home  setselectType={setselectType} HandleSubmitData={HandleSubmitData} logged={logged} setselectedSerie={setselectedSerie} selectedSerie={selectedSerie} backend_url={backend_url} />} />    
-          <Route path="/Serie" element={<Serie setreloading={setreloading} selectType={selectType} categoryContent={categoryContent} setselectedSerie={setselectedSerie} selectedSerie={selectedSerie} backend_url={backend_url} />} />    
-          <Route path="/Quiz" element={<Quiz validationRef={validationRef} setreloading={setreloading} typeLicence={typeLicence} logged={logged} testResults={testResults} settestResults={settestResults} backend_url={backend_url}  setselectedSerie={setselectedSerie} selectedSerie={selectedSerie}    />} />    
-          <Route path="/QuizRes" element={<QuizRes logged={logged} testResults={testResults} settestResults={settestResults} backend_url={backend_url}  setselectedSerie={setselectedSerie} selectedSerie={selectedSerie}    />} />    
-          <Route path="/result" element={<Results logged={logged} testResults={testResults} settestResults={settestResults} backend_url={backend_url}  />} />    
-          <Route path="/Owner" element={<Owner isOwner={isOwner} logged={logged} backend_url={backend_url} />} />    
+           <Route path="/" element={<Home backend_img={backend_img} setselectType={setselectType} HandleSubmitData={HandleSubmitData} logged={logged} setselectedSerie={setselectedSerie} selectedSerie={selectedSerie} backend_url={backend_url} />} />    
+          <Route path="/Serie" element={<Serie backend_img={backend_img} setreloading={setreloading} selectType={selectType} categoryContent={categoryContent} setselectedSerie={setselectedSerie} selectedSerie={selectedSerie} backend_url={backend_url} />} />    
+          <Route path="/Quiz" element={<Quiz backend_img={backend_img} validationRef={validationRef} setreloading={setreloading} typeLicence={typeLicence} logged={logged} testResults={testResults} settestResults={settestResults} backend_url={backend_url}  setselectedSerie={setselectedSerie} selectedSerie={selectedSerie}    />} />    
+          <Route path="/QuizRes" element={<Quiz01_02 backend_img={backend_img}  callNbQ={callNbQ} logged={logged} testResults={testResults} settestResults={settestResults} backend_url={backend_url}  setselectedSerie={setselectedSerie} selectedSerie={selectedSerie}    />} />    
+          <Route path="/result" element={<Results setcallNbQ={setcallNbQ} logged={logged} testResults={testResults} settestResults={settestResults} backend_url={backend_url}  />} />    
+          <Route path="/Owner" element={<Owner backend_img={backend_img} isOwner={isOwner} logged={logged} backend_url={backend_url} />} />    
           <Route path="/login" element={<Login  logged={logged} setLogged={setLogged} backend_url={backend_url} />} />    
           <Route path="/ByPass" element={<SellingPoing  logged={logged} setLogged={setLogged} backend_url={backend_url} />} />    
+          <Route path="/InernalError" element={<InernalError  logged={logged} setLogged={setLogged} backend_url={backend_url} />} />    
         </Routes>
         <Footer setselectedSerie={setselectedSerie} pathname={pathname} footerContent={footerContent} typeR={typeR} />
       </div>

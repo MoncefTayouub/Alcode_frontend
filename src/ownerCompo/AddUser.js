@@ -1,9 +1,11 @@
 import React , {useState , useEffect} from 'react'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 
 
 export default function AddUser({reloading,setreloading,backend_url,errorMsg,setErrorMsg,SetnavSelect,seteditUser,editUser}) {
+  const navigate = useNavigate()
 
   const [fullName , setFullName] = useState("")
   const [mail , setMail] = useState("")
@@ -85,7 +87,6 @@ export default function AddUser({reloading,setreloading,backend_url,errorMsg,set
               .then((response)=>{
                     let data = response.data ;
                     setreloading(false)
-                    console.log('add user' , data)
                     if (data['status'] == 1 ){
                     setErrorMsg(1) 
                     clearINput()
@@ -97,7 +98,7 @@ export default function AddUser({reloading,setreloading,backend_url,errorMsg,set
                           
                   
               }).catch(function (error) {
-                  console.log(error)
+                navigate('/InernalError')
                 });
     
               }else {

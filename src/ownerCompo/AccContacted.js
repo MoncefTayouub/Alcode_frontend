@@ -2,18 +2,25 @@ import React , {useState , useEffect}from 'react'
 import notSub from '../files/notSub.svg'
 import axios  from 'axios'
 import addIconerror from '../files/addIconerror.svg'
+import { useNavigate } from 'react-router-dom'
 
 
 export default function AccContacted({backend_url,setreloading}) {
+    const navigate = useNavigate()
     const [ data , setData ] = useState()
-    let getData = async () => { 
-            
-        let respons = await fetch (`${backend_url}owner/profiles/BC`)
-        let data = await respons.json()
-        setData(data)
-    
+    let getData = async () => {
+    try {
+        const response = await fetch(`${backend_url}owner/profiles/BC`);
+        if (!response.ok) {
+            navigate('/InernalError')
+            throw new Error("Network response was not ok");
+        };
+        const data = await response.json();
+        setData(data);
+    } catch (error) {
+        console.error("Fetch error:", error);
     }
-    console.log(data) 
+};
     const markConnected = async(ob)=> {
         const DataForm= new FormData();
         setreloading(true)
@@ -27,10 +34,8 @@ export default function AccContacted({backend_url,setreloading}) {
            
         })
         .then((response)=>{
-              // console.log(response.data) ;
               setreloading(false)
               let dataR = response.data
-              console.log(dataR)
               getData() 
               // eslint-disable-next-line eqeqeq
             //   if (data['status'] == 1 ) {
@@ -40,13 +45,13 @@ export default function AccContacted({backend_url,setreloading}) {
               
             
         }).catch(function (error) {
-            console.log(error)
+            // console.log(error)
           });
     }
     useEffect(()=> {
         getData() 
     },[])
-    console.log(data)
+
     const boxClass = (index )=> {
         if (parseInt(index)%2 == 1) return 'contentBox center bgContent'
         return 'contentBox center'

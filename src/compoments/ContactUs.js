@@ -6,12 +6,13 @@ import whatsappBleu from "../files/whatsappBleu.svg"
 import tiktokBleu from "../files/tiktokBleu.svg"
 import instagramBleu from "../files/instagramBleu.svg"
 import doublewave from "../files/doublewave.svg"
+import { useNavigate } from 'react-router-dom'
 
 export default function ContactUs({HandleSubmitData}) {
 
-
+    const navigate = useNavigate()
   const [fullName , setFullName ] = useState('')
-  const [Mail , setMail ] = useState('')
+  const [Mail , setMail ] = useState('')   
   const [Subjects , setSubjects ] = useState('')
   const [MSG , setMSG ] = useState('')
   const [sent , setSent] = useState(false)
@@ -40,6 +41,7 @@ export default function ContactUs({HandleSubmitData}) {
           })  
           .catch(error => {
             // console.error("Error in HandleSubmitData:", error);
+            navigate('InernalError')
           });
         }
 
@@ -77,7 +79,10 @@ export default function ContactUs({HandleSubmitData}) {
         </div>      
         </div>
         <div className='form frs center'>
+            <div className='imgCooon'>
              <img src={doublewave} className='' alt='' />
+
+            </div>
              {
                 sent ? 
                 <>

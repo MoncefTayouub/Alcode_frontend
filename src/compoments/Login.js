@@ -34,11 +34,9 @@ export default function Login({backend_url,setLogged,logged}) {
           const data = response.data;
           setresp(false)
           setLogged(data.status)
-          console.log('data.status',data.status)
           if (data.status === 1) {
               // Store JWT in localStorage
               const { jwt } = data;
-              console.log(data['jwt'].access,jwt)
               localStorage.setItem('accessToken', jwt.access);
               localStorage.setItem('refreshToken', jwt.refresh);
               localStorage.setItem('user', JSON.stringify({
@@ -52,12 +50,12 @@ export default function Login({backend_url,setLogged,logged}) {
   
               navigate('/'); 
               
-            //   console.log('Login successful and tokens stored:', data);
           } else if (data.status === 0) {
               setError('اسم المستخدم أو كلمة المرور غير صحيحة');
           }
       } catch (error) {
           console.error('Error during login:', error);
+        navigate('InernalError')
           setError('An error occurred during login. Please try again.');
       }
   };
@@ -67,7 +65,8 @@ export default function Login({backend_url,setLogged,logged}) {
   return (
     <div className='Login center'>
         <p>{error}</p>
-      <img src={leftBarLogin} alt='' />
+        
+      <img className='imgLogin' src={leftBarLogin} alt='' />
       <input className='bigInput' onChange={(e)=>setUsername(e.target.value)} value={username}  placeholder='username' />
       <input className='bigInput' type='password' onChange={(e)=>setpassword(e.target.value)} value={password}  placeholder='password' />
       <div className='twobutns  center padding'>

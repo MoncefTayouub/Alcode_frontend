@@ -2,12 +2,20 @@ import React ,{useEffect , useState , useRef} from 'react'
 import play_white from '../files/play_white.svg'
 import audioPlayer from '../files/audioPlayer.svg'
 import pauseWhite from '../files/pauseWhite.svg'
-import leftWhite from '../files/leftWhite.svg'
-import rightWhite from '../files/rightWhite.svg'
+import leftWhite from '../files/leftBlue.svg'
+import rightWhite from '../files/rightBlue.svg'
 import HandleAudio from './HandleAudio'
+import play_blue from '../files/play_blue.svg'
+import Pause_blue from '../files/Pause_blue.svg'
+import go_back from '../files/go_back.svg'
+import blue_Up_volume from '../files/blue_Up_volume.svg'
+import { useNavigate } from 'react-router-dom';
+
 export default function AudioExp({AXurl,setIsPlaying,len,nbQ,isPlaying,audioExplainationRef,togglePlayPause,seeRes=false,handleSeeNbQ}) {
     const [totalTiming , settotalTiming] = useState(0)
     const [currentTime , setcurrentTime] = useState(0) 
+    const navigate = useNavigate();
+
     // const [hourMode ]
 
     //  useEffect(()=> {
@@ -113,32 +121,34 @@ export default function AudioExp({AXurl,setIsPlaying,len,nbQ,isPlaying,audioExpl
           }
 
 
-
+          // console.log(seeRes,nbQ,len)
+    
   return (
-    <div className='audioExplaination padding center'>
+    <div className='audioExplaination  center'>
             <div className='seeRes'>
             
             <HandleAudio setCurrentTiming={setcurrentTime} setTotalDuration={settotalTiming} audioUrl={AXurl} isPlaying={isPlaying} setReady={setIsAudioReady} />
 
             </div>
             <div className='audioPlayer center width100 '>
-                    {seeRes && nbQ < len -1 ?    <img alt='' onClick={() => handleSeeNbQ(0)} src={leftWhite}  /> : ''} 
-                    <div className='audioLabel spacebetween'>
+                    <div className='audioLabel center'>
+                        { seeRes  ? <img onClick={() => navigate('/result')} alt='' src={go_back} /> : ''}
+                         {seeRes && nbQ > 0 ?    <img alt='' onClick={() => handleSeeNbQ(1)} src={leftWhite}  /> : <img alt='' style={{ opacity: 0 }}  src={leftWhite}  />} 
+                        <img alt='' src={isPlaying ? Pause_blue  : play_blue } onClick={()=>setIsPlaying(!isPlaying)} />
                         <p>{ formatSeconds(currentTime) }</p>
                         <div className='slide_bar center'>
                             <div className='s_bar' style={{width :(currentTime/totalTiming*100)+"%" }} ></div>
                         </div>
                         {
                             // isAudioReady ? 
-                            <img alt='' src={isPlaying ? pauseWhite  : play_white } onClick={()=>setIsPlaying(!isPlaying)} />
                             // : ''
                         }
                         {/* <img alt='' src={audioPlayer} /> */}
+                      { seeRes && nbQ < len -1 ? <img onClick={() => handleSeeNbQ(0)} alt='' src={rightWhite} /> : ''}
                     </div>
-                    { seeRes && nbQ > 0 ? <img onClick={() => handleSeeNbQ(1)} alt='' src={rightWhite} /> : ''}
 
             </div>
-            <p className='mativ'>استمع إلى الشرح الكامل والتعرف على كافة التفاصيل بسهولة</p>
+            {/* <p className='mativ'>استمع إلى الشرح الكامل والتعرف على كافة التفاصيل بسهولة</p> */}
 
         </div>
   )

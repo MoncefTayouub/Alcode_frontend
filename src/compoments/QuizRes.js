@@ -115,7 +115,6 @@ const [totalcounter , settotalcounter] = useState(0)
     const audiDesc = useRef(null);   
     const audioExplainationRef = useRef(null);
     const togglePlayPause = () => {
-        // console.log('-----' , isPlaying , AXurl ,audioExplainationRef.current )
         if (audioExplainationRef.current){
         if (isPlaying ) {
             audioExplainationRef.current.pause();
@@ -123,7 +122,8 @@ const [totalcounter , settotalcounter] = useState(0)
             audioExplainationRef.current.play();
         }
         setIsPlaying(!isPlaying);
-      }else console.log('not set yet')
+      }
+    //   else console.log('not set yet')
     }
 
     
@@ -131,10 +131,10 @@ const [totalcounter , settotalcounter] = useState(0)
 
     // console.log(selectedAnswers,userAnswers)
 
-    console.log('AXurl',AXurl,'userAnswers',userAnswers)
+    // console.log('AXurl',AXurl,'userAnswers',userAnswers)
 
     useEffect(()=> {
-        console.log(data,nbQ, data && nbQ >= 0 )
+        // console.log(data,nbQ, data && nbQ >= 0 )
         if ( data && nbQ >= 0 ) {
             setAXurl(backend_url+data[nbQ]['auidio_explaination'])  
         }

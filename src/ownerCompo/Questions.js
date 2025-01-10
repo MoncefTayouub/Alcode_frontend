@@ -6,10 +6,12 @@ import audioExpLogo from '../files/audioExp.svg'
 import image_logo from '../files/image_logo.svg'
 import axios from 'axios'
 import Quiz from '../pages/Quiz'
+import { useNavigate } from 'react-router-dom'
 
 export default function Questions({setreloading,setGoBack,logged,handleFileName,questionList , setquestionList ,serie,quiz , setquiz,setSerie,SetnavSelect,backend_url,errorMsg,setErrorMsg}) {
 
-  
+  const navigate = useNavigate()
+
   const [audioContent , setAudioContent ] = useState(null)
   const [audioExp , setAudioExp ] = useState(null)
   const [imgC , setimgC ] = useState(null)
@@ -20,7 +22,6 @@ export default function Questions({setreloading,setGoBack,logged,handleFileName,
   
   const [editMode , setEditmode] = useState(0)
   const [checkFiles,setcheckFiles] = useState([-1,-1,-1,-1])
-  console.log(checkFiles)
 
   const checkFields = ()=> {
     if (editMode) return 1 
@@ -84,7 +85,6 @@ export default function Questions({setreloading,setGoBack,logged,handleFileName,
 }
 
   useEffect(()=> {
-    console.log(imgCober,imgC)
     var arr = [ 
       HandlefileExtention(audioContent),
       HandlefileExtention(audioExp),
@@ -110,6 +110,7 @@ export default function Questions({setreloading,setGoBack,logged,handleFileName,
       });
       res.push({
         question : ob['questions']['content'] , 
+        explication : ob['questions']['explication'] ,
         answers : answers , 
         id : ob['questions']['id']
       })
@@ -144,7 +145,6 @@ export default function Questions({setreloading,setGoBack,logged,handleFileName,
     .then((response)=>{
       setreloading(false)
           let data = response.data
-          console.log('---__-',data)
           // eslint-disable-next-line eqeqeq
           if (data['status'] == 1 ) {
             if (editMode) {
@@ -158,7 +158,7 @@ export default function Questions({setreloading,setGoBack,logged,handleFileName,
           setimgContent(['','','',''])
         
     }).catch(function (error) {
-        console.log(error)
+      navigate('/InernalError')
       });
      
     }

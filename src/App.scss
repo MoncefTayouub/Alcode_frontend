@@ -119,6 +119,15 @@ $inputWidth : 654px;
 $inputHiegh : 70px ;
 $notAvailableBG : #939393 ;
 
+.jcfc {
+  justify-content: space-between !important;
+}
+.fdc {
+  flex-direction: column;
+}
+.h100vh {
+  height: 100vh !important;
+}
 html, body {
   margin: 0;
   padding: 0;
@@ -127,7 +136,7 @@ html, body {
 
 body {
   .App{position: relative;}
-  .Serie , .Footer ,.Quiz{
+  .Serie , .Footer ,.Quiz,.Login{
     overflow: hidden;
   }
     div {
@@ -180,7 +189,7 @@ body {
         background-color: $lightBC  ; 
         width : 100% ;
         padding : 0 80px ;
-        height: 80px ;
+        height: 60px ;
         position: sticky;
         top: 0;
         z-index: 100000;
@@ -529,6 +538,91 @@ body {
       }
    
     }
+    .resByAnswer{
+      width : 100% ;
+      gap : 20px ;
+      flex-wrap: wrap;
+      padding :  40px 0  ;
+      .boxOffice {
+        cursor: pointer;
+        width : 141px ;
+        height : 189px ;
+        flex-direction: column; 
+         .nbquestion {
+          font-size: 48px ;
+          border-bottom: 1px solid $white ;
+         }
+         .corrAns , .nbquestion {
+          width : 80% ; 
+          height : 50% ;
+          
+         }
+         .corrAns {
+          flex-direction: column;
+          gap : 15px ;
+          .center {
+            gap : 7px ;
+          }
+          .layer {
+            height : 23px ;
+            padding :  0 5px  ;
+          }
+          p {
+            width : 100% ;
+            font-size: 12px;
+          }
+         }
+      }
+      .boxOffice01 {
+        background-color: #1AFE0E;
+        .nbquestion {
+          color : white ;
+        }
+        .corrAns {
+          p {
+            color : #553636 ;
+          }
+          .layer {
+            border : 1px solid $white ;
+            color: $white ; 
+          }
+        }
+      }
+      .boxOffice_01 {
+        background-color: #FF0000;
+        .nbquestion {
+          color : white ;
+        }
+        .corrAns {
+          p {
+            color : $lightBC ;
+          }
+          .layer {
+            border : 1px solid $white ;
+            color: $white ; 
+          }
+        }
+      }
+      .boxOffice_00 {
+        background-color: transparent; 
+        border : 1px solid $primaryColor ;
+        .nbquestion {
+          color : $primaryColor ;
+          border-bottom : 1px solid $primaryColor ; 
+
+        }
+        .corrAns {
+          p {
+            color : $primaryColor ;
+          }
+          .layer {
+            border : 1px solid $primaryColor;
+            color: $primaryColor ; 
+          }
+        }
+      }
+      
+    }
     .HeaderSerie {
       margin-bottom: 80px ;
       height: 50vh;
@@ -628,11 +722,32 @@ body {
     }
     .Quiz {
       width : 100% ;
+      min-height: 100vh;
       background-color: $primaryColor;
-      padding-bottom: 60px  ;
+      // padding-bottom: 60px  ;
       position: relative;
       $viewWidth : 80% ;
-      
+      .toolBar {
+        width : $viewWidth; 
+        height : 60px ;
+        position: sticky ;
+        bottom  : 0 ;
+        left : 0 ;
+        background-color: $lightBC;
+        justify-content: flex-end;
+        padding: 0 30px ;
+        gap : 20px ;
+        .pbttn {  
+          height: 30px ;
+          padding: 0 20px ;
+          border-radius: 20px ;
+          border : 1px solid $primaryColor;
+          color : $primaryColor;
+          cursor: pointer;
+          margin-bottom: 10px ;
+          z-index: 100;
+        }
+      }
       h3 {
         width : $viewWidth ;
         color : $lightBC
@@ -640,10 +755,13 @@ body {
 
       .img_container {
         width : $viewWidth ;
-        height : 45vh ; 
+        // max-height : 50vh !important;
+        // height: max-content !important; 
+        // min-height: 30vh !important;
+        height: 50vh;
         // max-height: max-content;
         object-fit: cover;
-        background-color: #13171D;
+        background-color: #6D979E;
         flex-direction: column;
         img {
           // height: 100% ;
@@ -654,22 +772,23 @@ body {
         }
       }
       .bar {
-        width : $viewWidth ;
-        height : 100px ;
+        // width : $viewWidth ;
+        // height : 100px ;
         justify-content: flex-start;
-        margin-bottom: 40px ;
+        // margin-bottom: 40px ;
         gap : 20px ;
-        position: absolute;
-        top : 45vh ;
-        left : 10% ; 
-        z-index: 1000;
+        // position: absolute;
+        // top : 45vh ;
+        // left : 10% ; 
+        // z-index: 1000;
         .counter {
-            font-size: 24px ;
-            width : 60px ;
-            height: 60px ;
+            font-size: 18px ;
+            width : 40px ;
+            height: 40px ;
         }
         img {
           cursor: pointer;
+          height : 40px ;
         }
 
       }
@@ -690,7 +809,7 @@ body {
         height: 100%  ;
         background-color: $primaryColor;
         flex-direction: column; 
-        gap : 40px ;
+        gap : 20px ;
         h3 , p , div {
           width : 70% ;
         }
@@ -700,16 +819,16 @@ body {
           text-align: start;
         }
         h3 {
-          font-size: 52px ;
+          font-size: 28px ;
           // opacity: 0;
         }
         p {
-          font-size: 24px ;
+          font-size: 20px ;     
           font-weight: lighter;
         }
 
         button {
-          height : 70px ; 
+          height : 50px ; 
           font-size: 24px ;
           width : 200px ;
           border-radius: 35px ;
@@ -730,10 +849,11 @@ body {
       }
       .TestContainer {
         width : $viewWidth ;
+        height: calc(50vh - 60px);
         // min-height: 50vh;
         direction: rtl;
         flex-wrap: wrap;
-        padding-top: 40px ;
+        padding: 10px 0  ;
         ;
         h5 {
           width : 100% ;
@@ -761,6 +881,7 @@ body {
           color: #212B3E;
           border-radius: 30px;
       }
+      
         .answer {
           width : 400px;
           height : 60px ;
@@ -782,11 +903,23 @@ body {
       .answerContainer:nth-child(even) .answerContainer:last-child {
         margin-left: auto;
       }
+      .expText {
+        width: 90% ;
+        min-height: fit-content;
+        font-size: 20px ;
+        color : $primaryColor;
+        text-align: start;
+        padding : 20px ;
+        border: 2px solid #E4E5E7;
+        border-radius: 30px;
+        background-color: $secColor;
+
+      }
       .audioExplaination {
         color : $white ; 
-        position: relative;
-        margin-top: 40px ;
-        max-width: 70% ;
+        // position: relative;
+        // margin-top: 40px ;
+        // max-width: 70% ;
         .seeRes {
           width : $inputWidth ;
           position: absolute;
@@ -803,26 +936,37 @@ body {
         .audioPlayer {
           gap : 20px ;
           img {
-            height : 60px ;
+            height : 40px ;
             cursor:  pointer;
           }
         }
         .audioLabel {
-          width : 662px ;
-          height : 96px ;
-          border : 1px solid $secColor; 
-          padding: 20px ;
+          width : 100% ;
+          height : 100% ;
+          position : absolute ;
+          justify-content: flex-start  ;
+          // background-color: ;
+          bottom : 0 ;
+          left: 0;
+          padding: 12px  ;
           border-radius: 48px ;
-          padding: 0 40px ;
-          
+          gap : 10px ;
+          // padding: 0 40px ;
+          p {
+            color : $primaryColor ;
+          }
           img {
             cursor: pointer;
+            height : 30px ;
           }
         }
         .slide_bar {
-          width : 300px ;
-          height : 20px ;
-          border : 1px solid white; 
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width : 100% ;
+          height : 10px ;
+          border : 1px solid $primaryColor; 
           border-radius: 10px ;
           justify-content: flex-end;
           
@@ -1011,10 +1155,10 @@ body {
     }
 
     .bigInput {
+      max-width: 90%;
       width : $inputWidth ;
       font-size: 24px ;
       font-weight : 500;
-
       background-color: transparent; 
       border: 1px solid $primaryColor; 
       border-radius: 35px ;
@@ -1030,6 +1174,7 @@ body {
       width : $inputWidth ;
       padding : 20px ;
       box-sizing: border-box;
+      min-width: $inputWidth ;
     } 
     .scrollableSection {
       overflow-y: auto;
@@ -1119,6 +1264,8 @@ body {
       }
       .answerD {
         width : $inputWidth ;
+        justify-content: flex-end;
+        gap: 20px;
         .croud {
           img {
             height : 30px ;
@@ -1137,6 +1284,17 @@ body {
           // justify-content: flex-end;
           margin-top: 50px ;
           gap : 20px ;
+          // flex-direction: column;
+          .bxown {
+            width : $inputWidth ;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            gap: 20px;
+
+            .bigInput {
+              // width : calc( $inputWidth - 90px )
+            }
+          }
           p {
             margin: 0;
             margin-right: 30px ;
@@ -1181,6 +1339,11 @@ body {
       }
       p {
         font-size: 20px ;
+      }
+      .explinationText {
+        text-align: start;
+        font-size: 18px;
+        color: $notAvailableBG  ;
       }
       
     }
@@ -1267,14 +1430,24 @@ body {
       position: relative;
       flex-direction: column; 
       align-items: flex-end;
-      padding : 80px ;
+      padding: 20px 80px;
       gap : 40px ;
+      .imgLogin {
+        position: absolute; 
+        left : -120px ; 
+        top : 0 ;
+
+      }
+      input {
+        width : 80% ; 
+      }
       .container {
-        width : 70% ;
+        width : 90% ;
+
         text-align: start;
         p {
-          font-size: 24px ;
-          line-height: 40px;
+          font-size: 20px ;
+          line-height: 30px;
 
         }
         li {
@@ -1286,27 +1459,37 @@ body {
         
       }
       .link {
+        // background: $white!important;
+        text-align: center  !important;
+        font-size: 24px !important;
+        left: 0 !important;
+        bottom : 0  !important;
+        position: absolute !important;
+        text-align: center !important;
         color : $prColLight;
-        font-size: 28px ;
+        // font-size: 28px ;
         font-weight: bold;
         cursor: pointer;
+        width: 90%;
+        // text-align: start;
       }
       .detail_contenter {
-        width : 50% ; 
+        width : 90% ;
+        // justify-content: flex-end; 
         img , p {
           cursor: pointer;
         }
         img {
-          width : 70px ; 
+          width : 30px ; 
           position: relative;
-        }
+       }
         p {
-          font-size: 24px ;
-          width : 250px ;
+          font-size: 20px ;
+          width : 200px ;
           color : $primaryColor ;
         }
       }
-      img {
+      .imgCooon {
         position: absolute; 
         left : 0 ; 
         top : 0 ; 
@@ -1338,7 +1521,7 @@ body {
     .reloadSection {
       position: fixed ;
       left : 0 ;
-      top : 0 ; 
+      top : 0 ;    
       width : 100% ; 
       height: 100vh ;
       background-color: rgba(255, 255, 255, 0.4);
@@ -1372,7 +1555,7 @@ body {
         gap : 30px ;
         margin : 30px 0 ;
         flex-wrap: wrap;
-        width : 80% ;
+        width : 100% ;
         .course-card {
           width : 529px ;   
           height : 251px  ;    
@@ -1561,8 +1744,74 @@ body .Quiz .startTest p {
   width: 100%;
   font-weight: lighter;
 }
+body .Quiz .startTest p {
+  font-size: 20px;
+}
 
   @media (max-width: 634px) { 
+    body .Quiz .startTest .spacebetween {
+      flex-direction: row !important;
+  }
+    body .Quiz .startTest button {
+      height: 40px !important;
+      width: 150px;
+    }
+    body .Quiz .startTest p {
+      font-size: 16px;
+    }
+    body .Quiz .startTest button {
+      height: 40px;
+    }
+    body .Login .detail_contenter p {
+      font-size: 20px;
+      width: 200px;
+    }
+    body .Login .detail_contenter img {
+      width: 30px;
+    }
+    body .Login .detail_contenter  , body .Login {
+      gap: 20px;
+    }
+    body .Login .detail_contente {
+      justify-content: center !important;
+    }   
+    body .Login .link, body .Login .detail_contenter, body .Login .container {
+      width: 100% !important;     
+      
+  }
+  // body .Login .link {
+   
+  // }
+    
+    body .Login .container {
+      margin-top: 110px;
+    }
+    body .Login .container li {
+      font-size: 16px;
+      line-height: 20px;
+  }
+  body .Login .container p {
+    font-size: 18px;
+    line-height: 25px;
+  }
+      
+    body .Login input {
+      width: 100%;
+  }
+    body .Login .imgLogin {
+
+      left: 0px !important;
+      top: -80px !important;
+  }
+    body .Login .imgLogin {
+      height: 100vw !important;
+      transform-origin: top left;
+      transform: rotate(90deg) translateY(-100%);
+    }
+    body .bigInput {
+      max-width: 100%;
+    }
+
     body .Quiz .audioExplaination .audioPlayer {
       gap: 20px;
       width: 100vw;
@@ -1602,19 +1851,56 @@ body .BySection .seciontion .course-card .descBox .detials h2 {
 body .BySection .seciontion .course-card {
   width: 100%;
 }
+body .Quiz .answerContainer .QN {
+  font-size: 24px;
+  width: 50px;
+  min-width: 50px;
+  height: 50px;
+}
+body .Quiz .answerContainer .answer {
+  height: 50px;
   }
+  body .Quiz .questions {
+    gap : 20px ;
+  }
+}
 
   @media (max-width: 555px) { 
+    body .Quiz .toolBar {
+      width: 100% !important;
+    }
+    body .Login .detail_contenter p {
+      font-size: 18px !important;
+    }
+    body .Login .container p {
+      font-size: 16px !important;
+  }
+    
+    body .Login .container {
+      padding: 10px;
+      margin-top: 50px;
+  }
+  body .Login .container li {
+    padding: 10px;
+  }
+  body .Login .container p {
+    font-size: 16px;
+}
+
+    body .Login {
+      padding: 10px;
+      align-items: center;
+  }
+    body .Login .imgLogin {
+      top: -40px;
+  }
     body .Quiz .answerContainer .answer {
       width: 350px !important;
     }
     body .Quiz .bar {
       top: 51vh !important;
     }
-    body .Quiz .img_container {
-      width: 100% !important;
-      height: 50vh !important;
-    }
+    
    
 
     body .Quiz .startTest div {
@@ -1671,6 +1957,25 @@ body .ContactUs .motivation .social_acc {
   }
 
   @media (max-width: 456px) { 
+    body .Login .detail_contenter, body .Login {
+      gap: 10px;
+  }
+
+    body .Login .container {
+      margin-top: 30px;
+  }
+
+    body .Login .imgLogin {
+      top: 0px;
+   }
+   body .Login input {
+    width: 90%;
+    font-size: 16px;
+    }
+    body .Login {
+    
+      padding: 0px !important;
+    }
     body .HeaderSerie .descpt {
       padding-right: 20px !important;
     }
@@ -1685,6 +1990,9 @@ body .ContactUs .motivation .social_acc {
       font-size: 24px;
       width: 40px;
       min-width: 40px;
+      
+    }
+    body .Quiz .answerContainer .QN ,body .Quiz .answerContainer .answer {
       height: 40px;
     }
 
@@ -1763,6 +2071,13 @@ body .ContactUs .form {
   }
 
   @media (max-width: 494px) { 
+    body .Quiz .startTest .spacebetween {
+      flex-direction: row !important;  
+    }
+    body .Quiz .startTest button {
+      height: 40px !important;
+      width : 150px !important; 
+    }
     body .Quiz .answerContainer .answer {
       width: 300px !important;
 
@@ -1795,6 +2110,27 @@ body .Quiz .bar {
   }
 
   @media (max-width: 762px) { 
+    body .Login .detail_contenter {
+      // flex-wrap: nowrap;
+    }
+    body .Login .container li {
+      font-size: 16px;
+    }
+    body .Login .container p {
+      font-size: 20px;
+    }
+    body .Login .link , body .Login .detail_contenter , body .Login .container {
+      width: 80%;
+    }
+    body .Login .imgLogin {
+      left: -160px;
+    }
+    body .Login button {
+      max-width: 80%;
+    }
+    body .Login {
+      padding: 20px;
+    }
     $viewWidth : 90% ;
     body .Quiz .answerContainer .answer {
       font-size: 18px;
@@ -1819,6 +2155,10 @@ body .Quiz .bar {
     }
     body .Quiz .audioExplaination .mativ {
       width: 80%;
+    }
+    body .Quiz .img_container ,body .Quiz .toolBar{
+      width: 100% !important;
+      // height: 50vh !important;
     }
   }
 

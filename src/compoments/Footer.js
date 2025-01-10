@@ -19,7 +19,7 @@ export default function Footer({footerContent,setselectedSerie,pathname}) {
 
   useEffect(() => {
     setCurrentPath(location.pathname);
-    settypeR(location.pathname=="/login" || location.pathname=="/owner" )
+    settypeR(location.pathname=="/login" || location.pathname=="/owner" || location.pathname=="/Bypass"|| location.pathname=="/InernalError"|| location.pathname=="/quiz"|| location.pathname=="/QuizRes" )
   }, [location]);
 
   const log = ()=> {
