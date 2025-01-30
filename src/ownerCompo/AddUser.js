@@ -42,13 +42,19 @@ export default function AddUser({reloading,setreloading,backend_url,errorMsg,set
                 getData();
             },[update])       
 
-            let getData = async () => { 
-            
-                let respons = await fetch (`${"backend_url"}`)
-                let data = await respons.json()
-                setData(data)
-            
-            }
+            let getData = async () => {
+              try {
+                  let response = await fetch(`${"backend_url"}`);
+                  if (!response.ok) {
+                      throw new Error(`HTTP error! Status: ${response.status}`);
+                  }
+                  let data = await response.json();
+                  setData(data);
+              } catch (error) {
+                  console.error("Error fetching or parsing data:", error);
+              }
+          };
+          
 
              // Empty dependency array ensures this runs once when the component mounts
           
@@ -119,6 +125,24 @@ export default function AddUser({reloading,setreloading,backend_url,errorMsg,set
           return <p> {`المدة المتبقية: ${differenceInDays} يوم`}</p>; // Remaining duration in days
       }
       }
+      const [width, setWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    // Function to update width when window resizes
+    const handleResize = () => {
+      setWidth(window.innerWidth);
+    };
+
+    // Add event listener to window resize event
+    window.addEventListener('resize', handleResize);
+
+    // Cleanup the event listener when component unmounts
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []); // Empty array ensures that effect is only run on mount and unmount
+ 
+ 
   return (
     <div className='AddUser ownerPadding center'>
 

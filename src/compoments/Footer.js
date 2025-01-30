@@ -9,6 +9,7 @@ import phoneNumber from '../files/phoneNumber.svg'
 import mail_yellow from '../files/mail_yellow.svg'
 import Polygon from '../files/Polygon.svg'
 import { useNavigate , useLocation } from 'react-router-dom';
+import buzzmark from '../files/buzzmark.png'
 
 export default function Footer({footerContent,setselectedSerie,pathname}) {
  
@@ -19,19 +20,24 @@ export default function Footer({footerContent,setselectedSerie,pathname}) {
 
   useEffect(() => {
     setCurrentPath(location.pathname);
-    settypeR(location.pathname=="/login" || location.pathname=="/owner" || location.pathname=="/Bypass"|| location.pathname=="/InernalError"|| location.pathname=="/quiz"|| location.pathname=="/QuizRes" )
+    settypeR(location.pathname=="/login" || location.pathname=="/owner" || location.pathname=="/ByPass"|| location.pathname=="/InernalError"|| location.pathname=="/quiz"|| location.pathname=="/QuizRes" || location.pathname=="/SingelBrowser" )
   }, [location]);
 
+  // console.log('footer',footerContent)
   const log = ()=> {
       navigate('/login')
   }
 
   const handleSettingSerie = (ob)=> {
     setselectedSerie(ob)
-    if (pathname != 'serie')
-    navigate('/serie')
+    // if (pathname != 'quiz')
+    navigate('/quiz')
     }
+
+    const currentYear = new Date().getFullYear();
   var content = (typeR) ? <div></div> : 
+    <div>
+
     <div className='Footer center '>
       <div className='descContainer'>
         <div className='hight spacebetween'>
@@ -64,11 +70,7 @@ export default function Footer({footerContent,setselectedSerie,pathname}) {
                    
                    :''
                 }
-                {/* <p>C -- الشاحنات</p>
-                <p>C -- الشاحنات</p>
-                <p>C -- الشاحنات</p>
-                <p>C -- الشاحنات</p>
-                <p>C -- الشاحنات</p> */}
+            
             </div>
         </div>
         <div className='detail_content center'>
@@ -86,8 +88,13 @@ export default function Footer({footerContent,setselectedSerie,pathname}) {
       <div className='logoFooter center'>
         <img className='Polygon' alt='' src={Polygon} />
         <img className='Big_logo' src={Big_logo} alt='' />
-        <p>Copyright © 2024 Buzzmark agency. All rights reserved.</p>
       </div>
+
+    </div>
+    <div className='copyright center'>
+        <img src={buzzmark}/>
+        <a href='https://buzzmark.ma/'>Copyright © {currentYear} Buzzmark agency. All rights reserved.</a>
+    </div>
     </div>
   return (
     <div>   

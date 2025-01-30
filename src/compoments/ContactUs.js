@@ -16,13 +16,25 @@ export default function ContactUs({HandleSubmitData}) {
   const [Subjects , setSubjects ] = useState('')
   const [MSG , setMSG ] = useState('')
   const [sent , setSent] = useState(false)
+    const [errormessage , setErrormessage] = useState('')
+  function isValidEmail(email) {
+    // Regular expression for validating email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
   
   const handleFields = () => {
-    return !(fullName == "" || Mail == "" || Subjects == "" || MSG == "" )
+    let bol = !(fullName == "" || Mail == "" || Subjects == "" || MSG == "" )
+    if (!bol) setErrormessage('الرجاء ملء جميع الحقول')
+    return bol
   }
 
   const Submit = ()=> {
     if (handleFields()){
+        if (!isValidEmail(Mail)) {
+            setErrormessage('الرجاء إدخال بريد إلكتروني صحيح')
+            return ;
+        }
          const DataForm= new FormData();
          DataForm.append('fullNames',fullName)
          DataForm.append('gmail',Mail)
@@ -36,6 +48,7 @@ export default function ContactUs({HandleSubmitData}) {
                 setSubjects('')
                 setMSG('')
                 setSent(true)
+                setErrormessage('')
             }
             // console.log("Response:", res);
           })  
@@ -92,7 +105,7 @@ export default function ContactUs({HandleSubmitData}) {
                 </div> 
                 </>
                 : <>
-                
+                    <p>{errormessage}</p>
                     <input placeholder='الاسم الكامل' onChange={(e)=>setFullName(e.target.value)} value={fullName} />
                     <input placeholder='البريد الإلكتروني : example@gmail.com' onChange={(e)=>setMail(e.target.value)} value={Mail} />
                     <input placeholder='موضوع رسالتك' onChange={(e)=>setSubjects(e.target.value)} value={Subjects} />

@@ -16,6 +16,7 @@ export default function Quiz01_02({backend_img,validationRef,callNbQ,setvalidati
     const [ data , setData ] = useState(null)
     const [nbQ , setNbQ]= useState(callNbQ != null ? callNbQ : 0 )
     const [userAnswers , setuserAnswers] = useState([])
+    const [corrIds,setcorrIds] = useState()
     const [setQuiz ,sSETetQuiz ] = useState()
     const [switcher , setswitcher  ] = useState(false) 
 
@@ -27,12 +28,8 @@ export default function Quiz01_02({backend_img,validationRef,callNbQ,setvalidati
     const [selectedAnswers , setselectedAnswers] = useState([])
 
     const hadnleRes = (qi, anss) => {
-        if (userAnswers) {
-            for (let i = 0; i < userAnswers.length; i++) {
-                if (userAnswers[i].content.some(e => e.QI === qi && e.CA.includes(anss))) {
-                    return true; // Found a match, exit early
-                }
-            }
+        if (corrIds) {
+            return corrIds.includes(anss)
         }
         return false; // No match found
     };
@@ -65,13 +62,15 @@ export default function Quiz01_02({backend_img,validationRef,callNbQ,setvalidati
 
    
 useEffect(()=> {
-    if (testResults) {
-        setData(testResults.data)
+    if (testResults && data === null) {
+        setData(testResults.data.reverse())
         setuserAnswers(testResults.userAnswers)
+        setselectedAnswers(testResults.selectedAnswers)
+        setcorrIds(testResults.corrIds)
     }
 },[testResults])
 
-
+console.log(data , 'data')
 
 
 const [isPlaying, setIsPlaying] = useState(false);
@@ -135,9 +134,9 @@ useEffect(() => {
 
 
 
+console.log(testResults)
 
-
-
+  
 
 const HandleUserAnswer = (idQ, id) => { 
     // var check = hadnleRes(idQ, id); // Check if the answer already exists
@@ -264,6 +263,7 @@ const HandleUserAnswer = (idQ, id) => {
     }
 
     // console.log(callNbQ,nbQ)  
+    // console.log('testResults',testResults,'corrIds',corrIds) 
 
     useEffect(()=> {
         if (data&&callNbQ != null )
@@ -271,6 +271,63 @@ const HandleUserAnswer = (idQ, id) => {
             setNbQ(callNbQ) 
     },[callNbQ,data])
 
+    const checkAnswer = (ans )=> {
+        return selectedAnswers.filter((ob,i)=> {
+           return ob.answer.includes(ans)
+        }).length   
+    }
+
+    const handleQuestionUserAnswer = (qi)=> {
+        var corr = 0
+        var total = 0
+        var totalSec = false
+        var ids = [] 
+        selectedAnswers.map((ob,i)=> {
+            ids.push(...ob.answer)
+        })
+        userAnswers.filter((f)=> {
+            if (f.qId == qi) {
+                total = f.correctAnswers.length
+                corr = f.correctAnswers.filter((e)=> {
+                    return ids.includes(e)
+                }).length
+                totalSec = corr == total
+            }
+        })
+          return totalSec ? ' corr_expText ' : ' worong_expText '
+    }
+
+    // useEffect(()=>{
+    //     if (data ) {
+    //         if (nbQ>=0 && nbQ < data.length)
+    //         // console.log('data current content ',data[nbQ])
+    //     }
+    // },[data])
+
+    const handleanswerIndex = (ansId)=> {
+        // if (!data || !startTest) return -1 
+        let counter = 1 
+        for (var i = 0 ; i < data[nbQ].content.length  ;i++){
+            const row = data[nbQ].content[i]
+            for (let j = 0 ; j < row.answers.length ; j++) {
+                if ( row.answers[j].id == ansId ) return counter
+                counter ++ 
+            }
+    
+        }
+        return 0
+    
+       }
+       const handleImgPath = ()=> {
+        if (data != null && nbQ >= 0 ) {
+            if (data[nbQ].correctAnswer == null ) 
+                return backend_img +  data[nbQ].picture
+                return backend_img + data[nbQ].correctAnswer
+            console.log(data[nbQ] , data , nbQ)
+        }
+        return ''
+       }
+    
  return (   
     <div className='Quiz center'> 
    
@@ -286,9 +343,7 @@ const HandleUserAnswer = (idQ, id) => {
        
       
         <div className='img_container center'>
-            
-           
-                <img  alt='' src={data != null && nbQ >= 0 ?  backend_img+data[nbQ]['correctAnswer']:''} />
+                <img  alt='' src={handleImgPath()} />
            
         </div>
        
@@ -305,7 +360,8 @@ const HandleUserAnswer = (idQ, id) => {
                     {ob['answers'].map((oc,j)=> 
                             <div key={j*454432200} className='answerContainer center'>
                                     <div className='QN center'>
-                                        {j+1}
+                                        {/* {j+1} */}
+                                        {handleanswerIndex(oc.id)}
                                     </div>
                                     <div onClick={()=> HandleUserAnswer(ob['question']['id'],oc['id'])} className={handleBoxStyle(ob['question']['id'],oc['id'])}>
                                         <p>{oc['content']}</p>
@@ -314,11 +370,14 @@ const HandleUserAnswer = (idQ, id) => {
                     )}
 
                         </div>
+                        {(  ob['question']['explication'].trim() !== '' ) ?
+
                         <div className='center'>
-                                    <div className='expText'>
+                                    <div className={' expText '+handleQuestionUserAnswer(parseInt(ob['question']['id']))}>
                                     {ob['question']['explication']}
                                     </div>
                         </div>
+                        : ''}
                         </div> 
              
                 ) :''

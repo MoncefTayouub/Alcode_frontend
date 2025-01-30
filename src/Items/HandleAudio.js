@@ -46,13 +46,15 @@ const HandleAudio = ({ audioUrl, isPlaying ,setCurrentTiming,setTotalDuration,is
       return `${minutes}:${seconds.toString().padStart(2, '0')}`;
     };
 
-    if (!audioUrl) {
-        // return <div>No audio URL provided.</div>;
-    }
+    
 
     return (
         <div>
-            <audio style={{width:0 , height:0 , opacity:0}} ref={audioRef} src={audioUrl} preload="metadata" muted={ismute} /> {/* Added preload */}
+          {
+            audioUrl !== '' ? 
+            <audio style={{width:0 , height:0 , opacity:0}} ref={audioRef} src={audioUrl} preload="metadata" muted={ismute} /> 
+            : ''
+          }
         </div>
     );
 };

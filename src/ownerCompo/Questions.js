@@ -7,6 +7,8 @@ import image_logo from '../files/image_logo.svg'
 import axios from 'axios'
 import Quiz from '../pages/Quiz'
 import { useNavigate } from 'react-router-dom'
+import trash_blue from '../files/trash_blue.svg'
+
 
 export default function Questions({setreloading,setGoBack,logged,handleFileName,questionList , setquestionList ,serie,quiz , setquiz,setSerie,SetnavSelect,backend_url,errorMsg,setErrorMsg}) {
 
@@ -87,15 +89,17 @@ export default function Questions({setreloading,setGoBack,logged,handleFileName,
   useEffect(()=> {
     var arr = [ 
       HandlefileExtention(audioContent),
-      HandlefileExtention(audioExp),
+      
+      HandlefileExtention(audioExp) ,
        handleimageExtension(imgC),
-    handleimageExtension(imgCExp),
+       imgCExp === null ? 1
+    : handleimageExtension(imgCExp)  ,
   ]
   setcheckFiles(arr)
   },[imgC,audioExp,audioContent,imgCExp])
 
 
-  
+  // console.log(quiz)
   const setQuestions = (data)=> {
 
     var res = []
@@ -236,7 +240,36 @@ export default function Questions({setreloading,setGoBack,logged,handleFileName,
 };
 
 
- 
+ const handledeleteImage =async ()=> {
+    if (quiz != null) {
+      
+      var method = 'POST' 
+      const DataForm= new FormData();
+      
+      DataForm.append('id',quiz['id'])
+      setreloading(true)
+      await axios ({
+        method : method ,   
+        url : `${backend_url}owner/clearImgExp` ,
+        data :  DataForm
+    })
+  
+    .then((response)=>{
+      setreloading(false)
+          let data = response.data
+          
+        
+    }).catch(function (error) {
+      navigate('/InernalError')
+      });
+    }
+      imgCoberExp.current.value = null;
+      setimgContent(prev => {
+        const newArray = [...prev]; // Create a shallow copy of the array
+        newArray[3] = ''; // Update index 3
+        return newArray; // Set the new state
+      });
+ }
 
  return (
     <div className='Questions ownerPadding center '>
@@ -280,7 +313,10 @@ export default function Questions({setreloading,setGoBack,logged,handleFileName,
         </div>   
         <div className='filesound center'>
            {handleFileInput(imgCExp,'إضافة صورة مع شروحات',4)}
-            <img onClick={()=>handleTextClick(4)} alt='' src={image_logo} />
+           <div className='imgs center'>
+           <img onClick={()=>handleTextClick(4)} alt='' src={image_logo}   />
+           { imgCExp != null || imgContent[3] != '' ?<img onClick={()=>handledeleteImage()} className='trash'  alt='' src={trash_blue} />  : ''}
+           </div>   
             <input type='file' ref={imgCoberExp} onChange={((e)=>handleFileChange(e,4))} style={{width : 0 , height :0 , display : 0 }} />
             <p className='messageError404'>
             {checkFiles[3] == 0 ? "الملف المحدد ليس ملفًا صالحًا" : ""}

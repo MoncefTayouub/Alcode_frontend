@@ -19,6 +19,8 @@ function Home({setselectType,backend_img,HandleSubmitData,backend_url,setselecte
       let data = await respons.json()
       setData(data)
   }
+
+  
   
   useEffect(()=> {
       getData() 
@@ -54,9 +56,11 @@ function Home({setselectType,backend_img,HandleSubmitData,backend_url,setselecte
   },[data])
 
   const navi = ()=> {
-    setselectType('A')
+    setselectType('B')
     navigate('/serie')
   }
+
+  
 
   return (
     <div>

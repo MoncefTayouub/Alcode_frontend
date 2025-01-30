@@ -16,21 +16,39 @@ import TestAudio from './Items/TestAudio';
 import Quiz01_02 from './pages/Quiz01_02';
 import SeeAllRess from './compoments/SeeAllRess';
 import InernalError from './compoments/InernalError';
+import FingerprintJS from '@fingerprintjs/fingerprintjs';
+import SingelBrowser from './compoments/SingelBrowser';
+import {Navigating} from './compoments/Manipulation'
+
+
 const App = () => {
   const backend_url = 'https://srv668869.hstgr.cloud/';
   const backend_img = "https://srv668869.hstgr.cloud";
   // const backend_img = 'http://127.0.0.1:8000';
-  // const backend_url = 'http://127.0.0.1:8000/';
+  // const backend_url = 'http://127.0.0.1:8000/'; 
   const [testResults,settestResults] = useState()
   const [logged , setLogged] = useState(-5)
-  const [isOwner , setisOwner] = useState(false)
+  const [isOwner , setisOwner] = useState(false)    
   const [reloading , setreloading ] = useState(false)
   const [validationRef , setvalidationRef] = useState(null)
-  const [callNbQ,setcallNbQ] = useState(null)
-
+  const [callNbQ,setcallNbQ] = useState(null) 
   const [footerContent, setfooterContent] = useState()  
-
   const [pathname, setPathname] = useState('');
+
+
+
+
+  async function getBrowserId() {
+    const fp = await FingerprintJS.load();
+    const result = await fp.get();
+    return String(result.visitorId); 
+}
+
+
+
+
+
+
   useEffect(() => {
     setPathname(window.location.pathname);  
     const handleLocationChange = () => setPathname(window.location.pathname);
@@ -51,21 +69,27 @@ const App = () => {
   const [selectedSerie , setselectedSerie ] = useState(null)
 
 
+
   const checkUserLoggedIn = async () => {
+    // console.log('checkUserLoggedIn')
     // Retrieve tokens from localStorage
     const accessToken = localStorage.getItem('accessToken');
     const user = localStorage.getItem('user');
+    // console.log('accessToken',accessToken)
+    // if (!accessToken || !user) {
 
-    if (!accessToken || !user) {
+    //     setvalidationRef()
+    //     setLogged(-5)
+    //     return;
 
-        setvalidationRef()
-        setLogged(-5)
-
-    }
-
+    // }
+    // console.log( 'getBrowserId',getBrowserId().value ,  getBrowserId() , typeof(getBrowserId()) )
+    setreloading(true)
     const DataForm = new FormData();
     DataForm.append('accessToken', accessToken);
     DataForm.append('user', user);
+    const brid = await getBrowserId();
+    DataForm.append('browserID', brid);
 
     try {
       const response = await axios({
@@ -75,21 +99,25 @@ const App = () => {
       });
 
       const data = response.data; 
-
+      // console.log(data)
+      setreloading(false)
       setvalidationRef(data.auth)
       setLogged(data.status)
-      setfooterContent(data.seriesF)
+      // console.log('app',data.seriesF)
+      setfooterContent(data.seriesF.slice(0,5))
       if (data.status === 0) {
         return 0 ;
       }else {
           if (data.status === 2) 
             setisOwner(true)          
           return 1 ;
-      } 
+      }
 
        
   } catch (error) {
       console.error('Error during login:', error);
+      // setreloading(false)
+      // Navigating('/InernalError')
   }
         return -1;
     
@@ -106,6 +134,8 @@ const HandleSubmitData = async(DataForm,url,method)=> {
         return data ;
 } catch (error) {
   console.error('Error during login:', error);
+  // setreloading(false)
+  // Navigating('/InernalError')
   return null
 }
 }
@@ -117,15 +147,41 @@ useEffect(() => {
   };
 
   initializeAuth();
-}, []);
+}, [logged]);
 
+const [loginOut , setloginOut] = useState(false)
 
-const logOut = ()=> {
+const logOut = async () => {
+  const accessToken = localStorage.getItem('accessToken');
+  if (!accessToken ) {
+      setvalidationRef()
+      setLogged(-5)
+  }
+  setloginOut(true)
+  const DataForm = new FormData();
+  DataForm.append('accessToken', accessToken);
+  try {
+    const response = await axios({
+        method: 'POST',
+        url: `${backend_url}logout`,
+        data: DataForm,
+    });
+    const data = response.data; 
+    setloginOut(false)
     localStorage.removeItem('accessToken');
-  localStorage.removeItem('refreshToken');
-  localStorage.removeItem('user');
-  setLogged(-5)
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('user');
+    setLogged(-5)
+
+     
+} catch (error) {
+    console.error('Error during login:', error);
+    // setreloading(false)
+    // Navigating('/InernalError')
 }
+      return -1;
+  
+};
 
 const typeLicence = [
   {'type':"A", 
@@ -166,16 +222,19 @@ useEffect(()=> {
 },[selectType])
 
 
+
+
+
 return (
     <BrowserRouter>
       <div className="App">
       { reloading ? 
         <div className='reloadSection center '   >
-          <div class="loader"></div>
+          <div className="loader"></div>
           </div>           
         : '' 
       }
-        <Navbar logOut={logOut} logged={logged}  typeR={typeR} />   
+        <Navbar loginOut={loginOut} setloginOut={setloginOut} logOut={logOut} logged={logged}  typeR={typeR} />   
         <Routes>
            <Route path="/" element={<Home backend_img={backend_img} setselectType={setselectType} HandleSubmitData={HandleSubmitData} logged={logged} setselectedSerie={setselectedSerie} selectedSerie={selectedSerie} backend_url={backend_url} />} />    
           <Route path="/Serie" element={<Serie backend_img={backend_img} setreloading={setreloading} selectType={selectType} categoryContent={categoryContent} setselectedSerie={setselectedSerie} selectedSerie={selectedSerie} backend_url={backend_url} />} />    
@@ -185,6 +244,7 @@ return (
           <Route path="/Owner" element={<Owner backend_img={backend_img} isOwner={isOwner} logged={logged} backend_url={backend_url} />} />    
           <Route path="/login" element={<Login  logged={logged} setLogged={setLogged} backend_url={backend_url} />} />    
           <Route path="/ByPass" element={<SellingPoing  logged={logged} setLogged={setLogged} backend_url={backend_url} />} />    
+          <Route path="/SingelBrowser" element={<SingelBrowser logOut={logOut}  logged={logged} setLogged={setLogged} backend_url={backend_url} />} />    
           <Route path="/InernalError" element={<InernalError  logged={logged} setLogged={setLogged} backend_url={backend_url} />} />    
         </Routes>
         <Footer setselectedSerie={setselectedSerie} pathname={pathname} footerContent={footerContent} typeR={typeR} />

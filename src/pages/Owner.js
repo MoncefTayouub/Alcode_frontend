@@ -14,9 +14,12 @@ import { useNavigate } from 'react-router-dom';
 import HandleMails from './HandleMails'
 import reloadImage from '../files/reloadImage.svg'
 import axios from 'axios'
-
+import x_nav_mark from '../files/x_nav_mark.svg'
+import menu_nav from '../files/menu_nav.svg'
 export default function Owner({backend_img,isOwner,logged,backend_url}) {
   const navigate = useNavigate();
+
+  const [navinav, setnavinav]= useState(1)
   // const [content , setContent] = useState() 
   const [navSelect , SetnavSelect] = useState(8) 
 
@@ -118,12 +121,12 @@ export default function Owner({backend_img,isOwner,logged,backend_url}) {
  
  const submit = async () => {
    const user = localStorage.getItem('user')
-
    if (user == null){
       navigate('/login');
      return 0 ;
     }
-    const jsonObject = JSON.parse(user);
+
+    const jsonObject  = JSON.parse(user);
 
     setreloading(true)
        const DataForm = new FormData();
@@ -152,8 +155,10 @@ useEffect(()=> {
   submit()
 },[])
 
+// useEffect(()=> {
+//     setnavinav(1)
+// },[navSelect])
 
- console.log('navSelect',navSelect)
   let content = <div></div>
   switch (navSelect) { 
     case 1 :
@@ -226,22 +231,29 @@ useEffect(()=> {
           </div>           
         : '' 
       }
+
+          <div className='hoverShowMenue Menu' onClick={()=>setnavinav(1)}> <img src={menu_nav} /> </div>
+
              {errorDiv}
              {/* <div className='error center error1'><p>{errorMsg[1]}</p></div> */}
             {content}  
         </div>
-
-        <div className='nav center'>
-            <p className={(navSelect === 15) ? 'bigT one' : 'bigT'} onClick={()=> SetnavSelect(15)} >رسائل جديدة</p>
-            <p className={(navSelect === 1) ? 'bigT one' : 'bigT'} onClick={()=> SetnavSelect(1)} >إدارة الحسابات</p>
-            <p className={(navSelect === 2) ? ' one' : ''} onClick={()=> handleAddUser()} > {}إضافة حساب</p>
-            <p className={(navSelect === 3) ? ' one' : ''}  onClick={()=> SetnavSelect(3)} >الحسابات غير المشتركة</p>
-            <p className={(navSelect === 4) ? ' one' : ''}  onClick={()=> SetnavSelect(4)} >الحسابات تم التواصل معها</p>
-            <p className={(navSelect === 6) ? ' one' : ''} onClick={()=>SetnavSelect(6)} >الحسابات لم يتم التواصل معها</p>
-            <p className={(navSelect === 9) ? 'bigT one' : 'bigT'}  onClick={()=>SetnavSelect(9)}>محتوى السلاسل</p>
-            <p className={(navSelect === 8) ? ' one' : ''} onClick={()=> handleSelectNav()} >إضافة سلسلة</p>
-            <p className={(navSelect === 9) ? ' one' : ''} onClick={()=> SetnavSelect(9)} >جميع السلاسل</p>
-        </div>
+        {
+          navinav ?
+            <div className='nav center scrollableSection'>
+              <div className='hoverShowMenue x_mark' onClick={()=>setnavinav(0)}> <img src={x_nav_mark} /> </div>
+                <p className={(navSelect === 15) ? 'bigT one' : 'bigT'} onClick={()=> SetnavSelect(15)} >رسائل جديدة</p>
+                <p className={(navSelect === 1) ? 'bigT one' : 'bigT'} onClick={()=> SetnavSelect(1)} >إدارة الحسابات</p>
+                <p className={(navSelect === 2) ? ' one' : ''} onClick={()=> handleAddUser()} > {}إضافة حساب</p>
+                <p className={(navSelect === 3) ? ' one' : ''}  onClick={()=> SetnavSelect(3)} >الحسابات غير المشتركة</p>
+                <p className={(navSelect === 4) ? ' one' : ''}  onClick={()=> SetnavSelect(4)} >الحسابات تم التواصل معها</p>
+                <p className={(navSelect === 6) ? ' one' : ''} onClick={()=>SetnavSelect(6)} >الحسابات لم يتم التواصل معها</p>
+                <p className={(navSelect === 9) ? 'bigT one' : 'bigT'}  onClick={()=>SetnavSelect(9)}>محتوى السلاسل</p>
+                <p className={(navSelect === 8) ? ' one' : ''} onClick={()=> handleSelectNav()} >إضافة سلسلة</p>
+                <p className={(navSelect === 9) ? ' one' : ''} onClick={()=> SetnavSelect(9)} >جميع السلاسل</p>
+            </div>
+            : ''
+        }
     </div>
   )
 }

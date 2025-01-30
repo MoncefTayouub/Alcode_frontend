@@ -19,7 +19,7 @@ export default function Login({backend_url,setLogged,logged}) {
           setError('تأكد من أن اسم المستخدم وكلمة المرور غير فارغين');
           return;
       }
-      
+      setError('')
       const DataForm = new FormData();
       DataForm.append('username', username);
       DataForm.append('password', password);
@@ -54,8 +54,8 @@ export default function Login({backend_url,setLogged,logged}) {
               setError('اسم المستخدم أو كلمة المرور غير صحيحة');
           }
       } catch (error) {
-          console.error('Error during login:', error);
-        navigate('InernalError')
+        //   console.error('Error during login:', error);
+          navigate('/InernalError')
           setError('An error occurred during login. Please try again.');
       }
   };

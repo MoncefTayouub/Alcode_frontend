@@ -2,13 +2,18 @@ import React, { useEffect, useState , useRef } from 'react'
 import question_image from '../files/question_image.webp'
 import play_white from '../files/play_white.svg'
 import audioPlayer from '../files/audioPlayer.svg'
-import volume_off from "../files/volume_off.svg"
-import soundOne from "../files/soundOne.svg"
+import volume_off from "../files/volumeOffFolid.svg"
+import soundOne from "../files/soundOneBlue.svg"
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
 import AudioExp from '../Items/AudioExp'
 import pauseWhite from '../files/pauseWhite.svg'
 import AutoPlayAudio from '../Items/AutoPlayAudio'
+import skip_button from '../files/skip_button_white_second.svg'
+import play_blue from '../files/play_blue.svg'
+import Pause_blue from '../files/Pause_blue.svg'
+import x_nav_mark from '../files/x_mark_white.svg'
+
 
 export default function Quiz({backend_img,validationRef,setvalidationRef,setreloading,logged,backend_url,selectedSerie,setselectedSerie,testResults,settestResults}) {
     const navigate = useNavigate();
@@ -18,6 +23,13 @@ export default function Quiz({backend_img,validationRef,setvalidationRef,setrelo
     const [userAnswers , setuserAnswers] = useState([])
     const [setQuiz ,sSETetQuiz ] = useState()
     const [switcher , setswitcher  ] = useState(false) 
+
+    // ------ audio desc ----------------
+    const [audioFinsh , setAudioFinsh] = useState(false)
+    const [timing , settimnig ] = useState(false)
+
+    // ------------- pause / play quiz ------------
+    const [pauseQuiz , setpauseQuiz] = useState(false)
 
     const Auth =  () => {
     
@@ -63,23 +75,55 @@ export default function Quiz({backend_img,validationRef,setvalidationRef,setrelo
     
 
     const [selectedAnswers , setselectedAnswers] = useState([])
+   
 
     const hadnleRes = (qi, anss) => {
-        if (userAnswers) {
-            for (let i = 0; i < userAnswers.length; i++) {
-                if (userAnswers[i].content.some(e => e.QI === qi && e.CA.includes(anss))) {
-                    return true; // Found a match, exit early
-                }
-            }
-        }
-        return false; // No match found
+        return corrIds.includes(anss) 
+       
     };
 
+    const [corrIds , setcorrIds ] = useState(false)
 
+    useEffect(()=> {
+        var res = []
+        if (userAnswers) {
+            userAnswers.map((ob,i)=> {  
+                res.push(...ob.correctAnswers)
+            })
+            setcorrIds(res)
+        }
+},[userAnswers])
+    const checkAnswer = (ans )=> {
+        return selectedAnswers.filter((ob,i)=> {
+           return ob.answer.includes(ans)
+        }).length
+    }
+
+    const handleQuestionUserAnswer = (qi)=> {
+    
+        var selectAll = [] 
+        selectedAnswers.map((ob,i)=> {
+          selectAll.push(...ob.answer)
+        })
+        var res = []
+        var total = 0 
+        var corr = 0 
+        userAnswers.map((ob,i)=>{
+          if (ob.qzId == qi) {
+            ob.correctAnswers.map((mm)=> {
+              if (selectAll.includes(mm)) 
+                corr ++ 
+              total ++ 
+            })
+          }
+        })
+        return corr == total && total ? ' corr_expText ' : ' worong_expText '
+        // return res.length == ct  
+        }
 
 
     useEffect(()=> {
-        window.scrollTo(0, 0);
+        window.scrollTo(0, 0);   
        
            
        
@@ -91,11 +135,15 @@ export default function Quiz({backend_img,validationRef,setvalidationRef,setrelo
         //   </div>   
 
         useEffect(()=> {
+            // console.log('validationRef',validationRef,'logged',logged)
             if (logged !== 1  ) {
                 navigate('/login')
             }else 
             if (validationRef == 0  ) {
-                // navigate('/ByPass')
+                navigate('/ByPass')
+            }else 
+            if (validationRef == -1  ) {
+                navigate('/SingelBrowser')
             }
         },[validationRef,logged])
 
@@ -117,7 +165,7 @@ export default function Quiz({backend_img,validationRef,setvalidationRef,setrelo
             let dataR = response.data
             if (dataR['status'] == 1 ) {
                 setreloading(false)
-                setData(dataR['content'])
+                setData(dataR['content'].reverse())
                 setuserAnswers(dataR['correct'])
                 setNbQ(dataR['content'].length - 1)
               }
@@ -143,21 +191,36 @@ const [totalcounter , settotalcounter] = useState(0)
 
 
 const setRes = ()=> {
-    settestResults({'selectedAnswers':selectedAnswers,'userAnswers':userAnswers,'data':data})
+    settestResults({'selectedAnswers':selectedAnswers,'userAnswers':userAnswers,'data':data,'corrIds':corrIds})
            navigate("/result")
 }
 
-
+const [skipQuestion,setskipQuestion] = useState(false)
 
 useEffect(() => {
+    if (skipQuestion) {
+        setskipQuestion(false); 
+        setTimeLeft(30);       
+        setAudioFinsh(false);  
+        if (!(moDAnswer == 1 && totalcounter % 2 === 0)) {
+            setNbQ((prevNbQ) => prevNbQ - 1); 
+        }
+        settotalcounter(prev => prev + 1);    
+        return; 
+    }
+
+    
     if (nbQ == -1 && !isPlaying && startTest && moDAnswer !== 1 ) {
-        
-            settestResults({'selectedAnswers':selectedAnswers,'userAnswers':userAnswers,'data':data})
+            
+            settestResults({'selectedAnswers':selectedAnswers,'userAnswers':userAnswers,'data':data,'corrIds':corrIds})
             navigate("/result")
     }
-    if (nbQ < 0 || isPlaying || !startTest || false ) return ;
+    if (nbQ < 0 || isPlaying || !startTest || !audioFinsh || pauseQuiz || false ) return ;
     
     // Update every second    
+
+
+    
    
     const smallSequence = setInterval(() => {
         
@@ -175,6 +238,7 @@ useEffect(() => {
         }
         if (nbQ >= 0  ) {
             setTimeLeft(30)
+            setAudioFinsh(false)
             if (!(moDAnswer == 1 && totalcounter % 2 == 0 )) {
                 setNbQ((prevNbQ) => prevNbQ - 1);  
                
@@ -194,7 +258,7 @@ useEffect(() => {
         clearInterval(smallSequence);
         clearInterval(timer);
     };
-}, [nbQ,isPlaying,startTest]);
+}, [nbQ,isPlaying,startTest,audioFinsh,skipQuestion,pauseQuiz]);
 
 
 
@@ -202,9 +266,8 @@ useEffect(() => {
 
 
 
-const HandleUserAnswer = (idQ, id) => { 
+const HandleUserAnswer = (idQ, id) => {
     // var check = hadnleRes(idQ, id); // Check if the answer already exists
-    // console.log('check -- check', check);
      
    if( moDAnswer != 2 && !(moDAnswer == 1 && totalcounter % 2 == 0 )) 
             return ;
@@ -256,6 +319,7 @@ const HandleUserAnswer = (idQ, id) => {
     //   }, [data]);
     
       const handleBoxStyle = (QI, AI) => {
+        //
         // Check if there is a matching answer
         var cla = ' answer center '
         const isSelected = selectedAnswers.some((ob) => ob.QI === QI && ob.answer.includes(AI));
@@ -289,13 +353,10 @@ const HandleUserAnswer = (idQ, id) => {
         }
         setIsPlaying(!isPlaying);
       }
-    //   else console.log('not set yet')
     }
 
     
-    const [totalTiming, setTotalTiming] = useState(0);
 
-   
 
     
 
@@ -363,16 +424,46 @@ const HandleUserAnswer = (idQ, id) => {
     //     'AXurl' : AXurl,
     // })
     // console.log('handleBoxStyle',handleBoxStyle(69,142),moDAnswer != 2 && !(moDAnswer == 1 && totalcounter % 2 == 0 ),'hadnleRes',hadnleRes(69,142))
-      return (
+  
+   const clearAnswers = ()=> {
+    // console.log(data,startTest)
+        if (data && startTest) {
+            let qid = data[nbQ].content.map((oc,i)=> {
+                setselectedAnswers(selectedAnswers.filter((ob)=> ob.QI !== oc.question.id))
+            }
+            )
+            // console.log( qid )
+
+            
+        }
+   }
+
+   const handleanswerIndex = (ansId)=> {
+    if (!data || !startTest) return -1 
+    let counter = 1 
+    for (var i = 0 ; i < data[nbQ].content.length  ;i++){
+        const row = data[nbQ].content[i]
+        for (let j = 0 ; j < row.answers.length ; j++) {
+            if ( row.answers[j].id == ansId ) return counter
+            counter ++ 
+        }
+
+    }
+    return 0
+
+   }
+
+  
+    return (
     <div className='Quiz center'> 
-    {
+          {
             startTest ? 
             <>
             {
              switcher ? 
 
                 <div className='toolBar center'>
-                        <AudioExp startTest={startTest} isPlaying={isPlaying} setIsPlaying={setIsPlaying} totalTiming={totalTiming} pauseWhite={pauseWhite} togglePlayPause={togglePlayPause} audioExplainationRef={audioExplainationRef } AXurl={AXurl} />
+                        <AudioExp startTest={startTest} isPlaying={isPlaying} setIsPlaying={setIsPlaying}  pauseWhite={pauseWhite} togglePlayPause={togglePlayPause} audioExplainationRef={audioExplainationRef } AXurl={AXurl} />
                     <p className='pbttn center' onClick={()=>setswitcher(false)}>استئناف</p>
                 </div>
             : 
@@ -380,65 +471,67 @@ const HandleUserAnswer = (idQ, id) => {
 
                     {
                     moDAnswer != 2 && !(moDAnswer == 1 && totalcounter % 2 == 0 ) ?
+                          <p onClick={()=>setswitcher(true)} className='pbttn center'>شرح صوتي</p>                        
+                        : 
+                        <div className='bar center '>
+                            <div className='counter numberContainer center'>{timeLeft}</div>
+                            <div className='volum'>
+                                <img alt='' src={pauseQuiz ? Pause_blue : play_blue} onClick={()=> setpauseQuiz(!pauseQuiz)} />
+                            </div>
+                            <div className='volum'>   
+                                <img alt='' src={muteAudio ? volume_off : soundOne} onClick={()=> setmuteAudio(!muteAudio)} />
+                            </div>
+                            <div className='timing'>{timing}</div>
+                        </div>  
+                    }
+                    {
+                        moDAnswer != 2 && !(moDAnswer == 1 && totalcounter % 2 == 0 ) ?
                         nbQ == 0 ? 
                             <p className='pbttn  center' onClick={()=>setRes('/')}> النتائج</p>
                            
                         :
                         <p className='pbttn  center' onClick={()=>handleResumConter()}>التالي</p>
-                        
                         : 
-                        <div className='bar center '>
-                        <div className='counter numberContainer center'>{timeLeft}</div>
-                            <div className='volum'>
-                                <img alt='' src={muteAudio ? volume_off : soundOne} onClick={()=> setmuteAudio(!muteAudio)} />
-                            </div>
-                        </div>  
-                    }
-                    <p onClick={()=>setswitcher(true)} className='pbttn center'>شرح صوتي</p>
-                </div>
+                        <div className='center someBtn'  >
+                        <p onClick={()=>setskipQuestion(!skipQuestion)} className='pbttn center'>تأكيد</p>
+                        <p onClick={()=>clearAnswers()} className='pbttn center'>تصحيح</p>
 
+                        </div>
+                    }
+                </div>
+    
         }
             </>
             : ''
         }
-        {startTest ? 
+
+
+    {startTest ? 
         
         <>
-        <div className='img_container center'>
-            
+        <div className='img_container center'> 
+             
+            <p className='nbqHover'>{ ' السؤال رقم ' + ( data.length - nbQ  ) }</p>
             {
                 ( moDAnswer != 2 && !(moDAnswer == 1 && totalcounter % 2 == 0 )) ? 
-                <img  alt='' src={data != null && nbQ >= 0 ?  backend_img+data[nbQ]['correctAnswer']:''} />
+                data[nbQ]['correctAnswer'] === null ? 
+                  <img  alt='' src={data != null && nbQ >= 0 ?  backend_img+data[nbQ]['picture']:''} />
+                : <img  alt='' src={data != null && nbQ >= 0 ?  backend_img+data[nbQ]['correctAnswer']:''} />
+
                 :
                 <img  alt='' src={data != null && nbQ >= 0 ?  backend_img+data[nbQ]['picture']:''} />
             }
         </div>
-        {/* {
-           moDAnswer != 2 && !(moDAnswer == 1 && totalcounter % 2 == 0 ) ?
-            nbQ == 0 ? 
-            <div className='bar center '>
-                <button className='pbttn' onClick={()=>navigate('/')}> صفحة الرئيسية </button>
-            </div>   
-            :
-            <div className='bar center '>
-            <button className='pbttn' onClick={()=>handleResumConter()}>التالي</button>
-            </div>   
-            : 
-            <div className='bar center '>
-             <div className='counter numberContainer center'>{timeLeft}</div>
-                <div className='volum'>
-                    <img alt='' src={muteAudio ? volume_off : soundOne} onClick={()=> setmuteAudio(!muteAudio)} />
-                </div>
-            </div>
-        } */}
-        </>
+       </>
             : ''}
+    
+        
         <div className={startTest ? 'TestContainer scrollableSection positionRelative ' : '  TestContainer positionRelative h100vh '}>
               {
                 data != null && nbQ >= 0 ?
-                <AutoPlayAudio setmuteAudio={setmuteAudio} muteAudio={muteAudio} moDAnswer={moDAnswer} setmoDAnswer={setmoDAnswer} descAudioIsPlaying={isPlaying} startTest={startTest} setStartTest={setStartTest} audioUrl={backend_img+data[nbQ]['audio_content']}  />
+                <AutoPlayAudio nbQ={nbQ} skipQuestion={skipQuestion} pauseQuiz={pauseQuiz} settimnig={settimnig} timing={timing} audioFinsh={audioFinsh} setAudioFinsh={setAudioFinsh} setmuteAudio={setmuteAudio} muteAudio={muteAudio} moDAnswer={moDAnswer} setmoDAnswer={setmoDAnswer} descAudioIsPlaying={isPlaying} startTest={startTest} setStartTest={setStartTest} audioUrl={backend_img+data[nbQ]['audio_content']}  />
                 
-                :'' }   
+                :'' }      
                 {
                 data != null && nbQ >= 0 ? data[nbQ]['content'].map((ob,i)=> 
                 <div key={i}>
@@ -449,7 +542,8 @@ const HandleUserAnswer = (idQ, id) => {
                     {ob['answers'].map((oc,j)=> 
                             <div key={j*454432200} className='answerContainer center'>
                                     <div className='QN center'>
-                                        {j+1}
+                                        {/* {j+1} */}
+                                        {handleanswerIndex(oc.id)}
                                     </div>
                                     <div onClick={()=> HandleUserAnswer(ob['question']['id'],oc['id'])} className={handleBoxStyle(ob['question']['id'],oc['id'])}>
                                         <p>{oc['content']}</p>
@@ -459,19 +553,35 @@ const HandleUserAnswer = (idQ, id) => {
 
                         </div>
                         {
-                            ( moDAnswer != 2 && !(moDAnswer == 1 && totalcounter % 2 == 0 )) ?
+                            ( moDAnswer != 2 && !(moDAnswer == 1 && totalcounter % 2 == 0 ) && ob['question']['explication'].trim() !== ''  ) ?    
                                 <div className='center'>
-                                    <div className='expText'>
-                                    {ob['question']['explication']}
+                                    <div className={' expText '+handleQuestionUserAnswer(data[nbQ].id)}>
+                                        {ob['question']['explication']}
                                     </div>
                                 </div>
                             : ''
                         }
+                       
                         </div> 
+                        
              
                 ) :''
             } 
+            {
+            //         moDAnswer != 2 && !(moDAnswer == 1 && totalcounter % 2 == 0 ) ? ''
+            // :
+            //  <div className='expText expText_skip center' >
+            //                <div className='ntnBox center' onClick={()=>setskipQuestion(!skipQuestion)}>
+            //                         {/* <img  src={skip_button} /> */}
+            //                         <p>تأكيد</p>
+            //                </div>
+            //                <div className='ntnBox center' onClick={()=>clearAnswers()}>
+            //                         {/* <img  src={x_nav_mark} /> */}
+            //                         <p>تصحيح</p>
+            //                </div>
 
+            // </div> 
+            }
         </div>
        
     </div>

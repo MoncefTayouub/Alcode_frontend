@@ -18,68 +18,88 @@ export default function Results( {setcallNbQ,testResults,settestResults,logged})
   const [correctAnswer, setcorrectAnswer] = useState()
   const [totalAnswer, settotalAnswer] = useState()
   const [answersTable , setanswersTable  ] = useState([])
+  const [ResSucc, setResSucc] = useState(false)
+
+
+  // useEffect(()=> {
+  //   var test = []
+  //   for(var i = 1  ; i <= 40 ; i++) 
+  //     test.push({'status':1 , 'index' : i, 'ans':[2,4]})
+  //   setanswersTable(test)
+  // },[])
+
+  const handleQuestionUserAnswer = (qi)=> {
+    if (!testResults) return 0 
+    var selectedAnswers = testResults.selectedAnswers
+    var userAnswers = testResults.userAnswers
+
+    var selectAll = [] 
+    selectedAnswers.map((ob,i)=> {
+      selectAll.push(...ob.answer)
+    })
+        
+    var total = 0 
+    var corr = 0 
+    userAnswers.map((ob,i)=>{
+      if (ob.qzId == qi) {
+        ob.correctAnswers.map((mm)=> {
+          if (selectAll.includes(mm)) 
+            corr ++ 
+          total ++ 
+        })
+      }
+    })
+    return corr == total
+    // return res.length == ct  
+    }
+
   useEffect(()=> {
     if (testResults ) {
 
-      const compareAnswers = (ans , bns)=> {
-          if (ans.length !== bns.length) return 0 
-          let cc = 0
-          ans.filter((ob)=> {
-            if (bns.includes(ob)) cc ++
-          })
-          return (cc == ans.length)
-      }
-      const answerIndex = (id) => {
-        let index = -1; // Default value if no match is found
-        testResults.data.forEach((ob) => {
-            ob['content'].forEach((om) => {
-                om.answers.forEach((of, idx) => {
-                    if (of.id === id) {
-                        index = idx + 1 ; // Store the index of the matching answer
-                    }
-                });
-            });
-        });
-        return index; // Return the found index or -1 if not found
-    };
+      
 
-      const checkAnswer = (ans )=> {
-        return testResults['selectedAnswers'].filter((ob,i)=> {
-           return ob.answer.includes(ans)
-        }).length
-    }
+
+      const answerIndex = (ansId)=> {
+        let data = testResults.data
+        if (!data) return -1 
+        for (var nbQ = 0 ; nbQ < data.length ; nbQ++) {
+          let counter = 1 
+          for (var i = 0 ; i < data[nbQ].content.length  ;i++){
+              const row = data[nbQ].content[i]
+              for (let j = 0 ; j < row.answers.length ; j++) {
+                  if ( row.answers[j].id == ansId ) return counter
+                  counter ++ 
+              }
+      
+          } 
+        }
+        return 0
+    
+       }
+
+      
       
 
       settotalAnswer(testResults.userAnswers.length)
-      var cP = 0 
-      testResults.selectedAnswers.map((ob,i)=>{
-        
-       var  countP = testResults.userAnswers.filter((oc,j)=>{
-          return (oc.QI == ob.QI && compareAnswers(ob.answer ,oc.answer)) 
-        })
-        cP += countP.length ? 1 : 0
-
-      })
-      // setcorrectAnswer(cP)  
+     
       
       var totalSec = 0 
       var res = [] 
-      testResults['userAnswers'].map((ob,i)=>{
-        var total = [] 
-        var corr = 0
+      testResults.data.map((ob,i)=>{
+
+        
         var ansIndex = []
-        ob['content'].map((om,m)=> {
-          om['CA'].map((oca , ca)=>{
-            if (checkAnswer(oca)) corr++
-            total ++
-            ansIndex.push(answerIndex(oca))
-          })
+        testResults.userAnswers.filter((kk,k)=> {
+            if (kk.qzId == ob.id) 
+              for (var c = 0 ; c < kk.correctAnswers.length ; c ++) ansIndex.push(answerIndex(kk.correctAnswers[c]))
         })
-        totalSec += total == corr ? 1 : 0 
-        res.push({'status':total == corr , 'index' : i+1 , 'ans':ansIndex})
+        let status = handleQuestionUserAnswer(ob.id)
+        if (status) totalSec ++ 
+        res.push({'status':status , 'index' : testResults.data.length - i - 1, 'ans':ansIndex})
       })
+      setResSucc(totalSec>=32)
       setcorrectAnswer(totalSec)
-      setanswersTable(res)
+      setanswersTable(res.reverse())
       var obj = testResults
       obj.answersTable = res
       settestResults(obj)
@@ -89,19 +109,21 @@ export default function Results( {setcallNbQ,testResults,settestResults,logged})
 
 
   const handleGoRes = (nbqq)=> {
+    console.log(nbqq - 1 )
     if (!testResults) return ;
-    console.log(nbqq-1 , testResults.data , testResults.data[nbqq])
-    setcallNbQ(nbqq-1)
-    // setcallNbQ(testResults.data.length - nbqq)
+    setcallNbQ(testResults.data.length - nbqq - 1 )
     navigate('/QuizRes')
-    return 1
+    return 1    
 
   }
 
-//  console.log('answersTable',answersTable,'testResults',testResults)
+
+  
+
+ console.log('answersTable',answersTable,'testResults',testResults)
   return (
     <div className='Serie padding'>
-        <div className='HeaderSerie  center'>
+        {/* <div className='HeaderSerie  center'>
         <div className='image center'>
                 <img src={motocycleIcon} alt='' />
         </div>
@@ -111,31 +133,37 @@ export default function Results( {setcallNbQ,testResults,settestResults,logged})
             </div>
 
           
-        </div>
+        </div> */}
         <div className='twobutns scores center'>
-                <div className='containerRes center'>
+                <div className={ResSucc ? ' containerRes center res_succ ' : ' containerRes center res_fail ' }>
                   {
-                    testResults ?  <p>{correctAnswer}/{totalAnswer}</p>
+                    // testResults ?  <p className={ResSucc ? ' p_succ ' : ' p_fail '}>{correctAnswer}/{totalAnswer}</p>
+                    testResults ?  <p className={ResSucc ? ' p_succ ' : ' p_fail '}>{correctAnswer}/{40}</p>
                     : <p>-- / -- </p>
                   }
                  
                 </div>
-                <button className='full rad20' onClick={()=>handleSeeRes()}>الإجابات الصحيحة</button>
+                {/* <button className='full rad20' onClick={()=>handleSeeRes()}>الإجابات الصحيحة</button> */}
         </div>
-        <div className='resByAnswer center'>
+        <p className='feeback'>
+          {
+          ResSucc ? " أحسنت! لقد أكملت الاختبار بنجاح. يبدو أنك مستعد للقيادة بثقة. استمر في التعلم وممارسة القيادة لتحسين مهاراتك!"  
+          : 'للأسف، يبدو أنك لم تكن محظوظًا هذه المرة. لا تقلق، استمر في التدريب والتعلم، وستصبح قائدًا محترفًا قريبًا!'
+        }</p>     
+      <div className='resByAnswer center'>
 
           {
             answersTable.map((oc,i)=>
 
               <div onClick={()=>handleGoRes(oc.index)} key={i} className={oc.status ? 'boxOffice center boxOffice01 ' : 'boxOffice center boxOffice_01'}>
                   {/* <div  className='nbquestion center'>{oc.index}</div> */}
-                  <div  className='nbquestion center'>{ oc.index}</div>
+                  <div  className='nbquestion center'>{ oc.index + 1 }</div>
                   <div className='corrAns center'>
-                    <p>الإجابات الصحيحة</p>
+                    {/* <p>الإجابات الصحيحة</p> */}
                     <div className='center'>
                       {
                         oc.ans.map((om,j)=>
-                          <div className='layer'>{om}</div>
+                          <div className='layer center'>{om}</div>
                         )
                       }
                       {/* <div className='layer'>3</div>

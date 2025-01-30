@@ -98,7 +98,7 @@ export default function QueDetail({setreloading,GoBack,setGoBack,logged,clearFie
 
       const addQuestion = () => {
        if (checkCorrectAnswer()){
-      if (!content || answers.length === 0 || desc === '') {
+      if (!content || answers.length === 0 ) {
         setanswercheck("لا يمكن أن يكون محتوى السؤال أو الإجابات فارغًا");
         return;
       }
@@ -214,7 +214,7 @@ export default function QueDetail({setreloading,GoBack,setGoBack,logged,clearFie
 
  
 
- console.log(questions)
+ console.log(answers)
 
     const deleteItem = () => {
 
@@ -231,7 +231,18 @@ export default function QueDetail({setreloading,GoBack,setGoBack,logged,clearFie
     
 
     const handleDeleteAnswer = async ()=> {
-      if (del_answer != -1 ) {
+      console.log('del_answer',del_answer)
+      if (del_answer == -1 ) setErrorMsg(7)
+      if (answers.length == 0 || del_answer == -1 ) return 0
+      // get id of the answer
+      let id = answers[del_answer]['id']
+      if (id == -1) {
+        setAnswers((prevArr) => prevArr.filter((item,i) => i !== del_answer));
+        setdel_answer(-1)
+        return 1 ;
+      }
+      
+      
         setreloading(true)
         const DataForm= new FormData();
         DataForm.append('type','answer')
@@ -244,9 +255,9 @@ export default function QueDetail({setreloading,GoBack,setGoBack,logged,clearFie
       .then((response)=>{
         setreloading(false)
             let data =  response.data 
+            console.log(data)
             if (data['status'] == 1 ) {
               setAnswers((prevArr) => prevArr.filter((item,i) => i !== del_answer));
-              
               setdel_answer(-1)   
 
             }
@@ -255,8 +266,8 @@ export default function QueDetail({setreloading,GoBack,setGoBack,logged,clearFie
         navigate('/InernalError')
         });        
         
-      }else 
-        setErrorMsg(7)
+      
+        
     }
 
     const CircleBox = ({ text, colorClass , tpe , setGoBack }) => {  
@@ -335,7 +346,7 @@ export default function QueDetail({setreloading,GoBack,setGoBack,logged,clearFie
           <p className='explinationText'>{ob['explication']}</p> 
           {
             ob['answers'].map((os , j)=> 
-            <p key={j} className={os['status'] == 1 ? 'wrongAnswer' : ''} >  {os['content']} {j+1}</p>
+            <p key={j} className={os['status'] == 1 ? 'wrongAnswer' : ''} >{j+1}  {os['content']} </p>
             )
           }
           <p></p>
