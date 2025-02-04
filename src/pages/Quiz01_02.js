@@ -62,8 +62,9 @@ export default function Quiz01_02({backend_img,validationRef,callNbQ,setvalidati
 
    
 useEffect(()=> {
+    console.log('testResults data ',data)
     if (testResults && data === null) {
-        setData(testResults.data.reverse())
+        setData(testResults.data)
         setuserAnswers(testResults.userAnswers)
         setselectedAnswers(testResults.selectedAnswers)
         setcorrIds(testResults.corrIds)
@@ -343,6 +344,10 @@ const HandleUserAnswer = (idQ, id) => {
        
       
         <div className='img_container center'>
+     {data ?  
+            <p className='nbqHover'>{ ' السؤال رقم ' + ( data.length - nbQ  ) }</p>
+     :''}
+
                 <img  alt='' src={handleImgPath()} />
            
         </div>

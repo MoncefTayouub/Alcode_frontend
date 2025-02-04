@@ -3,7 +3,7 @@ import Box from '../compoments/Box'
 import motocycleIcon from '../files/motocycleIcon.png'
 import { useNavigate } from 'react-router-dom';
 
-export default function Results( {setcallNbQ,testResults,settestResults,logged}) {
+export default function Results( {setcallNbQ,testResults,settestResults,logged,answersTable,setanswersTable} ) {
   
   const navigate = useNavigate();
   useEffect(() => {
@@ -17,9 +17,8 @@ export default function Results( {setcallNbQ,testResults,settestResults,logged})
   
   const [correctAnswer, setcorrectAnswer] = useState()
   const [totalAnswer, settotalAnswer] = useState()
-  const [answersTable , setanswersTable  ] = useState([])
   const [ResSucc, setResSucc] = useState(false)
-
+  const [ResSets, setResSets] = useState(false)
 
   // useEffect(()=> {
   //   var test = []
@@ -27,7 +26,6 @@ export default function Results( {setcallNbQ,testResults,settestResults,logged})
   //     test.push({'status':1 , 'index' : i, 'ans':[2,4]})
   //   setanswersTable(test)
   // },[])
-
   const handleQuestionUserAnswer = (qi)=> {
     if (!testResults) return 0 
     var selectedAnswers = testResults.selectedAnswers
@@ -99,17 +97,18 @@ export default function Results( {setcallNbQ,testResults,settestResults,logged})
       })
       setResSucc(totalSec>=32)
       setcorrectAnswer(totalSec)
-      setanswersTable(res.reverse())
-      var obj = testResults
-      obj.answersTable = res
-      settestResults(obj)
+      if (answersTable.length == 0 )
+        setanswersTable(res.reverse())
+
+      // var obj = testResults
+      // obj.answersTable = res
+      // settestResults(obj)
 
     }
   },[testResults])
 
 
   const handleGoRes = (nbqq)=> {
-    console.log(nbqq - 1 )
     if (!testResults) return ;
     setcallNbQ(testResults.data.length - nbqq - 1 )
     navigate('/QuizRes')
@@ -120,7 +119,6 @@ export default function Results( {setcallNbQ,testResults,settestResults,logged})
 
   
 
- console.log('answersTable',answersTable,'testResults',testResults)
   return (
     <div className='Serie padding'>
         {/* <div className='HeaderSerie  center'>

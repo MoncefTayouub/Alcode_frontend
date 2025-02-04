@@ -2,10 +2,16 @@ import { useEffect , useState } from "react"
 import React  from 'react'
 import topWhite from '../files/topWhite.svg'
 import buttonWhite from '../files/buttonWhite.svg'
+import trash_blue from '../files/trash_blue.svg'
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom';
+
+
 export default function HandleMails({backend_url,setreloading}) {
     const [ data , setData ] = useState()
     const [hovering , sethovering ] = useState(-1)
     const [droppedMsg , setdroppedMsg] = useState(-1)
+    const navigate = useNavigate();
 
   let getData = async () => {
   setreloading(true); // Start reloading process
@@ -30,6 +36,27 @@ export default function HandleMails({backend_url,setreloading}) {
     return 'contentBox center'
 }
 
+const handleDeleteMail = async (id) => {
+        setreloading(true)
+        const DataForm= new FormData();
+        DataForm.append('id',id)
+        await axios ({
+          method : 'DELETE' , 
+          url : backend_url+'contactUs' ,
+          data :  DataForm,
+      })
+      .then((response)=>{
+        setreloading(false)
+            let data =  response.data 
+            // console.log(data)
+            getData(data)
+            
+      }).catch(function (error) {
+        navigate('/InernalError')
+        });        
+        
+}
+
   return (
     <div className='General positionRelative center'>
         <div className='contentHeader contentBox center'>            
@@ -51,6 +78,7 @@ export default function HandleMails({backend_url,setreloading}) {
                   {
                     droppedMsg == i ? 
                   <div className="messageContainer center"> 
+                      <img alt='' onClick={()=>handleDeleteMail(ob.id)} className="trash_blue" src={trash_blue} />
                         <div className="boxOffice center"> 
                             <p>{ob['fullNames']}</p>
                             <p>الاسم الكامل</p>
@@ -60,8 +88,8 @@ export default function HandleMails({backend_url,setreloading}) {
                             <p>البريد الإلكتروني</p>
                         </div>
                         <div className="boxOffice center"> 
-                            <p> الموضوع</p>
                             <p>{ob['subject']}</p>
+                            <p> الموضوع</p>
                         </div>
                         {ob['message']}
                     </div> : ''           

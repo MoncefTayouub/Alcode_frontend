@@ -1,13 +1,13 @@
 import React , {useEffect , useState} from 'react'
 import blue_plus from '../files/blue_plus.svg'
 import yellow_plus from '../files/yellow_plus.svg'
-import axios from 'axios'
 import { use } from 'react'
 import edit_blue from '../files/edit_blue.svg'
 import trash_blue from '../files/trash_blue.svg'
 import isCorr from '../files/isCorr.svg'
 import notCorr from '../files/notCorr.svg'
 import isvalidBlue from '../files/isvalidBlue.svg'
+import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
 
 export default function QueDetail({setreloading,GoBack,setGoBack,logged,clearFields,questionList , setquestionList ,quiz,serie,setSerie,SetnavSelect,backend_url,errorMsg,setErrorMsg}) {
@@ -214,7 +214,7 @@ export default function QueDetail({setreloading,GoBack,setGoBack,logged,clearFie
 
  
 
- console.log(answers)
+//  console.log(answers)
 
     const deleteItem = () => {
 
@@ -231,7 +231,7 @@ export default function QueDetail({setreloading,GoBack,setGoBack,logged,clearFie
     
 
     const handleDeleteAnswer = async ()=> {
-      console.log('del_answer',del_answer)
+      // console.log('del_answer',del_answer)
       if (del_answer == -1 ) setErrorMsg(7)
       if (answers.length == 0 || del_answer == -1 ) return 0
       // get id of the answer
@@ -255,7 +255,7 @@ export default function QueDetail({setreloading,GoBack,setGoBack,logged,clearFie
       .then((response)=>{
         setreloading(false)
             let data =  response.data 
-            console.log(data)
+            // console.log(data)
             if (data['status'] == 1 ) {
               setAnswers((prevArr) => prevArr.filter((item,i) => i !== del_answer));
               setdel_answer(-1)   

@@ -22,11 +22,12 @@ import {Navigating} from './compoments/Manipulation'
 
 
 const App = () => {
-  const backend_url = 'https://srv668869.hstgr.cloud/';
-  const backend_img = "https://srv668869.hstgr.cloud";
-  // const backend_img = 'http://127.0.0.1:8000';
-  // const backend_url = 'http://127.0.0.1:8000/'; 
+  // const backend_url = 'https://srv668869.hstgr.cloud/';
+  // const backend_img = "https://srv668869.hstgr.cloud";
+  const backend_img = 'http://127.0.0.1:8000';
+  const backend_url = 'http://127.0.0.1:8000/';    
   const [testResults,settestResults] = useState()
+  const [answersTable , setanswersTable  ] = useState([])
   const [logged , setLogged] = useState(-5)
   const [isOwner , setisOwner] = useState(false)    
   const [reloading , setreloading ] = useState(false)
@@ -71,19 +72,8 @@ const App = () => {
 
 
   const checkUserLoggedIn = async () => {
-    // console.log('checkUserLoggedIn')
-    // Retrieve tokens from localStorage
     const accessToken = localStorage.getItem('accessToken');
     const user = localStorage.getItem('user');
-    // console.log('accessToken',accessToken)
-    // if (!accessToken || !user) {
-
-    //     setvalidationRef()
-    //     setLogged(-5)
-    //     return;
-
-    // }
-    // console.log( 'getBrowserId',getBrowserId().value ,  getBrowserId() , typeof(getBrowserId()) )
     setreloading(true)
     const DataForm = new FormData();
     DataForm.append('accessToken', accessToken);
@@ -99,11 +89,9 @@ const App = () => {
       });
 
       const data = response.data; 
-      // console.log(data)
       setreloading(false)
       setvalidationRef(data.auth)
       setLogged(data.status)
-      // console.log('app',data.seriesF)
       setfooterContent(data.seriesF.slice(0,5))
       if (data.status === 0) {
         return 0 ;
@@ -116,8 +104,6 @@ const App = () => {
        
   } catch (error) {
       console.error('Error during login:', error);
-      // setreloading(false)
-      // Navigating('/InernalError')
   }
         return -1;
     
@@ -134,8 +120,6 @@ const HandleSubmitData = async(DataForm,url,method)=> {
         return data ;
 } catch (error) {
   console.error('Error during login:', error);
-  // setreloading(false)
-  // Navigating('/InernalError')
   return null
 }
 }
@@ -238,9 +222,9 @@ return (
         <Routes>
            <Route path="/" element={<Home backend_img={backend_img} setselectType={setselectType} HandleSubmitData={HandleSubmitData} logged={logged} setselectedSerie={setselectedSerie} selectedSerie={selectedSerie} backend_url={backend_url} />} />    
           <Route path="/Serie" element={<Serie backend_img={backend_img} setreloading={setreloading} selectType={selectType} categoryContent={categoryContent} setselectedSerie={setselectedSerie} selectedSerie={selectedSerie} backend_url={backend_url} />} />    
-          <Route path="/Quiz" element={<Quiz backend_img={backend_img} validationRef={validationRef} setreloading={setreloading} typeLicence={typeLicence} logged={logged} testResults={testResults} settestResults={settestResults} backend_url={backend_url}  setselectedSerie={setselectedSerie} selectedSerie={selectedSerie}    />} />    
+          <Route path="/Quiz" element={<Quiz   backend_img={backend_img} validationRef={validationRef} setreloading={setreloading} typeLicence={typeLicence} logged={logged} testResults={testResults} settestResults={settestResults} backend_url={backend_url}  setselectedSerie={setselectedSerie} selectedSerie={selectedSerie}    />} />    
           <Route path="/QuizRes" element={<Quiz01_02 backend_img={backend_img}  callNbQ={callNbQ} logged={logged} testResults={testResults} settestResults={settestResults} backend_url={backend_url}  setselectedSerie={setselectedSerie} selectedSerie={selectedSerie}    />} />    
-          <Route path="/result" element={<Results setcallNbQ={setcallNbQ} logged={logged} testResults={testResults} settestResults={settestResults} backend_url={backend_url}  />} />    
+          <Route path="/result" element={<Results answersTable={answersTable}  setanswersTable={setanswersTable} setcallNbQ={setcallNbQ} logged={logged} testResults={testResults} settestResults={settestResults} backend_url={backend_url}  />} />    
           <Route path="/Owner" element={<Owner backend_img={backend_img} isOwner={isOwner} logged={logged} backend_url={backend_url} />} />    
           <Route path="/login" element={<Login  logged={logged} setLogged={setLogged} backend_url={backend_url} />} />    
           <Route path="/ByPass" element={<SellingPoing  logged={logged} setLogged={setLogged} backend_url={backend_url} />} />    
