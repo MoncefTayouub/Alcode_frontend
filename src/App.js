@@ -89,6 +89,7 @@ const App = () => {
       });
 
       const data = response.data; 
+      // console.log(data,brid)
       setreloading(false)
       setvalidationRef(data.auth)
       setLogged(data.status)
@@ -135,7 +136,7 @@ useEffect(() => {
 
 const [loginOut , setloginOut] = useState(false)
 
-const logOut = async () => {
+const logOut = async (error = false) => {
   const accessToken = localStorage.getItem('accessToken');
   if (!accessToken ) {
       setvalidationRef()
@@ -144,25 +145,34 @@ const logOut = async () => {
   setloginOut(true)
   const DataForm = new FormData();
   DataForm.append('accessToken', accessToken);
-  try {
-    const response = await axios({
-        method: 'POST',
-        url: `${backend_url}logout`,
-        data: DataForm,
-    });
-    const data = response.data; 
+  if (!error) {
+    try {
+      const response = await axios({
+          method: 'POST',
+          url: `${backend_url}logout`,
+          data: DataForm,
+      });
+      const data = response.data; 
+      setloginOut(false)
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      localStorage.removeItem('user');
+      setLogged(-5)
+  
+       
+  } catch (error) {
+      console.error('Error during login:', error);
+      // setreloading(false)
+      // Navigating('/InernalError')
+  }
+    
+  }else {
     setloginOut(false)
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('user');
-    setLogged(-5)
-
-     
-} catch (error) {
-    console.error('Error during login:', error);
-    // setreloading(false)
-    // Navigating('/InernalError')
-}
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      localStorage.removeItem('user');
+      setLogged(-5)
+  }
       return -1;
   
 };

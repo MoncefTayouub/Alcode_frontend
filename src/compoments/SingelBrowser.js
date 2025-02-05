@@ -8,7 +8,7 @@ export default function SingelBrowser({logOut}) {
         const navigate = useNavigate();
 
     useEffect(()=> {  
-        logOut()
+        logOut(true)
     },[])
   return (
     <div className='Login center'>
