@@ -22,10 +22,10 @@ import {Navigating} from './compoments/Manipulation'
 
 
 const App = () => {
-  // const backend_url = 'https://srv668869.hstgr.cloud/';
-  // const backend_img = "https://srv668869.hstgr.cloud";
-  const backend_img = 'http://127.0.0.1:8000';
-  const backend_url = 'http://127.0.0.1:8000/';    
+  const backend_url = 'https://srv668869.hstgr.cloud/';
+  const backend_img = "https://srv668869.hstgr.cloud";
+  // const backend_img = 'http://127.0.0.1:8000';
+  // const backend_url = 'http://127.0.0.1:8000/';    
   const [testResults,settestResults] = useState()
   const [answersTable , setanswersTable  ] = useState([])
   const [logged , setLogged] = useState(-5)

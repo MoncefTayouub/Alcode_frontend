@@ -31,45 +31,6 @@ export default function Quiz({backend_img,validationRef,setvalidationRef,setrelo
     // ------------- pause / play quiz ------------
     const [pauseQuiz , setpauseQuiz] = useState(false)
 
-    const Auth =  () => {
-    
-    //   const user = localStorage.getItem('user')
-    //     console.log('user',user)
-    //   if (user == null){
-    //      navigate('/login');
-    //     return 0 ;
-    //    }
-    //    const jsonObject = JSON.parse(user);
-    //    setreloading(true)
-    //       const DataForm = new FormData();
-    //       DataForm.append('user', jsonObject.id);
-    //       DataForm.append('data', selectedSerie['id']);
-       
-    //       try {
-    //           const response = await axios({
-    //               method: 'POST',
-    //               url: `${backend_url}userlogin/duration`,
-    //               data: DataForm,
-    //           });
-      
-    //           const data = response.data;
-    //           if (data.status === 1) {
-    //             setData(data['serieTest'])
-    //             setNbQ(data['serieTest'].length - 1)
-    //             setuserAnswers(data['res'])
-    //           }
-    //           setreloading(false)
-    //           if (data.status === 0) {
-    //              navigate('/login')
-    //              return 0 
-    //           }
-    //           return 1 
-              
-    //       } catch (error) {
-    //           console.error('Error during login:', error);
-    //           return 0 
-    //       }
-      };    
     
 
     
@@ -134,6 +95,9 @@ export default function Quiz({backend_img,validationRef,setvalidationRef,setrelo
         //   <div class="loader"></div>
         //   </div>   
 
+
+
+        // handle loggin
         useEffect(()=> {
             // console.log('validationRef',validationRef,'logged',logged)
             if (logged !== 1  ) {
@@ -143,7 +107,7 @@ export default function Quiz({backend_img,validationRef,setvalidationRef,setrelo
                 navigate('/ByPass')
             }else 
             if (validationRef == -1  ) {
-                navigate('/SingelBrowser')
+                // navigate('/SingelBrowser')
             }
         },[validationRef,logged])
 

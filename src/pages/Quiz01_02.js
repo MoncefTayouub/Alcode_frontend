@@ -49,14 +49,14 @@ export default function Quiz01_02({backend_img,validationRef,callNbQ,setvalidati
         //   <div class="loader"></div>
         //   </div>   
 
-        useEffect(()=> {
-            if (logged !== 1  ) {
-                navigate('/login')
-            }else 
-            if (validationRef == 0  ) {
-                navigate('/ByPass')
-            }
-        },[validationRef,logged])
+        // useEffect(()=> {
+        //     if (logged !== 1  ) {
+        //         navigate('/login')
+        //     }else 
+        //     if (validationRef == 0  ) {
+        //         navigate('/ByPass')
+        //     }
+        // },[validationRef,logged])
 
     const [startTest , setStartTest] = useState(false)
 
