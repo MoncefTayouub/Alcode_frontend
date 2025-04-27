@@ -10,6 +10,9 @@ import Box from '../compoments/Box'
 import ContactUs from '../compoments/ContactUs'
 import BySection from '../compoments/BySection'
 import { useNavigate } from 'react-router-dom';
+import whatsapp_white from '../files/whatsapp_white.svg'
+import what_layout from '../files/what_layout.svg'
+import whatsapp_vert from '../files/whatsapp_vert.svg'
 
 function Home({setselectType,backend_img,HandleSubmitData,backend_url,setselectedSerie}) {    
   const navigate = useNavigate();
@@ -75,8 +78,27 @@ function Home({setselectType,backend_img,HandleSubmitData,backend_url,setselecte
             </div>
             <h3>كونوا معنا يومياً في المساء، لمتابعة البث المباشر على جميع منصات التواصل الاجتماعي</h3>
      </div>
-     <BySection data={data} setselectType={setselectType} />
+     <BySection data={data} setselectType={setselectType} />  
      <AboutSectoin />
+     <a href={'https://wa.me/212613294385'}  target="_blank">
+     <div className='link_whatwsapp spacebetween'>
+      <div className='whatsapp_vert'>
+            <img src={whatsapp_vert} alt=''></img>
+      </div>
+      <div className='desccc center'>
+          <h3>احصل على حسابك الآن</h3>
+          <p>لا تضيع الوقت! تواصل معنا عبر واتساب للحصول على حسابك مباشرة والتمتع بجميع دروس رخصة القيادة والاختبارات التي تحتاجها</p>
+          <div className='bttons center'>
+            <img src={whatsapp_white}/>
+            <p>تواصل معنا الآن</p>
+        </div>
+      </div>
+      <div className='img_whatapp'>
+            <img src={what_layout} alt=''></img>
+      </div>
+ 
+    </div>
+    </a>
      <div id = 'content'></div>
      <div className='center gap'>
       {
@@ -90,10 +112,12 @@ function Home({setselectType,backend_img,HandleSubmitData,backend_url,setselecte
      <div className='twobutns seeMore center padding'>
         <button className='full rad20' onClick={()=>navi()}>عرض المزيد</button>
     </div>
+
     <a id='contact'></a>
     <ContactUs  HandleSubmitData={HandleSubmitData} />
     <div className='headerContent padding center'>
       <p>تصفح مكتبتنا الشاملة من الدورات التدريبية المصممة لتلبية احتياجاتك التعليمية والمهنية. اكتشف الآن مجموعة متنوعة من المواضيع وابدأ رحلتك في التعلم معنا.</p>
+     
     </div>
     <div className='center gap'>
     {

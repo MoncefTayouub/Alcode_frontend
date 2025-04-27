@@ -138,10 +138,60 @@ html, body {
 }
 
 body {
+  .what_loggin {
+    position :absolute ;
+    right : 0 ; 
+    bottom : 0 ;
+    width : 80% ;
+  }
+  .despearing {
+    width : 0 ;
+    height : 0 ; 
+    opacity : 0 ; 
+  }
+  .link_whatwsapp {
+    // background-color: #00d693;
+    width : 100% ;
+    margin : 20px 0 ;
+    box-sizing: border-box;
+    .desccc {
+    // border : 1px solid red ;
+    box-sizing: border-box;
+    width : 60% ;
+    gap : 20px ;
+    flex-direction: column;
+    padding : 10px ;
+    h3 {
+      font-size : 28px ;
+    }
+    p {
+      text-align: start;
+      font-size: 20px ;
+    }
+    .bttons {
+      font-size: 20px ; 
+      cursor :pointer ; 
+      gap : 10px ;
+      background-color: #25D366; 
+      padding : 5px 20px ;
+      border-radius : 10px ;
+      color : white ;
+    }
+  }
+  .img_whatapp {
+    box-sizing: border-box;
+    width : 40% ;
+    img {
+      width : 100%;
+    }
+  }
+  }
+
   .App{position: relative;}
   .Serie , .Footer ,.Quiz,.Login{
     overflow: hidden;
   }
+
     div {
         box-sizing: border-box;
     }
@@ -1909,6 +1959,7 @@ body .Quiz .TestContainer ,body .Quiz .img_container ,body .Quiz .toolBar {
   max-width: 1100px ;
 }
 @media (max-width: 1000px) { 
+  
   body .Quiz .answerContainer {
     width: 100%;
   }
@@ -1916,7 +1967,50 @@ body .Quiz .TestContainer ,body .Quiz .img_container ,body .Quiz .toolBar {
     width: calc(100% - 80px);
   }
 }
+
+@media (min-width: 634px) { 
+ 
+  .whatsapp_vert {
+    width : 0 ;
+    height : 0 ;
+    opacity : 0 ;
+  }
+}
   @media (max-width: 634px) { 
+   body .what_loggin {
+      width : 100% ;
+    }
+   body .link_whatwsapp {
+      justify-content : center ;
+      flex-direction: column;
+      width : 100% ;
+    .img_whatapp {
+      width : 0 ;
+      height : 0 ;
+      opacity : 0 ;
+    }
+    .whatsapp_vert {
+      width : 100% ;
+      img { 
+        width : 100% ;
+      }
+    }
+    }
+
+    body .link_whatwsapp .desccc p {
+      padding : 0 30px ;  
+    }
+
+    body .link_whatwsapp .desccc {
+      gap : 10x ;
+      width : 100% ;
+    }
+    body .link_whatwsapp .desccc h3 {
+      font-size: 24px;
+    }
+    body .link_whatwsapp .desccc p {
+      font-size: 16px ;
+    }
     body .Quiz .startTest .spacebetween {
       flex-direction: row !important;
   }

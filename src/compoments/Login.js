@@ -3,6 +3,7 @@ import leftBarLogin from '../files/leftBarLogin.svg'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 // import { useNavigationHistory } from './NavigationHistoryProvider';
+import what_loggin from '../files/what_loggin.svg'
 
 
 export default function Login({backend_url,setLogged,logged}) {
@@ -72,6 +73,9 @@ export default function Login({backend_url,setLogged,logged}) {
       <div className='twobutns  center padding'>
         <button  className='full rad20' onClick={()=>submit()} >{resp ? '...' :'تسجيل'}</button>
     </div>     
+    <a href={'https://wa.me/212613294385'}  target="_blank">
+      <img className='what_loggin' src={what_loggin} />
+    </a>
     </div>
   )
 }
