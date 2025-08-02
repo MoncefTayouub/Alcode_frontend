@@ -60,25 +60,62 @@ export default function Quiz({backend_img,validationRef,setvalidationRef,setrelo
         }).length
     }
 
+
+    const checkAnswerCorrect = (qi)=> {
+            var coorRes = []
+            
+            var qzRes = true 
+            
+            userAnswers.map((ob,i)=> {
+                if (ob.qzId == qi) {
+                    var ansRes = true
+                    var quesFound = false 
+                    selectedAnswers.map((mm,j)=> {
+                        if (mm.QI == ob.qId) {
+                          quesFound = true
+                            if (mm.answer.length == ob.correctAnswers.length) {
+                                ob.correctAnswers.map((ans,k)=> {
+                                        ansRes &&= mm.answer.includes(ans)
+                                    
+                                })
+                            }else 
+                                ansRes = false
+                        }
+                    }   )
+                    if (!quesFound) qzRes = false
+                    else qzRes &&= ansRes
+                }
+            })
+
+            
+            return qzRes
+    }
     const handleQuestionUserAnswer = (qi)=> {
     
-        var selectAll = [] 
-        selectedAnswers.map((ob,i)=> {
-          selectAll.push(...ob.answer)
-        })
-        var res = []
-        var total = 0 
-        var corr = 0 
-        userAnswers.map((ob,i)=>{
-          if (ob.qzId == qi) {
-            ob.correctAnswers.map((mm)=> {
-              if (selectAll.includes(mm)) 
-                corr ++ 
-              total ++ 
-            })
-          }
-        })
-        return corr == total && total ? ' corr_expText ' : ' worong_expText '
+        // var selectAll = [] 
+        // var UTA = 0 
+        // selectedAnswers.map((ob,i)=> {
+        //   selectAll.push(...ob.answer)
+        //   if (ob.QI == qi) {
+        //     UTA = ob.answer.length
+        //   }
+        // })
+        // var res = []
+        // var total = 0 
+        // var corr = 0 
+        // userAnswers.map((ob,i)=>{
+        //   if (ob.qzId == qi) {
+        //     ob.correctAnswers.map((mm)=> {
+        //       if (selectAll.includes(mm)) 
+        //         corr ++ 
+        //       total ++ 
+        //     })
+        //   }
+        // })
+        // console.log('res',res,'corr',corr,'total',total,'userAnswers',userAnswers,'selectedAnswers',selectedAnswers,'selectAll',selectAll,'UTA',UTA)
+        // if (UTA != total) return ' worong_expText '
+        var checkingAns = checkAnswerCorrect(qi)
+        return !checkingAns ?  ' worong_expText ' : ' corr_expText ' 
         // return res.length == ct  
         }
 
@@ -132,6 +169,7 @@ export default function Quiz({backend_img,validationRef,setvalidationRef,setrelo
                 setData(dataR['content'].reverse())
                 setuserAnswers(dataR['correct'])
                 setNbQ(dataR['content'].length - 1)
+                console.log('dataR',dataR)
               }
         }).catch(function (error) {  
             navigate('/InernalError')
@@ -160,7 +198,6 @@ const setRes = ()=> {
 }
 
 const [skipQuestion,setskipQuestion] = useState(false)
-
 useEffect(() => {
     if (skipQuestion) {
         setskipQuestion(false); 
@@ -204,8 +241,10 @@ useEffect(() => {
             setTimeLeft(30)
             setAudioFinsh(false)
             if (!(moDAnswer == 1 && totalcounter % 2 == 0 )) {
-                setNbQ((prevNbQ) => prevNbQ - 1);  
-               
+                
+                if (moDAnswer == 2 && nbQ > 0 ) setskipQuestion(!skipQuestion)
+                setNbQ((prevNbQ) => prevNbQ - 1); 
+                
             }
             else 
             clearInterval(smallSequence);
@@ -216,7 +255,7 @@ useEffect(() => {
             clearInterval(timer);
         }
         settotalcounter(prev => prev + 1)
-    }, 30000); // 60 seconds = 60000 milliseconds
+    }, 30000); // 30 seconds = 30000 milliseconds
     
     return () => {
         clearInterval(smallSequence);
@@ -283,13 +322,13 @@ const HandleUserAnswer = (idQ, id) => {
     //   }, [data]);
     
       const handleBoxStyle = (QI, AI) => {
-        //
-        // Check if there is a matching answer
-        var cla = ' answer center '
-        const isSelected = selectedAnswers.some((ob) => ob.QI === QI && ob.answer.includes(AI));
-        if (isSelected)  cla+=' answerSelection ' 
-        if ( moDAnswer != 2 && !(moDAnswer == 1 && totalcounter % 2 == 0 ) &&hadnleRes(QI,AI)) cla+=' correctAnswer '
-        // Return the appropriate className
+          // Check if there is a matching answer
+          var cla = ' answer center '
+          const isSelected = selectedAnswers.some((ob) => ob.QI === QI && ob.answer.includes(AI));
+          if (isSelected)  cla+=' answerSelection ' 
+          if ( moDAnswer != 2 && !(moDAnswer == 1 && totalcounter % 2 == 0 ) &&hadnleRes(QI,AI)) cla+=' correctAnswer '
+          // Return the appropriate className
+        // console.log("isSelected", isSelected, "hadnleRes", hadnleRes(QI,AI), 'cla', cla)
         return cla
       };
 
@@ -516,6 +555,7 @@ const HandleUserAnswer = (idQ, id) => {
                     )}
 
                         </div>
+                        {/*  */}
                         {
                             ( moDAnswer != 2 && !(moDAnswer == 1 && totalcounter % 2 == 0 ) && ob['question']['explication'].trim() !== ''  ) ?    
                                 <div className='center'>

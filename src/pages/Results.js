@@ -26,29 +26,38 @@ export default function Results( {setcallNbQ,testResults,settestResults,logged,a
   //     test.push({'status':1 , 'index' : i, 'ans':[2,4]})
   //   setanswersTable(test)
   // },[])
+  console.log('testResults',testResults)
   const handleQuestionUserAnswer = (qi)=> {
     if (!testResults) return 0 
     var selectedAnswers = testResults.selectedAnswers
     var userAnswers = testResults.userAnswers
 
-    var selectAll = [] 
-    selectedAnswers.map((ob,i)=> {
-      selectAll.push(...ob.answer)
-    })
-        
-    var total = 0 
-    var corr = 0 
-    userAnswers.map((ob,i)=>{
-      if (ob.qzId == qi) {
-        ob.correctAnswers.map((mm)=> {
-          if (selectAll.includes(mm)) 
-            corr ++ 
-          total ++ 
-        })
-      }
-    })
-    return corr == total
-    // return res.length == ct  
+            var qzRes = true 
+            
+            userAnswers.map((ob,i)=> {
+                if (ob.qzId == qi) {
+                    var ansRes = true
+                    var quesFound = false 
+                    selectedAnswers.map((mm,j)=> {
+                        if (mm.QI == ob.qId) {
+                          quesFound = true
+                            if (mm.answer.length == ob.correctAnswers.length) {
+                                ob.correctAnswers.map((ans,k)=> {
+                                        ansRes &&= mm.answer.includes(ans)
+                                    
+                                })
+                            }else 
+                                ansRes = false
+                        }
+                    }   )
+                    if (!quesFound) qzRes = false
+                    else qzRes &&= ansRes
+                }
+            })
+            console.log('checkAnswerCorrect','userAnswers',userAnswers,'selectedAnswers',selectedAnswers,'qi',qi,'qzRes',qzRes)
+
+            return qzRes
+ 
     }
 
   useEffect(()=> {
@@ -91,7 +100,8 @@ export default function Results( {setcallNbQ,testResults,settestResults,logged,a
             if (kk.qzId == ob.id) 
               for (var c = 0 ; c < kk.correctAnswers.length ; c ++) ansIndex.push(answerIndex(kk.correctAnswers[c]))
         })
-        let status = handleQuestionUserAnswer(ob.id)
+        let status =  handleQuestionUserAnswer(ob.id)
+        // console.log('status',status,'ansIndex',ansIndex)
         if (status) totalSec ++ 
         res.push({'status':status , 'index' : testResults.data.length - i - 1, 'ans':ansIndex})
       })

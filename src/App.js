@@ -230,7 +230,7 @@ return (
       }
         <Navbar loginOut={loginOut} setloginOut={setloginOut} logOut={logOut} logged={logged}  typeR={typeR} />   
         <Routes>
-           <Route path="/" element={<Home backend_img={backend_img} setselectType={setselectType} HandleSubmitData={HandleSubmitData} logged={logged} setselectedSerie={setselectedSerie} selectedSerie={selectedSerie} backend_url={backend_url} />} />    
+          <Route path="/" element={<Home backend_img={backend_img} setselectType={setselectType} HandleSubmitData={HandleSubmitData} logged={logged} setselectedSerie={setselectedSerie} selectedSerie={selectedSerie} backend_url={backend_url} />} />    
           <Route path="/Serie" element={<Serie backend_img={backend_img} setreloading={setreloading} selectType={selectType} categoryContent={categoryContent} setselectedSerie={setselectedSerie} selectedSerie={selectedSerie} backend_url={backend_url} />} />    
           <Route path="/Quiz" element={<Quiz   backend_img={backend_img} validationRef={validationRef} setreloading={setreloading} typeLicence={typeLicence} logged={logged} testResults={testResults} settestResults={settestResults} backend_url={backend_url}  setselectedSerie={setselectedSerie} selectedSerie={selectedSerie}    />} />    
           <Route path="/QuizRes" element={<Quiz01_02 backend_img={backend_img}  callNbQ={callNbQ} logged={logged} testResults={testResults} settestResults={settestResults} backend_url={backend_url}  setselectedSerie={setselectedSerie} selectedSerie={selectedSerie}    />} />    
